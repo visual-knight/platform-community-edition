@@ -26,7 +26,9 @@
               "apps/visual-knight-webapp/src/favicon.ico",
               "apps/visual-knight-webapp/src/assets"
             ],
-            "styles": ["apps/visual-knight-webapp/src/styles.scss"],
+            "styles": [
+              "apps/visual-knight-webapp/src/styles.scss"
+            ],
             "scripts": [],
             "es5BrowserSupport": true
           },
@@ -60,7 +62,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "visual-knight-webapp:build"
+            "browserTarget": "visual-knight-webapp:build",
+            "proxyConfig": "apps/visual-knight-webapp//proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -81,7 +84,9 @@
               "apps/visual-knight-webapp/tsconfig.app.json",
               "apps/visual-knight-webapp/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -116,7 +121,67 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/visual-knight-webapp-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "backend-webapp": {
+      "root": "apps/backend-webapp",
+      "sourceRoot": "apps/backend-webapp/src",
+      "projectType": "application",
+      "prefix": "backend-webapp",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/builders:node-build",
+          "options": {
+            "outputPath": "dist/apps/backend-webapp",
+            "main": "apps/backend-webapp/src/main.ts",
+            "tsConfig": "apps/backend-webapp/tsconfig.app.json",
+            "assets": [
+              "apps/backend-webapp/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/backend-webapp/src/environments/environment.ts",
+                  "with": "apps/backend-webapp/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/builders:node-execute",
+          "options": {
+            "buildTarget": "backend-webapp:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/backend-webapp/tsconfig.app.json",
+              "apps/backend-webapp/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/backend-webapp/jest.config.js",
+            "tsConfig": "apps/backend-webapp/tsconfig.spec.json"
           }
         }
       }

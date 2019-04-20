@@ -9,10 +9,18 @@
   },
   "projects": {
     "visual-knight-webapp": {
-      "tags": ["webapp"]
+      "tags": [
+        "webapp"
+      ]
     },
     "visual-knight-webapp-e2e": {
       "tags": []
+    },
+    "backend-webapp": {
+      "tags": [
+        "backend",
+        "webapp"
+      ]
     }
   }
 }
