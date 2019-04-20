@@ -185,6 +185,64 @@
           }
         }
       }
+    },
+    "backend-comparison": {
+      "root": "apps/backend-comparison",
+      "sourceRoot": "apps/backend-comparison/src",
+      "projectType": "application",
+      "prefix": "backend-comparison",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/builders:node-build",
+          "options": {
+            "outputPath": "dist/apps/backend-comparison",
+            "main": "apps/backend-comparison/src/main.ts",
+            "tsConfig": "apps/backend-comparison/tsconfig.app.json",
+            "assets": [
+              "apps/backend-comparison/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/backend-comparison/src/environments/environment.ts",
+                  "with": "apps/backend-comparison/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/builders:node-execute",
+          "options": {
+            "buildTarget": "backend-comparison:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/backend-comparison/tsconfig.app.json",
+              "apps/backend-comparison/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/backend-comparison/jest.config.js",
+            "tsConfig": "apps/backend-comparison/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {

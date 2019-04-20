@@ -21,6 +21,11 @@
         "backend",
         "webapp"
       ]
+    },
+    "backend-comparison": {
+      "tags": [
+        "backend"
+      ]
     }
   }
 }
