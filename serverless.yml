@@ -9,38 +9,33 @@ provider:
   tracing: true
   profile: serverless-cli-dev-thought
 
+plugins:
+  - serverless-offline
+
 package:
+  individually: true
   exclude:
     - '**'
-  include:
-    - dist/apps/**
-#   exclude:
-#     - .git/**
-#     - apps/**
-#     - libs/**
-#     - tools/**
-#     - nodemon.json
-#     - README.md
-#     - .editorconfig
-#     - .prettier*
-#     - angular.json
-#     - jest.config.js
-#     - nx.json
-#     - serverless.yml
-#     - visual-knight.png
-#     - ts*
 
 functions:
-  # webapp:
-  #   handler: apps/backend-webapp/src/index.handler
+  webapp:
+    handler: apps/backend-webapp/dist/index.handler
+    package:
+      include:
+        - apps/backend-webapp/dist/**
+        - apps/backend-webapp/node_modules/**
 
-  #   events:
-  #     - http:
-  #         method: any
-  #         path: /webapp
+    events:
+      - http:
+          method: any
+          path: /webapp
 
   comparison:
-    handler: dist/apps/backend-comparison/main.backendComparison
+    handler: apps/backend-comparison/dist/index.handler
+    package:
+      include:
+        - apps/backend-comparison/dist/**
+        - apps/backend-comparison/node_modules/**
 
     events:
       - http:

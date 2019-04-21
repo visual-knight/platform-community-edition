@@ -205,7 +205,7 @@
           },
           "configurations": {
             "production": {
-              "optimization": true,
+              "optimization": false,
               "extractLicenses": true,
               "sourceMap": false,
               "inspect": false,
@@ -215,13 +215,7 @@
                   "with": "apps/backend-comparison/src/environments/environment.prod.ts"
                 }
               ],
-              "externalDependencies": [
-                "@nestjs/microservices",
-                "@nestjs/platform-express",
-                "class-transformer",
-                "class-validator",
-                "cache-manager"
-              ]
+              "webpackConfig": "api.webpack.config.js"
             }
           }
         },
