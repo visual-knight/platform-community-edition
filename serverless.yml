@@ -1,0 +1,48 @@
+service: visual-knight-platform
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  memorySize: 128
+  stage: dev
+  region: eu-central-1
+  tracing: true
+  profile: serverless-cli-dev-thought
+
+package:
+  exclude:
+    - '**'
+  include:
+    - dist/apps/**
+#   exclude:
+#     - .git/**
+#     - apps/**
+#     - libs/**
+#     - tools/**
+#     - nodemon.json
+#     - README.md
+#     - .editorconfig
+#     - .prettier*
+#     - angular.json
+#     - jest.config.js
+#     - nx.json
+#     - serverless.yml
+#     - visual-knight.png
+#     - ts*
+
+functions:
+  # webapp:
+  #   handler: apps/backend-webapp/src/index.handler
+
+  #   events:
+  #     - http:
+  #         method: any
+  #         path: /webapp
+
+  comparison:
+    handler: dist/apps/backend-comparison/main.backendComparison
+
+    events:
+      - http:
+          method: any
+          path: /comparison

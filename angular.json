@@ -139,7 +139,7 @@
           "builder": "@nrwl/builders:node-build",
           "options": {
             "outputPath": "dist/apps/backend-webapp",
-            "main": "apps/backend-webapp/src/main.ts",
+            "main": "apps/backend-webapp/src/index.ts",
             "tsConfig": "apps/backend-webapp/tsconfig.app.json",
             "assets": [
               "apps/backend-webapp/src/assets"
@@ -197,7 +197,7 @@
           "builder": "@nrwl/builders:node-build",
           "options": {
             "outputPath": "dist/apps/backend-comparison",
-            "main": "apps/backend-comparison/src/main.ts",
+            "main": "apps/backend-comparison/src/index.ts",
             "tsConfig": "apps/backend-comparison/tsconfig.app.json",
             "assets": [
               "apps/backend-comparison/src/assets"
@@ -207,12 +207,20 @@
             "production": {
               "optimization": true,
               "extractLicenses": true,
+              "sourceMap": false,
               "inspect": false,
               "fileReplacements": [
                 {
                   "replace": "apps/backend-comparison/src/environments/environment.ts",
                   "with": "apps/backend-comparison/src/environments/environment.prod.ts"
                 }
+              ],
+              "externalDependencies": [
+                "@nestjs/microservices",
+                "@nestjs/platform-express",
+                "class-transformer",
+                "class-validator",
+                "cache-manager"
               ]
             }
           }
