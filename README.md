@@ -1,3 +1,5 @@
+![Visual Knight](visual-knight.png)
+
 # Community edition of the Visual Knight Platform
 
 The ecosystem contains 4 essential parts in Visual Knight.
