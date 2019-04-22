@@ -3,11 +3,15 @@ service: visual-knight-platform
 provider:
   name: aws
   runtime: nodejs8.10
-  memorySize: 128
+  memorySize: 256
   stage: dev
   region: eu-central-1
-  tracing: true
   profile: serverless-cli-dev-thought
+  apiGateway:
+    minimumCompressionSize: 1024
+  tracing:
+    apiGateway: true
+    lambda: true
 
 plugins:
   - serverless-offline
@@ -39,5 +43,10 @@ functions:
 
     events:
       - http:
+          cors: true
           method: any
           path: /comparison
+      - http:
+          cors: true
+          path: '/comparison/{proxy+}'
+          method: any
