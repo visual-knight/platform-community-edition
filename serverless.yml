@@ -1,17 +1,24 @@
 service: visual-knight-platform
 
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  region: ${opt:region, self:provider.region}
+
 provider:
   name: aws
   runtime: nodejs8.10
-  memorySize: 256
+  memorySize: 512
   stage: dev
   region: eu-central-1
-  profile: serverless-cli-dev-thought
+  profile: ${env:AWS_PROFILE_VISUAL_KNIGHT_PLATFORM}
   apiGateway:
     minimumCompressionSize: 1024
   tracing:
     apiGateway: true
     lambda: true
+  environment:
+    accountId: '#{AWS::AccountId}'
+    region: '#{AWS::Region}'
 
 plugins:
   - serverless-offline
@@ -50,3 +57,30 @@ functions:
           cors: true
           path: '/comparison/{proxy+}'
           method: any
+
+  processTestsessionImage:
+    handler: apps/lambdas/dist/processTestsessionImage.handler
+    package:
+      include:
+        - apps/lambdas/dist/processTestsessionImage.js
+    environment:
+      # needs permission to call CREATE_DIFF_FUNCTION_NAME
+      # get function reference name for CREATE_DIFF_FUNCTION_NAME
+      CREATE_DIFF_FUNCTION_NAME: ${self:provider.stage}-createDiff
+      PRISMA: ${ssm:/${self:custom:stage}/visual-knigth-platform/prisma~true}
+    events:
+      - s3:
+          bucket: photos
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .screenshot.png
+
+  createDiff:
+    handler: apps/lambdas/dist/createDiff.handler
+    package:
+      include:
+        - apps/lambdas/dist/createDiff.js
+    environment:
+      PRISMA: ${ssm:/${self:custom:stage}/visual-knigth-platform/prisma~true}
+      threshold: 12
+      includeAA: true
