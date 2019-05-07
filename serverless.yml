@@ -1,15 +1,11 @@
 service: visual-knight-platform
 
-custom:
-  stage: ${opt:stage, self:provider.stage}
-  region: ${opt:region, self:provider.region}
-
 provider:
   name: aws
   runtime: nodejs8.10
   memorySize: 512
-  stage: dev
-  region: eu-central-1
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'eu-central-1'}
   profile: ${env:AWS_PROFILE_VISUAL_KNIGHT_PLATFORM}
   apiGateway:
     minimumCompressionSize: 1024
@@ -17,60 +13,52 @@ provider:
     apiGateway: true
     lambda: true
   environment:
-    accountId: '#{AWS::AccountId}'
-    region: '#{AWS::Region}'
+    region: ${opt:region, 'eu-central-1'}
 
 plugins:
   - serverless-offline
 
 package:
   individually: true
-  exclude:
-    - '**'
 
 functions:
   webapp:
     handler: apps/backend-webapp/dist/index.handler
     package:
-      include:
-        - apps/backend-webapp/dist/**
-        - apps/backend-webapp/node_modules/**
+      artifact: apps/backend-webapp/dist/build.zip
 
     events:
       - http:
           method: any
           path: /webapp
 
-  comparison:
-    handler: apps/backend-comparison/dist/index.handler
-    package:
-      include:
-        - apps/backend-comparison/dist/**
-        - apps/backend-comparison/node_modules/**
+  # comparison:
+  #   handler: apps/backend-comparison/dist/index.handler
+  #   package:
+  #     artifact: apps/backend-comparison/dist/build.zip
 
-    events:
-      - http:
-          cors: true
-          method: any
-          path: /comparison
-      - http:
-          cors: true
-          path: '/comparison/{proxy+}'
-          method: any
+  #   events:
+  #     - http:
+  #         cors: true
+  #         method: any
+  #         path: /comparison
+  #     - http:
+  #         cors: true
+  #         path: '/comparison/{proxy+}'
+  #         method: any
 
   processTestsessionImage:
     handler: apps/lambdas/dist/processTestsessionImage.handler
     package:
-      include:
-        - apps/lambdas/dist/processTestsessionImage.js
+      artifact: apps/lambdas/dist/processTestsessionImage.zip
     environment:
       # needs permission to call CREATE_DIFF_FUNCTION_NAME
       # get function reference name for CREATE_DIFF_FUNCTION_NAME
       CREATE_DIFF_FUNCTION_NAME: ${self:provider.stage}-createDiff
-      PRISMA: ${ssm:/${self:custom:stage}/visual-knigth-platform/prisma~true}
+      PRISMA: ${ssm:/${self:provider.stage}/visual-knigth-platform/prisma~true}
     events:
       - s3:
-          bucket: photos
+          bucket: visual-knight-platform-photos
           event: s3:ObjectCreated:*
           rules:
             - suffix: .screenshot.png
@@ -78,9 +66,8 @@ functions:
   createDiff:
     handler: apps/lambdas/dist/createDiff.handler
     package:
-      include:
-        - apps/lambdas/dist/createDiff.js
+      artifact: apps/lambdas/dist/createDiff.zip
     environment:
-      PRISMA: ${ssm:/${self:custom:stage}/visual-knigth-platform/prisma~true}
+      PRISMA: ${ssm:/${self:provider.stage}/visual-knigth-platform/prisma~true}
       threshold: 12
       includeAA: true

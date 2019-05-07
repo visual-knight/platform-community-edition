@@ -4,9 +4,7 @@
   "description": "description",
   "author": "",
   "license": "MIT",
-  "scripts": {
-    "build": "tsc -p tsconfig.build.json"
-  },
+  "scripts": {},
   "dependencies": {
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
