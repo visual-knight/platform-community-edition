@@ -25,27 +25,27 @@ functions:
   webapp:
     handler: apps/backend-webapp/dist/index.handler
     package:
-      artifact: apps/backend-webapp/dist/build.zip
+      artifact: apps/backend-webapp/dist/webapp.zip
 
     events:
       - http:
           method: any
           path: /webapp
 
-  # comparison:
-  #   handler: apps/backend-comparison/dist/index.handler
-  #   package:
-  #     artifact: apps/backend-comparison/dist/build.zip
+  comparison:
+    handler: apps/backend-comparison/dist/index.handler
+    package:
+      artifact: apps/backend-comparison/dist/comparison.zip
 
-  #   events:
-  #     - http:
-  #         cors: true
-  #         method: any
-  #         path: /comparison
-  #     - http:
-  #         cors: true
-  #         path: '/comparison/{proxy+}'
-  #         method: any
+    events:
+      - http:
+          cors: true
+          method: any
+          path: /comparison
+      - http:
+          cors: true
+          path: '/comparison/{proxy+}'
+          method: any
 
   processTestsessionImage:
     handler: apps/lambdas/dist/processTestsessionImage.handler
@@ -55,7 +55,8 @@ functions:
       # needs permission to call CREATE_DIFF_FUNCTION_NAME
       # get function reference name for CREATE_DIFF_FUNCTION_NAME
       CREATE_DIFF_FUNCTION_NAME: ${self:provider.stage}-createDiff
-      PRISMA: ${ssm:/${self:provider.stage}/visual-knigth-platform/prisma~true}
+      # PRISMA: ${ssm:/${self:provider.stage}/visual-knigth-platform/prisma~true}
+      PRISMA: some-endpoint
     events:
       - s3:
           bucket: visual-knight-platform-photos
@@ -68,6 +69,7 @@ functions:
     package:
       artifact: apps/lambdas/dist/createDiff.zip
     environment:
-      PRISMA: ${ssm:/${self:provider.stage}/visual-knigth-platform/prisma~true}
+      # PRISMA: ${ssm:/${self:provider.stage}/visual-knigth-platform/prisma~true}
+      PRISMA: some-endpoint
       threshold: 12
       includeAA: true
