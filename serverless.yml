@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   memorySize: 512
+  timeout: 15
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-central-1'}
   profile: ${env:AWS_PROFILE_VISUAL_KNIGHT_PLATFORM}
@@ -12,8 +13,7 @@ provider:
   tracing:
     apiGateway: true
     lambda: true
-  environment:
-    region: ${opt:region, 'eu-central-1'}
+  environment: ${file(./config/env.yml)}
 
 plugins:
   - serverless-offline
@@ -55,8 +55,6 @@ functions:
       # needs permission to call CREATE_DIFF_FUNCTION_NAME
       # get function reference name for CREATE_DIFF_FUNCTION_NAME
       CREATE_DIFF_FUNCTION_NAME: ${self:provider.stage}-createDiff
-      # PRISMA: ${ssm:/${self:provider.stage}/visual-knigth-platform/prisma~true}
-      PRISMA: some-endpoint
     events:
       - s3:
           bucket: visual-knight-platform-photos
@@ -69,7 +67,26 @@ functions:
     package:
       artifact: apps/lambdas/dist/createDiff.zip
     environment:
-      # PRISMA: ${ssm:/${self:provider.stage}/visual-knigth-platform/prisma~true}
-      PRISMA: some-endpoint
+      threshold: 12
+      includeAA: true
+
+  invokeTestsession:
+    handler: apps/lambdas/dist/invokeTestsession.handler
+    package:
+      artifact: apps/lambdas/dist/invokeTestsession.zip
+
+    events:
+      - http:
+          path: /invokeTestsession
+          method: post
+          cors: true
+          integration: lambda-proxy
+      - http:
+          path: /invokeTestsession
+          method: get
+          cors: true
+          integration: lambda-proxy
+
+    environment:
       threshold: 12
       includeAA: true
