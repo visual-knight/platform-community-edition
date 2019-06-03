@@ -5,7 +5,8 @@ module.exports = {
   entry: {
     processTestsessionImage:
       './apps/lambdas/src/processTestsessionImage/index.ts',
-    createDiff: './apps/lambdas/src/createDiff/index.ts'
+    createDiff: './apps/lambdas/src/createDiff/index.ts',
+    invokeTestsession: './apps/lambdas/src/invokeTestsession/index.ts'
   },
   devtool: 'source-map',
   resolve: {
