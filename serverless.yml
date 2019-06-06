@@ -55,20 +55,14 @@ functions:
       # needs permission to call CREATE_DIFF_FUNCTION_NAME
       # get function reference name for CREATE_DIFF_FUNCTION_NAME
       CREATE_DIFF_FUNCTION_NAME: ${self:provider.stage}-createDiff
+      threshold: 12
+      includeAA: true
     events:
       - s3:
           bucket: visual-knight-platform-photos
           event: s3:ObjectCreated:*
           rules:
             - suffix: .screenshot.png
-
-  createDiff:
-    handler: apps/lambdas/dist/createDiff.handler
-    package:
-      artifact: apps/lambdas/dist/createDiff.zip
-    environment:
-      threshold: 12
-      includeAA: true
 
   invokeTestsession:
     handler: apps/lambdas/dist/invokeTestsession.handler
@@ -90,3 +84,18 @@ functions:
     environment:
       threshold: 12
       includeAA: true
+
+  getTestsessionStatus:
+    handler: apps/lambdas/dist/getTestsessionStatus.handler
+    package:
+      artifact: apps/lambdas/dist/getTestsessionStatus.zip
+
+    events:
+      - http:
+          path: /getTestsessionStatus
+          method: get
+          cors: true
+          integration: lambda-proxy
+
+    environment:
+      app_url: ${env:APP_URL}
