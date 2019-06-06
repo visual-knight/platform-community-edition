@@ -26,9 +26,7 @@
               "apps/visual-knight-webapp/src/favicon.ico",
               "apps/visual-knight-webapp/src/assets"
             ],
-            "styles": [
-              "apps/visual-knight-webapp/src/styles.scss"
-            ],
+            "styles": ["apps/visual-knight-webapp/src/styles.scss"],
             "scripts": [],
             "es5BrowserSupport": true
           },
@@ -84,9 +82,7 @@
               "apps/visual-knight-webapp/tsconfig.app.json",
               "apps/visual-knight-webapp/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -121,9 +117,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/visual-knight-webapp-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -141,9 +135,7 @@
             "outputPath": "dist/apps/backend-webapp",
             "main": "apps/backend-webapp/src/index.ts",
             "tsConfig": "apps/backend-webapp/tsconfig.app.json",
-            "assets": [
-              "apps/backend-webapp/src/assets"
-            ]
+            "assets": ["apps/backend-webapp/src/assets"]
           },
           "configurations": {
             "production": {
@@ -172,9 +164,7 @@
               "apps/backend-webapp/tsconfig.app.json",
               "apps/backend-webapp/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -199,9 +189,7 @@
             "outputPath": "dist/apps/backend-comparison",
             "main": "apps/backend-comparison/src/index.ts",
             "tsConfig": "apps/backend-comparison/tsconfig.app.json",
-            "assets": [
-              "apps/backend-comparison/src/assets"
-            ]
+            "assets": ["apps/backend-comparison/src/assets"]
           },
           "configurations": {
             "production": {
@@ -232,9 +220,7 @@
               "apps/backend-comparison/tsconfig.app.json",
               "apps/backend-comparison/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -243,6 +229,36 @@
             "jestConfig": "apps/backend-comparison/jest.config.js",
             "tsConfig": "apps/backend-comparison/tsconfig.spec.json"
           }
+        }
+      }
+    },
+    "prisma": {
+      "root": "libs/prisma",
+      "sourceRoot": "libs/prisma/src",
+      "projectType": "library",
+      "prefix": "platform-community-edition",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/prisma/tsconfig.lib.json",
+              "libs/prisma/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/prisma/jest.config.js",
+            "tsConfig": "libs/prisma/tsconfig.spec.json"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
         }
       }
     }
