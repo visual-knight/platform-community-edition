@@ -1,9 +1,9 @@
 import { S3Handler } from 'aws-lambda';
 
 import { loadTestSessionData } from './loadTestsessionData';
-import { createDiff } from './invokeCreateDiff';
 import { updateImageData } from './updateImageData';
 import { updateAutoBaseline } from './updateAutoBaseline';
+import { createDiff } from './createDiff/createDiff';
 
 export const handler: S3Handler = async (event, _context) => {
   const srcBucket = event.Records[0].s3.bucket.name;
@@ -24,15 +24,16 @@ export const handler: S3Handler = async (event, _context) => {
 
   if (baselineVariationRef) {
     console.log(`Create diff`);
-    const createDiffResult = await createDiff(
+    const {
+      misMatchPercentage,
+      diffImageKey,
+      isSameDimensions
+    } = await createDiff({
       srcBucket,
       srcKey,
       testSessionId,
       baselineVariationRef
-    );
-    const { misMatchPercentage, diffImageKey, isSameDimensions } = JSON.parse(
-      createDiffResult.Payload.toString()
-    );
+    });
 
     await updateImageData(
       testSessionId,
@@ -42,7 +43,7 @@ export const handler: S3Handler = async (event, _context) => {
         : 'ACCEPTED',
       diffImageKey,
       baselineVariationRef.id,
-      parseFloat(misMatchPercentage),
+      misMatchPercentage,
       isSameDimensions
     );
     console.log('Updated imaged data');

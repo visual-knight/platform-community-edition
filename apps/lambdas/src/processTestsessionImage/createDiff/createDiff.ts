@@ -7,15 +7,17 @@ import { uploadDiffImage } from './uploadDiffImage';
 const threshold = parseFloat(process.env.threshold);
 const includeAA: boolean = !!process.env.includeAA;
 
-export const handler = async (event: CreateDiffEvent) => {
-  const srcBucket = event.srcBucket;
-  const testSessionId = event.testSessionId;
+export async function createDiff(
+  data: CreateDiffData
+): Promise<CreateDiffResult> {
+  const srcBucket = data.srcBucket;
+  const testSessionId = data.testSessionId;
 
   let images: S3.Body[];
   try {
     images = await Promise.all([
-      loadImage(srcBucket, event.srcKey),
-      loadImage(srcBucket, event.baselineVariationRef.imageKey)
+      loadImage(srcBucket, data.srcKey),
+      loadImage(srcBucket, data.baselineVariationRef.imageKey)
     ]);
   } catch (error) {
     return error;
@@ -46,11 +48,7 @@ export const handler = async (event: CreateDiffEvent) => {
     }
   );
 
-  try {
-    await uploadDiffImage(diff, srcBucket, diffImageKey);
-  } catch (error) {
-    return JSON.stringify(error);
-  }
+  await uploadDiffImage(diff, srcBucket, diffImageKey);
 
   return {
     misMatchPercentage:
@@ -58,9 +56,9 @@ export const handler = async (event: CreateDiffEvent) => {
     isSameDimensions,
     diffImageKey
   };
-};
+}
 
-interface CreateDiffEvent {
+interface CreateDiffData {
   srcBucket: string;
   testSessionId: string;
   srcKey: string;
@@ -68,4 +66,10 @@ interface CreateDiffEvent {
     imageKey: string;
     id: string;
   };
+}
+
+interface CreateDiffResult {
+  misMatchPercentage?: number;
+  isSameDimensions: boolean;
+  diffImageKey?: string;
 }
