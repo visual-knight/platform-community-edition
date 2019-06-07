@@ -1,75 +1,67 @@
-import { GraphQLClient } from 'graphql-request';
-import { find } from 'lodash';
-import { InvokeTestsessessionTest } from './loadTestData.graphql';
-import {
-  createTestSessionWithExistingVariationMutation,
-  createTestSessionWithNewVariationMutation,
-  createTestMutation,
-  CreateTestSessionData,
-  CreateTestData
-} from './create.graphql';
+import { Test, Prisma, TestSession } from '@platform-community-edition/prisma';
 
-const client = new GraphQLClient(process.env.PRISMA_ENDPOINT, {
-  headers: {
-    Authorization: `Bearer ${process.env.PRISMA_TOKEN}`
-  }
+const prisma = new Prisma({
+  endpoint: 'http://localhost:4466/hello-world/dev',
+  secret: 'mysecret42'
 });
 
 export async function createTestSession(
-  test: InvokeTestsessessionTest,
+  test: Test,
   projectId: string,
   deviceName: string | null = null,
   browserName: string | null = null,
   misMatchTolerance: number,
   autoBaseline: boolean
 ): Promise<string> {
-  let mutation = '';
-  const variables = {
-    deviceName,
-    browserName,
-    misMatchTolerance,
-    variationId: null,
-    testId: null,
-    autoBaseline: undefined,
-    testname: undefined,
-    projectId: undefined
-  };
+  let testSession: TestSession;
+
   if (test.id) {
-    const variation = find(test.variations, {
-      deviceName,
-      browserName
+    const variations = await prisma.variations({
+      where: { test: { id: test.id }, deviceName, browserName }
     });
-    if (variation) {
-      mutation = createTestSessionWithExistingVariationMutation;
-      variables.variationId = variation.id;
+
+    // create test session and connect to existing variation
+    if (variations.length > 0) {
+      testSession = await prisma.createTestSession({
+        misMatchTolerance,
+        autoBaseline,
+        variation: {
+          connect: { id: variations[0].id }
+        }
+      });
     } else {
-      mutation = createTestSessionWithNewVariationMutation;
-      variables.testId = test.id;
-      variables.autoBaseline = autoBaseline;
+      // create test session and variation
+      testSession = await prisma.createTestSession({
+        misMatchTolerance,
+        autoBaseline,
+        variation: {
+          create: {
+            browserName,
+            deviceName,
+            test: { connect: { id: test.id } }
+          }
+        }
+      });
     }
-
-    const { createTestSessionData } = await client.request<
-      CreateTestSessionData
-    >(mutation, variables);
-    return createTestSessionData.id;
   } else {
-    mutation = createTestMutation;
-    variables.testname = test.name;
-    variables.projectId = projectId;
-    variables.autoBaseline = autoBaseline;
-    const { createTest } = await client.request<CreateTestData>(
-      mutation,
-      variables
-    );
-    return createTest.variations[0].testSessions[0].id;
+    // create test, test session and variation
+    testSession = await prisma.createTestSession({
+      misMatchTolerance,
+      autoBaseline,
+      variation: {
+        create: {
+          browserName,
+          deviceName,
+          test: {
+            create: {
+              name: test.name,
+              project: { connect: { id: projectId } }
+            }
+          }
+        }
+      }
+    });
   }
-}
 
-export interface CreateTestsessionEvent {
-  test: string;
-  projectId: string;
-  deviceName?: string;
-  browserName?: string;
-  misMatchTolerance: number;
-  autoBaseline: boolean;
+  return testSession.id;
 }

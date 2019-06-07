@@ -1,10 +1,10 @@
 import * as retry from 'bluebird-retry';
-import { loadTestSession } from './loadTestsession';
+import { loadTestSession, LoadTestSessionData } from './loadTestsession';
 
 const appUrl = process.env.APP_URL;
 
 export async function getTestsessionStatus(testsessionId: string) {
-  const testSessionData = await retry<any>(
+  const { testSession, variation } = await retry<LoadTestSessionData>(
     loadTestSession.bind(this, testsessionId),
     {
       interval: 400,
@@ -12,11 +12,9 @@ export async function getTestsessionStatus(testsessionId: string) {
     }
   );
 
-  console.log('final test session data', testSessionData);
-  console.log(testSessionData);
-  return Object.assign(testSessionData, {
-    link: `${appUrl}/test/${testSessionData.id}/variation/${
-      testSessionData.variation.id
-    }`
+  console.log('final test session data', testSession);
+  console.log(testSession);
+  return Object.assign(testSession, {
+    link: `${appUrl}/test/${testSession.id}/variation/${variation.id}`
   });
 }

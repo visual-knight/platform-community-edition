@@ -1,43 +1,30 @@
-import { GraphQLClient } from 'graphql-request';
-import {
-  getPreconditionDataQuery,
-  createProjectMutation,
-  PreconditionQueryData,
-  CreateProjectData
-} from './createProject.graphql';
-
-const client = new GraphQLClient(process.env.PRISMA_ENDPOINT, {
-  headers: {
-    Authorization: `Bearer ${process.env.PRISMA_TOKEN}`
-  }
+import { Prisma } from '@platform-community-edition/prisma';
+const prisma = new Prisma({
+  endpoint: 'http://localhost:4466/hello-world/dev',
+  secret: 'mysecret42'
 });
 
-export async function createProject(
+export async function getOrCreateProject(
   project: string,
   apiKey: string
 ): Promise<string> {
-  const { projects, users } = await client.request<PreconditionQueryData>(
-    getPreconditionDataQuery,
-    {
-      id: project,
-      projectName: project,
-      apiKey
-    }
-  );
+  const user = await prisma.user({ apiKey });
+  if (!user) {
+    throw new Error('Unknown API Key!');
+  }
+
+  const projects = await prisma
+    .user({ apiKey })
+    .projects({ where: { OR: [{ name: project }, { id: project }] } });
 
   if (projects.length > 0) {
     return projects[0].id;
   }
 
-  const { createProjectData } = await client.request<CreateProjectData>(
-    createProjectMutation,
-    {
-      projectName: project,
-      userId: users[0].id
-    }
-  );
+  const createdProject = await prisma.createProject({
+    name: project,
+    users: { connect: { id: user.id } }
+  });
 
-  if (createProjectData) {
-    return createProjectData.id;
-  }
+  return createdProject.id;
 }

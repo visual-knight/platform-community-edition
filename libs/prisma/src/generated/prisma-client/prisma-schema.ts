@@ -1837,6 +1837,7 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+  apiKey: String
 }
 
 type Variation {

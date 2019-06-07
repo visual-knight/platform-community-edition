@@ -984,6 +984,7 @@ export interface VariationUpdateManyWithWhereNestedInput {
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   email?: Maybe<String>;
+  apiKey?: Maybe<String>;
 }>;
 
 export interface TestSessionUpdateWithoutVariationDataInput {

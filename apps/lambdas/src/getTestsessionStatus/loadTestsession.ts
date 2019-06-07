@@ -1,28 +1,27 @@
-import { GraphQLClient } from 'graphql-request';
 import {
-  GetTestsessionQueryData,
-  GetTestsessionQuery
-} from './loadTestsession.graphql';
+  Prisma,
+  TestSession,
+  Variation
+} from '@platform-community-edition/prisma';
 
-const client = new GraphQLClient(process.env.PRISMA_ENDPOINT, {
-  headers: {
-    Authorization: `Bearer ${process.env.PRISMA_TOKEN}`
-  }
+const prisma = new Prisma({
+  endpoint: 'http://localhost:4466/hello-world/dev',
+  secret: 'mysecret42'
 });
 
-export async function loadTestSession(testSessionId: string) {
-  const data = await client.request<GetTestsessionQueryData>(
-    GetTestsessionQuery,
-    {
-      testSessionId
-    }
-  );
+export async function loadTestSession(
+  testSessionId: string
+): Promise<LoadTestSessionData> {
+  const testSession = await prisma.testSession({ id: testSessionId });
+  const variation = await prisma.testSession({ id: testSessionId }).variation();
+  const baselineVariationRef = await prisma
+    .testSession({ id: testSessionId })
+    .baselineRef();
 
-  const testSession = data.testSession;
   console.log(testSession);
   if (
     ((testSession.misMatchPercentage === null &&
-      testSession.variation.baselineVariationRef !== null) ||
+      baselineVariationRef !== null) ||
       (testSession.misMatchPercentage === null &&
         testSession.autoBaseline === true)) &&
     testSession.isSameDimensions !== false
@@ -30,5 +29,10 @@ export async function loadTestSession(testSessionId: string) {
     console.log('No misMatchPercentage yet');
     throw new Error('No misMatchPercentage yet');
   }
-  return testSession;
+  return { testSession, variation };
+}
+
+export interface LoadTestSessionData {
+  testSession: TestSession;
+  variation: Variation;
 }

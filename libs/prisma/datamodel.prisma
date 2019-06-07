@@ -10,7 +10,7 @@ type User {
   active: Boolean! @default(value: false)
   role: Role! @default(value: "CUSTOMER")
   projects: [Project!]! @relation(link: TABLE, name: "ProjectOnUser")
-  apiKey: String!
+  apiKey: String! @unique
 }
 
 type RefreshTokenList {
