@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   memorySize: 512
-  timeout: 15
+  timeout: 20
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-central-1'}
   profile: ${env:AWS_PROFILE_VISUAL_KNIGHT_PLATFORM}
@@ -51,18 +51,17 @@ functions:
     handler: apps/lambdas/dist/processTestsessionImage.handler
     package:
       artifact: apps/lambdas/dist/processTestsessionImage.zip
-    environment:
-      # needs permission to call CREATE_DIFF_FUNCTION_NAME
-      # get function reference name for CREATE_DIFF_FUNCTION_NAME
-      CREATE_DIFF_FUNCTION_NAME: ${self:provider.stage}-createDiff
-      threshold: 12
-      includeAA: true
     events:
       - s3:
           bucket: visual-knight-platform-photos
           event: s3:ObjectCreated:*
           rules:
             - suffix: .screenshot.png
+
+    environment:
+      threshold: 12
+      includeAA: true
+      imageBucketName: 'visual-knight-images'
 
   invokeTestsession:
     handler: apps/lambdas/dist/invokeTestsession.handler
@@ -84,6 +83,7 @@ functions:
     environment:
       threshold: 12
       includeAA: true
+      imageBucketName: 'visual-knight-images'
 
   getTestsessionStatus:
     handler: apps/lambdas/dist/getTestsessionStatus.handler
