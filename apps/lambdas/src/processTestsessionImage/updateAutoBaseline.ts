@@ -1,10 +1,7 @@
-import { GraphQLClient } from 'graphql-request';
-import gql from 'graphql-tag';
-
-const client = new GraphQLClient(process.env.PRISMA_ENDPOINT, {
-  headers: {
-    Authorization: `Bearer ${process.env.PRISMA_TOKEN}`
-  }
+import { Prisma } from '@platform-community-edition/prisma';
+const prisma = new Prisma({
+  endpoint: 'http://localhost:4466/hello-world/dev',
+  secret: 'mysecret42'
 });
 
 export async function updateAutoBaseline(
@@ -12,38 +9,21 @@ export async function updateAutoBaseline(
   testSessionId: string,
   variationId: string
 ) {
-  const variables = {
-    imageKey,
-    testSessionId,
-    variationId
-  };
-  const mutation = gql`
-    mutation updateData(
-      $variationId: ID!
-      $testSessionId: ID!
-      $imageKey: String!
-    ) {
-      updateVariation(
-        where: { id: $variationId }
-        data: {
-          baselineVariationRef: { connect: { id: $testSessionId } }
-          testSessions: {
-            update: {
-              where: { id: $testSessionId }
-              data: {
-                imageKey: $imageKey
-                isSameDimensions: true
-                misMatchPercentage: 0
-                state: ACCEPTED
-              }
-            }
+  await prisma.updateVariation({
+    where: { id: variationId },
+    data: {
+      baselineVariationRef: { connect: { id: testSessionId } },
+      testSessions: {
+        update: {
+          where: { id: testSessionId },
+          data: {
+            imageKey: imageKey,
+            isSameDimensions: true,
+            misMatchPercentage: 0,
+            state: 'ACCEPTED'
           }
         }
-      ) {
-        id
       }
     }
-  `;
-
-  await client.request(mutation, variables);
+  });
 }

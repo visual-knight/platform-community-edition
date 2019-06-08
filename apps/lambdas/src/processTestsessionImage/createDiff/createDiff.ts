@@ -3,6 +3,7 @@ import { PNG } from 'pngjs';
 import Pixelmatch from 'pixelmatch';
 import { S3 } from 'aws-sdk';
 import { uploadDiffImage } from './uploadDiffImage';
+import { TestSession } from '@platform-community-edition/prisma';
 
 const threshold = parseFloat(process.env.threshold);
 const includeAA: boolean = !!process.env.includeAA;
@@ -62,10 +63,7 @@ interface CreateDiffData {
   srcBucket: string;
   testSessionId: string;
   srcKey: string;
-  baselineVariationRef: {
-    imageKey: string;
-    id: string;
-  };
+  baselineVariationRef: TestSession;
 }
 
 interface CreateDiffResult {

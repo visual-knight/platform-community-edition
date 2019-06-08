@@ -1,51 +1,24 @@
-import gql from 'graphql-tag';
-import { GraphQLClient } from 'graphql-request';
-
-const client = new GraphQLClient(process.env.PRISMA_ENDPOINT, {
-  headers: {
-    Authorization: `Bearer ${process.env.PRISMA_TOKEN}`
-  }
+import { Prisma } from '@platform-community-edition/prisma';
+const prisma = new Prisma({
+  endpoint: 'http://localhost:4466/hello-world/dev',
+  secret: 'mysecret42'
 });
 
 export async function loadTestSessionData(testSessionId: string) {
-  const query = gql`
-    query getTestSessionWithBaseline($testSessionId: ID!) {
-      testSession(where: { id: $testSessionId }) {
-        misMatchTolerance
-        autoBaseline
-        variation {
-          id
-          baselineVariationRef {
-            imageKey
-            id
-          }
-        }
-      }
-    }
-  `;
+  const testSession = await prisma.testSession({ id: testSessionId });
+  const baselineVariationRef = await prisma
+    .testSession({ id: testSessionId })
+    .variation()
+    .baselineVariationRef();
+  const variation = await prisma
+    .testSession({ id: testSessionId })
+    .variation()
+    .baselineVariationRef();
 
-  return client
-    .request<TestSessionData>(query, { testSessionId })
-    .then(data => {
-      return {
-        baselineVariationRef: data.testSession.variation.baselineVariationRef,
-        misMatchTolerance: data.testSession.misMatchTolerance,
-        autoBaseline: data.testSession.autoBaseline,
-        variationId: data.testSession.variation.id
-      };
-    });
-}
-
-interface TestSessionData {
-  testSession: {
-    misMatchTolerance: number;
-    autoBaseline: boolean;
-    variation: {
-      id: string;
-      baselineVariationRef: {
-        imageKey: string;
-        id: string;
-      };
-    };
+  return {
+    baselineVariationRef,
+    misMatchTolerance: testSession.misMatchTolerance,
+    autoBaseline: testSession.autoBaseline,
+    variationId: variation.id
   };
 }
