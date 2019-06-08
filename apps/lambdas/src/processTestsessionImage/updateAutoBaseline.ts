@@ -1,15 +1,11 @@
-import { Prisma } from '@platform-community-edition/prisma';
-const prisma = new Prisma({
-  endpoint: 'http://localhost:4466/hello-world/dev',
-  secret: 'mysecret42'
-});
+import { prismaClient } from '@platform-community-edition/prisma';
 
 export async function updateAutoBaseline(
   imageKey: string,
   testSessionId: string,
   variationId: string
 ) {
-  await prisma.updateVariation({
+  await prismaClient.updateVariation({
     where: { id: variationId },
     data: {
       baselineVariationRef: { connect: { id: testSessionId } },

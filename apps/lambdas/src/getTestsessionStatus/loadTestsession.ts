@@ -1,20 +1,17 @@
 import {
-  Prisma,
   TestSession,
-  Variation
+  Variation,
+  prismaClient
 } from '@platform-community-edition/prisma';
-
-const prisma = new Prisma({
-  endpoint: 'http://localhost:4466/hello-world/dev',
-  secret: 'mysecret42'
-});
 
 export async function loadTestSession(
   testSessionId: string
 ): Promise<LoadTestSessionData> {
-  const testSession = await prisma.testSession({ id: testSessionId });
-  const variation = await prisma.testSession({ id: testSessionId }).variation();
-  const baselineVariationRef = await prisma
+  const testSession = await prismaClient.testSession({ id: testSessionId });
+  const variation = await prismaClient
+    .testSession({ id: testSessionId })
+    .variation();
+  const baselineVariationRef = await prismaClient
     .testSession({ id: testSessionId })
     .baselineRef();
 
