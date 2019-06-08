@@ -1,12 +1,7 @@
-import { Prisma } from '@platform-community-edition/prisma';
-
-const prisma = new Prisma({
-  endpoint: 'http://localhost:4466/hello-world/dev',
-  secret: 'mysecret42'
-});
+import { prismaClient } from '@platform-community-edition/prisma';
 
 export async function loadTestData(projectId: string, testname: string) {
-  const tests = await prisma.tests({
+  const tests = await prismaClient.tests({
     where: { name: testname, project: { id: projectId } }
   });
 

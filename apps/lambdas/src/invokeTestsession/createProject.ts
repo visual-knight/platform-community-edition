@@ -1,19 +1,15 @@
-import { Prisma } from '@platform-community-edition/prisma';
-const prisma = new Prisma({
-  endpoint: 'http://localhost:4466/hello-world/dev',
-  secret: 'mysecret42'
-});
+import { prismaClient } from '@platform-community-edition/prisma';
 
 export async function getOrCreateProject(
   project: string,
   apiKey: string
 ): Promise<string> {
-  const user = await prisma.user({ apiKey });
+  const user = await prismaClient.user({ apiKey });
   if (!user) {
     throw new Error('Unknown API Key!');
   }
 
-  const projects = await prisma
+  const projects = await prismaClient
     .user({ apiKey })
     .projects({ where: { OR: [{ name: project }, { id: project }] } });
 
@@ -21,7 +17,7 @@ export async function getOrCreateProject(
     return projects[0].id;
   }
 
-  const createdProject = await prisma.createProject({
+  const createdProject = await prismaClient.createProject({
     name: project,
     users: { connect: { id: user.id } }
   });

@@ -1,8 +1,7 @@
-import { Prisma, TestSessionState } from '@platform-community-edition/prisma';
-const prisma = new Prisma({
-  endpoint: 'http://localhost:4466/hello-world/dev',
-  secret: 'mysecret42'
-});
+import {
+  prismaClient,
+  TestSessionState
+} from '@platform-community-edition/prisma';
 
 export async function updateImageData(
   testSessionId: string,
@@ -13,7 +12,7 @@ export async function updateImageData(
   misMatchPercentage?: number,
   isSameDimensions?: boolean
 ) {
-  const testSession = await prisma.updateTestSession({
+  const testSession = await prismaClient.updateTestSession({
     where: { id: testSessionId },
     data: {
       imageKey,

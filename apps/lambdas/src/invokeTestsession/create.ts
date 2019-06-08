@@ -1,9 +1,5 @@
-import { Test, Prisma, TestSession } from '@platform-community-edition/prisma';
-
-const prisma = new Prisma({
-  endpoint: 'http://localhost:4466/hello-world/dev',
-  secret: 'mysecret42'
-});
+import { Test, TestSession } from '@platform-community-edition/prisma';
+import { prismaClient } from '@platform-community-edition/prisma';
 
 export async function createTestSession(
   test: Test,
@@ -16,13 +12,13 @@ export async function createTestSession(
   let testSession: TestSession;
 
   if (test.id) {
-    const variations = await prisma.variations({
+    const variations = await prismaClient.variations({
       where: { test: { id: test.id }, deviceName, browserName }
     });
 
     // create test session and connect to existing variation
     if (variations.length > 0) {
-      testSession = await prisma.createTestSession({
+      testSession = await prismaClient.createTestSession({
         misMatchTolerance,
         autoBaseline,
         variation: {
@@ -31,7 +27,7 @@ export async function createTestSession(
       });
     } else {
       // create test session and variation
-      testSession = await prisma.createTestSession({
+      testSession = await prismaClient.createTestSession({
         misMatchTolerance,
         autoBaseline,
         variation: {
@@ -45,7 +41,7 @@ export async function createTestSession(
     }
   } else {
     // create test, test session and variation
-    testSession = await prisma.createTestSession({
+    testSession = await prismaClient.createTestSession({
       misMatchTolerance,
       autoBaseline,
       variation: {
