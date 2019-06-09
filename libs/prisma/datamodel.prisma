@@ -5,7 +5,6 @@ type User {
   createdAt: DateTime!
   updatedAt: DateTime!
   lastname: String
-  phoneNumber: String
   forename: String
   active: Boolean! @default(value: false)
   role: Role! @default(value: "CUSTOMER")
@@ -71,8 +70,8 @@ type Variation {
 }
 
 enum Role {
-  OWNER
   CUSTOMER
+  ADMIN
 }
 
 enum TestSessionState {

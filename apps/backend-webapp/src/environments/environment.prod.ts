@@ -28,7 +28,8 @@ export const environment = {
     accessKeyId: process.env.AWS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
     iAmGroupName: process.env.IAM_GROUP_NAME,
-    iAmPath: process.env.IAM_PATH
+    iAmPath: process.env.IAM_PATH,
+    s3BucketName: process.env.bucketName
   },
 
   // s3 user

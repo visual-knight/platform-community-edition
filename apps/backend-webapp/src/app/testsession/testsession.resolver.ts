@@ -3,7 +3,7 @@ import { SignedTestSessionUrls } from './models/signed-urls';
 import { TestsessionService } from './testsession.service';
 import { TestSession } from './models/testsession';
 import { CurrentUser } from '../shared/decorators/current-user.decorator';
-import { User as PrismaUser } from '../../generated/prisma-client';
+import { User as PrismaUser } from '@platform-community-edition/prisma';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guards/auth.guard';
 import { TestSessionWhereArgs } from './models/testsession-where.input';
@@ -19,7 +19,7 @@ export class TestsessionResolver {
     @Args('testSessionId') testSessionId: string,
     @CurrentUser() user: PrismaUser
   ): Promise<SignedTestSessionUrls> {
-    return this.testSessionService.getSignedUrls(user.id, testSessionId);
+    return this.testSessionService.getSignedUrls(testSessionId);
   }
 
   @Query(returns => TestSession)

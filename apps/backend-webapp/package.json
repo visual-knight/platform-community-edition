@@ -19,6 +19,7 @@
   "devDependencies": {
     "@nestjs/swagger": "^3.0.2",
     "@nestjs/testing": "^6.0.0",
+    "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.16.0",
     "@types/jest": "^23.3.13",
     "@types/node": "^10.12.18",

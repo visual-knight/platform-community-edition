@@ -1,37 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../shared/prisma/prisma.service';
 import gql from 'graphql-tag';
-import { AwsService, AwsApiGatewayService } from '../shared/aws';
-import { ProductService } from '../shared/product/product.service';
-import { TestSession } from '../../generated/prisma-client';
+import { TestSession, User } from '@platform-community-edition/prisma';
 import { flattenDeep, orderBy } from 'lodash';
 
 @Injectable()
 export class DashboardService {
-  constructor(
-    private prisma: PrismaService,
-    private awsService: AwsService,
-    private awsApiGatewayService: AwsApiGatewayService,
-    private productService: ProductService
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  async getDashboardData(user: any) {
+  async getDashboardData(user: User) {
     try {
-      const userData = await this.prisma.client
-        .user({ id: user.id })
-        .$fragment<DashboardUserFragment>(
-          gql`
-            query {
-              contractUserOwner {
-                contractUserAwsConfig {
-                  apiKeyId
-                }
-                planStripeId
-              }
-            }
-          `
-        );
-
       const projects = await this.prisma.client
         .projects({ where: { users_some: { id: user.id } } })
         .$fragment<DashboardProjectFragment[]>(
@@ -60,7 +38,6 @@ export class DashboardService {
         );
 
       return {
-        api: await this.getApiUsageData(userData),
         projectsSuccess: this.getProjectsSuccess(projects),
         recentTests: await this.getRecentTests(projects),
         testStatistics: this.getTestStatistic(projects)
@@ -69,20 +46,6 @@ export class DashboardService {
       console.log(e);
       return null;
     }
-  }
-
-  private async getApiUsageData(
-    userData: DashboardUserFragment
-  ): Promise<{ used: number; remaining: number; totalQuota: number }> {
-    const usagePlan = this.awsService.getAwsUsagePlanByProduct(
-      this.productService.findProductByPlanId(
-        userData.contractUserOwner.planStripeId
-      )
-    );
-    return await this.awsApiGatewayService.getApiUsage(
-      usagePlan,
-      userData.contractUserOwner.contractUserAwsConfig.apiKeyId
-    );
   }
 
   private getProjectsSuccess(projects: DashboardProjectFragment[]) {
@@ -144,8 +107,10 @@ export class DashboardService {
           return {
             id: test.id,
             name: test.name,
-            success: test.variations.every(variation =>
-              this.isSucessfullTestsession(variation.testSessions[0])
+            success: test.variations.every(
+              // TODO: Could be possible that this is not working -> async
+              async variation =>
+                await this.isSucessfullTestsession(variation.testSessions[0])
             ),
             lastUpdate: test.variations
               .map(variation => variation.testSessions[0].updatedAt)
@@ -163,20 +128,17 @@ export class DashboardService {
     return allTests;
   }
 
-  // TODO!: check why baseref is not available
-  // private isSucessfullTestsession(testSession: TestSession): boolean {
-  //   return (
-  //     (testSession.imageKey !== null &&
-  //       testSession.misMatchPercentage !== null &&
-  //       testSession.misMatchPercentage <= testSession.misMatchTolerance) ||
-  //     (testSession.misMatchPercentage === null && !!testSession.baselineRef)
-  //   );
-  // }
-  private isSucessfullTestsession(testSession: TestSession): boolean {
+  private async isSucessfullTestsession(
+    testSession: TestSession
+  ): Promise<boolean> {
     return (
-      testSession.imageKey !== null &&
-      testSession.misMatchPercentage !== null &&
-      testSession.misMatchPercentage <= testSession.misMatchTolerance
+      (testSession.imageKey !== null &&
+        testSession.misMatchPercentage !== null &&
+        testSession.misMatchPercentage <= testSession.misMatchTolerance) ||
+      (testSession.misMatchPercentage === null &&
+        !!(await this.prisma.client
+          .testSession({ id: testSession.id })
+          .baselineRef()))
     );
   }
 }

@@ -35,7 +35,8 @@ export const environment = {
     accessKeyId: process.env.AWS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
     iAmGroupName: process.env.IAM_GROUP_NAME,
-    iAmPath: process.env.IAM_PATH
+    iAmPath: process.env.IAM_PATH,
+    s3BucketName: process.env.bucketName
   },
 
   // s3 user
@@ -45,9 +46,9 @@ export const environment = {
 
   // email
   email: {
-    user: 'noreply@visual-knight.io',
+    user: process.env.EMAIL_USER,
     password: process.env.EMAIL_PW,
-    smtp: 'smtp.1und1.de',
+    smtp: process.env.EMAIL_SMTP_PROVIDER,
 
     registrationExpiresIn: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // 24h valid
     forgotPasswordExpiresIn: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // 24h valid

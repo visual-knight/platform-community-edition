@@ -3,20 +3,16 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { environment } from '../../environments/environment';
 import { PrismaService } from '../shared/prisma/prisma.service';
-import { User } from '../../generated/prisma-client';
-import { AwsService } from '../shared/aws/aws.service';
-import { ProductService } from '../shared/product/product.service';
-import { IAM } from 'aws-sdk';
+import { User } from '@platform-community-edition/prisma';
 import { EmailService } from '../email/services/email.service';
 import { genSaltSync, hash } from 'bcryptjs';
+import { ACTIVATION_ERRORS } from './interfaces/auth-errors';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaService,
-    private readonly awsService: AwsService,
-    private readonly productService: ProductService,
     private readonly emailService: EmailService
   ) {}
 
@@ -63,56 +59,9 @@ export class AuthService {
       throw new Error(ACTIVATION_ERRORS.ALREADY_DONE);
     }
 
-    const contractUser = await this.prisma.client
-      .user({ email })
-      .contractUser();
-
     await this.prisma.client.updateUser({
       where: { email: email },
       data: { active: true }
-    });
-
-    let keys: { AccessKey: IAM.AccessKey; apiKey: string; apiKeyId: string };
-    if (environment.stage === 'development') {
-      keys = {
-        AccessKey: {
-          SecretAccessKey: 'DEV_SECRET_ACCESS_KEY',
-          AccessKeyId: 'DEV_ACCESS_KEY',
-          Status: 'dev',
-          UserName: contractUser.id
-        },
-        apiKey: 'DEV_API_KEY',
-        apiKeyId: 'DEV_API_KEY_ID'
-      };
-    } else {
-      keys = await this.awsService.createIamUser(
-        contractUser.id,
-        this.productService.findProductByPlanId(contractUser.planStripeId)
-      );
-
-      await this.awsService.setupS3BucketForUser(
-        contractUser.id,
-        keys.AccessKey.AccessKeyId,
-        keys.AccessKey.SecretAccessKey
-      );
-    }
-
-    // set user as owner of the contract
-    await this.prisma.client.updateContractUser({
-      data: {
-        owner: {
-          connect: { id: user.id }
-        },
-        contractUserAwsConfig: {
-          create: {
-            accessKeyId: keys.AccessKey.AccessKeyId,
-            secretAccessKey: keys.AccessKey.SecretAccessKey,
-            apiKey: keys.apiKey,
-            apiKeyId: keys.apiKeyId
-          }
-        }
-      },
-      where: { id: contractUser.id }
     });
   }
 
@@ -161,10 +110,4 @@ export class AuthService {
 
     return true;
   }
-}
-
-export enum ACTIVATION_ERRORS {
-  ALREADY_DONE = 'verification.done',
-  INVALID = 'verification.invalid',
-  EXPIRED = 'verification.expired'
 }

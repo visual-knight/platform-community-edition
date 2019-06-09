@@ -13,7 +13,7 @@ const services: Provider[] = [EmailService];
         environment.email.password
       }@${environment.email.smtp}`,
       defaults: {
-        from: '"Visual Knight" <noreply@visual-knight.io>'
+        from: `"Visual Knight Community Edition" <${environment.email.user}>`
       },
       template: {
         dir: environment.email.templateDirectory,
