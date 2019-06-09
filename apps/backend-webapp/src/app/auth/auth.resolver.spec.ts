@@ -1,42 +1,20 @@
-import { mock } from 'aws-sdk-mock';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthResolver } from './auth.resolver';
 import { AuthModule } from './auth.module';
 import { PrismaService } from '../shared/prisma/prisma.service';
 import { EmailService } from '../email/services/email.service';
-import { ACTIVATION_ERRORS } from './auth.service';
-import { environment } from '../../environments/environment';
-import { ProductService, Product } from '../shared/product/product.service';
 
-import {
-  AwsApiGatewayService,
-  AwsIamService,
-  AwsLambdaService
-} from '../shared/aws';
-
-mock('APIGateway', 'getUsagePlans', function(params, callback) {
-  callback(null, {
-    items: [
-      { id: 1, name: 'free_production' },
-      { id: 2, name: 'basic_production' },
-      { id: 3, name: 'testsession_production' }
-    ]
-  });
-});
+import { AwsLambdaService } from '../shared/aws';
+import { ACTIVATION_ERRORS } from './interfaces/auth-errors';
 
 describe('AuthResolver', () => {
   let testingModule: TestingModule;
   let resolver: AuthResolver;
   let prisma: PrismaService;
   let emailService: EmailService;
-  let productService: ProductService;
-  let apiService: AwsApiGatewayService;
-  let iAmService: AwsIamService;
-  let lambdaService: AwsLambdaService;
   let prismaCreateUserSpy;
   let prismaUpdateUserSpy;
   let prismaUserSpy;
-  let prismaUpdateContractUserSpy;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -45,22 +23,11 @@ describe('AuthResolver', () => {
     resolver = testingModule.get<AuthResolver>(AuthResolver);
     prisma = testingModule.get<PrismaService>(PrismaService);
     emailService = testingModule.get<EmailService>(EmailService);
-    apiService = testingModule.get<AwsApiGatewayService>(AwsApiGatewayService);
-    iAmService = testingModule.get<AwsIamService>(AwsIamService);
-    lambdaService = testingModule.get<AwsLambdaService>(AwsLambdaService);
 
     spyOn(emailService, 'sendRegistrationMail').and.stub();
     prismaCreateUserSpy = spyOn(prisma.client, 'createUser');
     prismaUpdateUserSpy = spyOn(prisma.client, 'updateUser');
-    prismaUpdateContractUserSpy = spyOn(prisma.client, 'updateContractUser');
     prismaUserSpy = spyOn(prisma.client, 'user');
-    productService = testingModule.get<ProductService>(ProductService);
-
-    spyOn(productService, 'findProductByPlanId').and.returnValue({
-      id: '1',
-      nickname: 'free',
-      plans: [{ id: 'stripe_id' }]
-    } as Product);
   });
 
   it('should be defined', () => {
@@ -157,62 +124,8 @@ describe('AuthResolver', () => {
           })
       });
       prismaUpdateUserSpy.and.stub();
-      prismaUpdateContractUserSpy.and.stub();
 
       expect(await resolver.verifyEmail('valid_token')).toBeTruthy();
-      expect(prisma.client.updateContractUser).toHaveBeenCalled();
-    });
-
-    it('should return true if the verification was successful in prod mode', async () => {
-      const environmentCopy = { ...environment };
-      environment.stage = 'production';
-      prismaUserSpy.and.returnValue({
-        email: 'myemail@mail.test',
-        contractUser: () =>
-          Promise.resolve({
-            id: 'some_id',
-            planStripeId: 'stripe_id'
-          })
-      });
-      prismaUpdateUserSpy.and.stub();
-      prismaUpdateContractUserSpy.and.stub();
-
-      spyOn(iAmService, 'createUser').and.returnValue({
-        promise: () => Promise.resolve()
-      });
-      spyOn(iAmService, 'addUserToGroup').and.returnValue({
-        promise: () => Promise.resolve()
-      });
-      spyOn(iAmService, 'createAccessKey').and.returnValue({
-        promise: () =>
-          Promise.resolve({
-            AccessKey: 'CreateAccessKey'
-          })
-      });
-      spyOn(apiService, 'createApiKey').and.returnValue({
-        promise: () =>
-          Promise.resolve({
-            id: 'createdApiId',
-            value: 'createdApiValue'
-          })
-      });
-      spyOn(apiService, 'createUsagePlanKey').and.returnValue({
-        promise: () => Promise.resolve()
-      });
-      spyOn(lambdaService, 'invoke').and.returnValue({
-        promise: () => Promise.resolve()
-      });
-
-      expect(await resolver.verifyEmail('valid_token')).toBeTruthy();
-
-      expect(iAmService.createUser).toHaveBeenCalledTimes(1);
-      expect(iAmService.addUserToGroup).toHaveBeenCalledTimes(1);
-      expect(iAmService.createAccessKey).toHaveBeenCalledTimes(1);
-      expect(apiService.createApiKey).toHaveBeenCalledTimes(1);
-      expect(apiService.createUsagePlanKey).toHaveBeenCalledTimes(2);
-      expect(prisma.client.updateContractUser).toHaveBeenCalled();
-
-      environment.stage = environmentCopy.stage;
     });
 
     it('should throw an error if token is invalid', () => {

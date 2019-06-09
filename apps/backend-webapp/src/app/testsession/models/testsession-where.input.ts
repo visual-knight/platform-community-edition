@@ -1,5 +1,5 @@
 import { InputType, Field, ID } from 'type-graphql';
-import { TestSessionWhereInput } from '../../../generated/prisma-client';
+import { TestSessionWhereInput } from '@platform-community-edition/prisma';
 
 @InputType()
 export class TestSessionWhereArgs implements TestSessionWhereInput {

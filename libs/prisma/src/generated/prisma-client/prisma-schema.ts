@@ -514,8 +514,8 @@ input RefreshTokenListWhereUniqueInput {
 }
 
 enum Role {
-  OWNER
   CUSTOMER
+  ADMIN
 }
 
 type Subscription {

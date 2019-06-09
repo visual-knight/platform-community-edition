@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID, Float } from 'type-graphql';
-import { TestSessionState } from '../../../generated/prisma-client';
+import { TestSessionState } from '@platform-community-edition/prisma';
 
 // export enum TestSessionState {
 //   PENDING,

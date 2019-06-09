@@ -314,7 +314,7 @@ export type TestSessionState =
   | "ACCEPTED"
   | "DECLINED";
 
-export type Role = "OWNER" | "CUSTOMER";
+export type Role = "CUSTOMER" | "ADMIN";
 
 export type TestOrderByInput =
   | "id_ASC"

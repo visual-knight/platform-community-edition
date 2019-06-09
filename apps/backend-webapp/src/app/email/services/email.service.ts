@@ -31,9 +31,9 @@ export class EmailService {
     };
 
     const sendMailOptions = {
-      from: 'Registration <noreply@visual-knight.io>',
+      from: `Registration <${environment.email.user}>`,
       to: data.to,
-      subject: 'Welcome to Visual Knight!',
+      subject: 'Welcome to Visual Knight Community Edition!',
       template: 'registration.html.hbs',
       context: registrationData
     };
@@ -61,7 +61,7 @@ export class EmailService {
     }sessions/reset-password?token=${token}`;
 
     const sendMailOptions = {
-      from: 'Password Reset <noreply@visual-knight.io>',
+      from: `Password Reset <${environment.email.user}>`,
       to: data.to,
       subject: 'Reset password!',
       template: 'forgotpassword.html.hbs',
@@ -90,9 +90,9 @@ export class EmailService {
     }sessions/invitation?token=${token}`;
 
     const sendMailOptions = {
-      from: 'Invitation <noreply@visual-knight.io>',
+      from: `Invitation <${environment.email.user}>`,
       to: data.to,
-      subject: `You've been invited to Visual Knight!`,
+      subject: `You've been invited to Visual Knight Community Edition!`,
       template: 'invitation.html.hbs',
       context: data
     };

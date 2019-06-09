@@ -4,12 +4,12 @@ import { PrismaService } from '../shared/prisma/prisma.service';
 import { compare } from 'bcryptjs';
 import { UserService } from '../user/user.service';
 import { EmailService } from '../email/services/email.service';
-import { User } from '../../generated/prisma-client';
+import { User } from '@platform-community-edition/prisma';
 import { Logger, UseGuards } from '@nestjs/common';
 import { AuthPayload } from './models/auth-payload';
 import { GqlAuthGuard } from './guards/auth.guard';
 import { CurrentUser } from '../shared/decorators/current-user.decorator';
-import { User as PrismaUser } from '../../generated/prisma-client';
+import { User as PrismaUser } from '@platform-community-edition/prisma';
 
 @Resolver('Auth')
 export class AuthResolver {
