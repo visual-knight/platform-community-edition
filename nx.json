@@ -22,6 +22,9 @@
     },
     "prisma": {
       "tags": ["shared"]
+    },
+    "prisma2": {
+      "tags": []
     }
   }
 }

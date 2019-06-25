@@ -261,6 +261,36 @@
           "styleext": "scss"
         }
       }
+    },
+    "prisma2": {
+      "root": "libs/prisma2",
+      "sourceRoot": "libs/prisma2/src",
+      "projectType": "library",
+      "prefix": "platform-community-edition",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/prisma2/tsconfig.lib.json",
+              "libs/prisma2/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/prisma2/jest.config.js",
+            "tsConfig": "libs/prisma2/tsconfig.spec.json"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {
