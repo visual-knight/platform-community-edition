@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { genSaltSync, hash } from 'bcryptjs';
 import { environment } from '../../environments/environment';
-import { User } from '@platform-community-edition/prisma';
-import { PrismaService } from '../shared/prisma/prisma.service';
 import { EmailService } from '../email/services/email.service';
 import { JwtService } from '@nestjs/jwt';
 import { INVITATION_ERRORS } from './models/error.enum';
@@ -10,14 +8,15 @@ import { AuthService } from '../auth/auth.service';
 import { UpdateUserInput } from './dto/update-user.input';
 import { AuthPayload } from '../auth/models/auth-payload';
 import uuidAPIKey from 'uuid-apikey';
+import { PhotonService, User } from '@platform-community-edition/prisma2';
 
 @Injectable()
 export class UserService {
   constructor(
-    private prisma: PrismaService,
     private emailService: EmailService,
     private jwtService: JwtService,
-    private authService: AuthService
+    private authService: AuthService,
+    private photonService: PhotonService
   ) {}
 
   async createUser(email: string, password: string): Promise<User> {
@@ -25,26 +24,28 @@ export class UserService {
     const hashedPassword = await hash(password, salt);
     const apiKey = this.generateApiKey();
 
-    return this.prisma.client.createUser({
-      email,
-      password: hashedPassword,
-      apiKey: apiKey.apiKey
+    return this.photonService.users.create({
+      data: {
+        email,
+        apiKey: apiKey.apiKey,
+        password: hashedPassword
+      }
     });
   }
 
-  async deleteUser(user: User, userIdToDelete: string): Promise<User> {
+  async deleteUser(user: User, userIdToDelete: number): Promise<User> {
     if (user.role !== 'ADMIN') {
       throw new Error('You are not allowed to delete a user!');
     }
 
-    return this.prisma.client.deleteUser({ id: userIdToDelete });
+    return this.photonService.users.delete({ where: { id: userIdToDelete } });
   }
 
   async updateUser(
     user: User,
     { email, forename, lastname }: UpdateUserInput
   ): Promise<User> {
-    return this.prisma.client.updateUser({
+    return this.photonService.users.update({
       where: { id: user.id },
       data: {
         email,
@@ -63,10 +64,12 @@ export class UserService {
     const password = await hash('ACTIVATE', salt);
     const apiKey = this.generateApiKey();
 
-    const newUser = await this.prisma.client.createUser({
-      email: invitationEmail,
-      password,
-      apiKey: apiKey.apiKey
+    const newUser = await this.photonService.users.create({
+      data: {
+        password,
+        email: invitationEmail,
+        apiKey: apiKey.apiKey
+      }
     });
 
     this.emailService.sendInvitationMail({
@@ -84,7 +87,7 @@ export class UserService {
     password: string
   ): Promise<AuthPayload> {
     const { email, exp } = this.jwtService.verify(token);
-    const user = await this.prisma.client.user({ email });
+    const user = await this.photonService.users.findOne({ where: { email } });
     if (user.active) {
       throw new Error(INVITATION_ERRORS.ALREADY_DONE);
     }
@@ -95,12 +98,12 @@ export class UserService {
     const salt = genSaltSync(environment.saltRounds);
     const hashedPassword = await hash(password, salt);
 
-    const updatedUser = await this.prisma.client.updateUser({
+    const updatedUser = await this.photonService.users.update({
       where: { email: email },
       data: { active: true, password: hashedPassword }
     });
 
-    const accessToken = await this.authService.createToken(updatedUser.id);
+    const accessToken = await this.authService.createToken(updatedUser.email);
 
     return {
       token: accessToken,

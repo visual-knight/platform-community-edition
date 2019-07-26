@@ -7,10 +7,12 @@ import {
 } from './aws';
 import { APIGateway, Lambda, IAM, S3 } from 'aws-sdk';
 import { AwsS3Service } from './aws/aws-s3.service';
+import { PhotonModule } from '@platform-community-edition/prisma2';
 
 const services: Provider[] = [PrismaService, Logger];
 
 @Module({
+  imports: [PhotonModule],
   providers: [
     AwsConfigService,
     {
@@ -36,6 +38,6 @@ const services: Provider[] = [PrismaService, Logger];
     },
     ...services
   ],
-  exports: [...services, AwsApiGatewayService]
+  exports: [...services, AwsApiGatewayService, PhotonModule]
 })
 export class SharedModule {}

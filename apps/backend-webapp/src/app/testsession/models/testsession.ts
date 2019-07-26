@@ -16,7 +16,7 @@ import { TestSessionState } from '@platform-community-edition/prisma';
 @ObjectType()
 export class TestSession {
   @Field(type => ID)
-  id: string;
+  id: number;
 
   @Field({ nullable: true })
   diffImageKey?: string;

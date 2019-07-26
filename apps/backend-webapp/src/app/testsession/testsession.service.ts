@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { SignedTestSessionUrls } from './models/signed-urls';
-import { PrismaService } from '../shared/prisma/prisma.service';
-import gql from 'graphql-tag';
 import { Config, S3 } from 'aws-sdk';
-import { TestSessionWhereInput } from '@platform-community-edition/prisma';
 import { environment } from '../../environments/environment';
 import { TestSession } from './models/testsession';
 import { merge } from 'lodash';
 import { TestSessionWhereArgs } from './models/testsession-where.input';
+import {
+  PhotonService,
+  TestSessionWhereInput
+} from '@platform-community-edition/prisma2';
 
 const AWS_CONFIG = new Config({ region: environment.aws.region });
 
 @Injectable()
 export class TestsessionService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private photonService: PhotonService) {}
 
   updateTestSession(id: string) {
     throw new Error('Method not implemented.');
@@ -25,51 +26,52 @@ export class TestsessionService {
   }
 
   async testSession(
-    testSessionId: string,
-    userId: string
+    testSessionId: number,
+    userId: number
   ): Promise<TestSession> {
-    const requestingUserHasAccess = await this.prisma.client.$exists.testSession(
-      {
-        id: testSessionId,
-        variation: { test: { project: { users_some: { id: userId } } } }
-      }
-    );
+    const requestingUserHasAccess = await this.photonService.testSessions
+      .findOne({
+        where: { id: testSessionId }
+      })
+      .variation()
+      .test()
+      .project()
+      .users({ where: { id: userId } });
 
-    if (requestingUserHasAccess) {
-      return this.prisma.client.testSession({ id: testSessionId });
+    if (requestingUserHasAccess.length > 0) {
+      return this.photonService.testSessions.findOne({
+        where: { id: testSessionId }
+      });
     }
     throw new Error(
       'Invalid permissions, you do not have access to this testSession.'
     );
   }
 
-  async testSessions(userId: string, where: TestSessionWhereArgs) {
+  async testSessions(userId: number, where: TestSessionWhereArgs) {
     const userFilter: TestSessionWhereInput = {
-      variation: { test: { project: { users_some: { id: userId } } } }
+      variation: { test: { project: { users: { some: { id: userId } } } } }
     };
 
-    return this.prisma.client.testSessions({
+    return this.photonService.testSessions.findMany({
       where: merge(where || {}, userFilter)
     });
   }
 
   async testSessionCount(
-    userId: string,
+    userId: number,
     where: TestSessionWhereArgs
   ): Promise<number> {
     const userFilter: TestSessionWhereInput = {
-      variation: { test: { project: { users_some: { id: userId } } } }
+      variation: { test: { project: { users: { some: { id: userId } } } } }
     };
 
-    return this.prisma.client
-      .testSessionsConnection({
-        where: merge(where || {}, userFilter)
-      })
-      .aggregate()
-      .count();
+    return (await this.photonService.testSessions.findMany({
+      where: merge(where || {}, userFilter)
+    })).length;
   }
 
-  async getSignedUrls(testSessionId: string): Promise<SignedTestSessionUrls> {
+  async getSignedUrls(testSessionId: number): Promise<SignedTestSessionUrls> {
     const testSession = await this.getTestSession(testSessionId);
     const S3_INSTANCE = new S3(AWS_CONFIG);
 
@@ -91,12 +93,12 @@ export class TestsessionService {
     };
   }
 
-  private async getTestSession(testSessionId: string): Promise<TestSession> {
-    const testSession = await this.prisma.client.testSession({
-      id: testSessionId
+  private async getTestSession(testSessionId: number): Promise<TestSession> {
+    return this.photonService.testSessions.findOne({
+      where: {
+        id: testSessionId
+      }
     });
-
-    return testSession;
   }
 
   private createSignedUrl(
