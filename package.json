@@ -43,7 +43,8 @@
     "prisma:lift:save": "cd libs/prisma2 && prisma2 lift save",
     "prisma:lift:up": "cd libs/prisma2 && prisma2 lift up",
     "prisma:generate": "cd libs/prisma2 && prisma2 generate",
-    "prisma:dev": "cd libs/prisma2 && prisma2 dev"
+    "prisma:dev": "cd libs/prisma2 && prisma2 dev",
+    "postinstall": "npm run prisma:generate"
   },
   "private": true,
   "dependencies": {
