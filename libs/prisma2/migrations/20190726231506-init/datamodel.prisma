@@ -1,0 +1,100 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("VK_POSTGRES_URL")
+}
+
+// datasource db {
+//   provider = "sqlite"
+//   url      = "file:dev.db"
+//   default  = true
+// }
+
+generator photon {
+  provider = "photonjs"
+}
+
+generator nexus_prisma {
+  provider = "nexus-prisma"
+  output   = "node_modules/@generated/nexus-prisma"
+}
+
+model User {
+  id        Int      @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email    String    @unique
+  password String
+  lastname String?
+  forename String?
+  active   Boolean   @default(false)
+  role     Role      @default(CUSTOMER)
+  projects Project[]
+  apiKey   String    @unique
+}
+
+model Project {
+  id        Int      @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String
+  description String?
+  tests       Test[]
+  users       User[]
+}
+
+model Test {
+  id        Int      @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name       String
+  project    Project
+  variations Variation[]
+}
+
+model Variation {
+  id        Int      @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  browserName String
+  deviceName  String
+  test        Test
+
+  testSessions   TestSession[]
+  additionalData String?
+  baseline       TestSession?  @relation(name: "VariationBaseline")
+}
+
+model TestSession {
+  id        Int      @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  diffImageKey       String?
+  imageKey           String?
+  misMatchPercentage Float?
+  misMatchTolerance  Float
+  isSameDimensions   Boolean?
+  variation          Variation
+  state              TestSessionState @default(PENDING)
+  stateChangedByUser User?
+  stateComment       String?
+  autoBaseline       Boolean          @default(false)
+
+  baselineRef Variation? @relation(name: "VariationBaseline")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum TestSessionState {
+  PENDING
+  UNRESOLVED
+  ACCEPTED
+  DECLINED
+}

@@ -1,0 +1,669 @@
+{
+  "version": "0.1.9",
+  "steps": [
+    {
+      "stepType": "CreateModel",
+      "name": "User",
+      "embedded": false
+    },
+    {
+      "stepType": "CreateModel",
+      "name": "Project",
+      "embedded": false
+    },
+    {
+      "stepType": "CreateModel",
+      "name": "Test",
+      "embedded": false
+    },
+    {
+      "stepType": "CreateModel",
+      "name": "Variation",
+      "embedded": false
+    },
+    {
+      "stepType": "CreateModel",
+      "name": "TestSession",
+      "embedded": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "id",
+      "type": {
+        "Base": "Int"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "id": {
+        "strategy": "Auto",
+        "sequence": null
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "createdAt",
+      "type": {
+        "Base": "DateTime"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "default": {
+        "Expression": [
+          "now",
+          "DateTime",
+          []
+        ]
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "updatedAt",
+      "type": {
+        "Base": "DateTime"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "email",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "required",
+      "isUnique": true
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "password",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "lastname",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "forename",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "active",
+      "type": {
+        "Base": "Boolean"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "default": {
+        "Boolean": false
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "role",
+      "type": {
+        "Enum": "Role"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "default": {
+        "ConstantLiteral": "CUSTOMER"
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "projects",
+      "type": {
+        "Relation": {
+          "to": "Project",
+          "to_fields": [
+            "id"
+          ],
+          "name": "ProjectToUser",
+          "on_delete": "None"
+        }
+      },
+      "arity": "list",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "apiKey",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "required",
+      "isUnique": true
+    },
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "testSession",
+      "type": {
+        "Relation": {
+          "to": "TestSession",
+          "to_fields": [],
+          "name": "TestSessionToUser",
+          "on_delete": "None"
+        }
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Project",
+      "name": "id",
+      "type": {
+        "Base": "Int"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "id": {
+        "strategy": "Auto",
+        "sequence": null
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Project",
+      "name": "createdAt",
+      "type": {
+        "Base": "DateTime"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "default": {
+        "Expression": [
+          "now",
+          "DateTime",
+          []
+        ]
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Project",
+      "name": "updatedAt",
+      "type": {
+        "Base": "DateTime"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Project",
+      "name": "name",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Project",
+      "name": "description",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Project",
+      "name": "tests",
+      "type": {
+        "Relation": {
+          "to": "Test",
+          "to_fields": [],
+          "name": "ProjectToTest",
+          "on_delete": "None"
+        }
+      },
+      "arity": "list",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Project",
+      "name": "users",
+      "type": {
+        "Relation": {
+          "to": "User",
+          "to_fields": [
+            "id"
+          ],
+          "name": "ProjectToUser",
+          "on_delete": "None"
+        }
+      },
+      "arity": "list",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Test",
+      "name": "id",
+      "type": {
+        "Base": "Int"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "id": {
+        "strategy": "Auto",
+        "sequence": null
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Test",
+      "name": "createdAt",
+      "type": {
+        "Base": "DateTime"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "default": {
+        "Expression": [
+          "now",
+          "DateTime",
+          []
+        ]
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Test",
+      "name": "updatedAt",
+      "type": {
+        "Base": "DateTime"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Test",
+      "name": "name",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Test",
+      "name": "project",
+      "type": {
+        "Relation": {
+          "to": "Project",
+          "to_fields": [
+            "id"
+          ],
+          "name": "ProjectToTest",
+          "on_delete": "None"
+        }
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Test",
+      "name": "variations",
+      "type": {
+        "Relation": {
+          "to": "Variation",
+          "to_fields": [],
+          "name": "TestToVariation",
+          "on_delete": "None"
+        }
+      },
+      "arity": "list",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Variation",
+      "name": "id",
+      "type": {
+        "Base": "Int"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "id": {
+        "strategy": "Auto",
+        "sequence": null
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Variation",
+      "name": "createdAt",
+      "type": {
+        "Base": "DateTime"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "default": {
+        "Expression": [
+          "now",
+          "DateTime",
+          []
+        ]
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Variation",
+      "name": "updatedAt",
+      "type": {
+        "Base": "DateTime"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Variation",
+      "name": "browserName",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Variation",
+      "name": "deviceName",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Variation",
+      "name": "test",
+      "type": {
+        "Relation": {
+          "to": "Test",
+          "to_fields": [
+            "id"
+          ],
+          "name": "TestToVariation",
+          "on_delete": "None"
+        }
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Variation",
+      "name": "testSessions",
+      "type": {
+        "Relation": {
+          "to": "TestSession",
+          "to_fields": [],
+          "name": "TestSessionToVariation",
+          "on_delete": "None"
+        }
+      },
+      "arity": "list",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Variation",
+      "name": "additionalData",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Variation",
+      "name": "baseline",
+      "type": {
+        "Relation": {
+          "to": "TestSession",
+          "to_fields": [
+            "id"
+          ],
+          "name": "VariationBaseline",
+          "on_delete": "None"
+        }
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "id",
+      "type": {
+        "Base": "Int"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "id": {
+        "strategy": "Auto",
+        "sequence": null
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "createdAt",
+      "type": {
+        "Base": "DateTime"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "default": {
+        "Expression": [
+          "now",
+          "DateTime",
+          []
+        ]
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "updatedAt",
+      "type": {
+        "Base": "DateTime"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "diffImageKey",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "imageKey",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "misMatchPercentage",
+      "type": {
+        "Base": "Float"
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "misMatchTolerance",
+      "type": {
+        "Base": "Float"
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "isSameDimensions",
+      "type": {
+        "Base": "Boolean"
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "variation",
+      "type": {
+        "Relation": {
+          "to": "Variation",
+          "to_fields": [
+            "id"
+          ],
+          "name": "TestSessionToVariation",
+          "on_delete": "None"
+        }
+      },
+      "arity": "required",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "state",
+      "type": {
+        "Enum": "TestSessionState"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "default": {
+        "ConstantLiteral": "PENDING"
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "stateChangedByUser",
+      "type": {
+        "Relation": {
+          "to": "User",
+          "to_fields": [
+            "id"
+          ],
+          "name": "TestSessionToUser",
+          "on_delete": "None"
+        }
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "stateComment",
+      "type": {
+        "Base": "String"
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "autoBaseline",
+      "type": {
+        "Base": "Boolean"
+      },
+      "arity": "required",
+      "isUnique": false,
+      "default": {
+        "Boolean": false
+      }
+    },
+    {
+      "stepType": "CreateField",
+      "model": "TestSession",
+      "name": "baselineRef",
+      "type": {
+        "Relation": {
+          "to": "Variation",
+          "to_fields": [],
+          "name": "VariationBaseline",
+          "on_delete": "None"
+        }
+      },
+      "arity": "optional",
+      "isUnique": false
+    },
+    {
+      "stepType": "CreateEnum",
+      "name": "Role",
+      "values": [
+        "CUSTOMER",
+        "ADMIN"
+      ]
+    },
+    {
+      "stepType": "CreateEnum",
+      "name": "TestSessionState",
+      "values": [
+        "PENDING",
+        "UNRESOLVED",
+        "ACCEPTED",
+        "DECLINED"
+      ]
+    }
+  ]
+}

@@ -39,7 +39,11 @@
     "update:check": "ng update",
     "workspace-schematic": "./node_modules/.bin/nx workspace-schematic",
     "dep-graph": "./node_modules/.bin/nx dep-graph",
-    "help": "./node_modules/.bin/nx help"
+    "help": "./node_modules/.bin/nx help",
+    "prisma:lift:save": "cd libs/prisma2 && prisma2 lift save",
+    "prisma:lift:up": "cd libs/prisma2 && prisma2 lift up",
+    "prisma:generate": "cd libs/prisma2 && prisma2 generate",
+    "prisma:dev": "cd libs/prisma2 && prisma2 dev"
   },
   "private": true,
   "dependencies": {
