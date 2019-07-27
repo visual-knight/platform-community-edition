@@ -1,41 +1,51 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../shared/prisma/prisma.service';
 import gql from 'graphql-tag';
-import { TestSession, User } from '@platform-community-edition/prisma';
 import { flattenDeep, orderBy } from 'lodash';
+import {
+  PhotonService,
+  User,
+  Variation,
+  TestSession
+} from '@platform-community-edition/prisma2';
 
 @Injectable()
 export class DashboardService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private photonService: PhotonService) {}
 
   async getDashboardData(user: User) {
     try {
-      const projects = await this.prisma.client
-        .projects({ where: { users_some: { id: user.id } } })
-        .$fragment<DashboardProjectFragment[]>(
-          gql`
-            query {
-              id
-              name
-              tests {
-                id
-                name
-                variations(orderBy: createdAt_DESC) {
-                  testSessions(orderBy: createdAt_DESC, first: 1) {
-                    updatedAt
-                    state
-                    imageKey
-                    misMatchPercentage
-                    misMatchTolerance
-                    baselineRef {
-                      id
+      const projects = await this.photonService.projects.findMany({
+        where: { users: { some: { id: user.id } } },
+        select: {
+          id: true,
+          name: true,
+          tests: {
+            select: {
+              id: true,
+              name: true,
+              variations: {
+                orderBy: { createdAt: 'desc' },
+                select: {
+                  baseline: true,
+                  testSessions: {
+                    orderBy: { createdAt: 'desc' },
+                    first: 1,
+                    select: {
+                      state: true,
+                      misMatchPercentage: true,
+                      misMatchTolerance: true,
+                      imageKey: true,
+                      updatedAt: true,
+                      baselineRef: true
                     }
                   }
                 }
               }
             }
-          `
-        );
+          }
+        }
+      });
 
       return {
         projectsSuccess: this.getProjectsSuccess(projects),
@@ -107,10 +117,8 @@ export class DashboardService {
           return {
             id: test.id,
             name: test.name,
-            success: test.variations.every(
-              // TODO: Could be possible that this is not working -> async
-              async variation =>
-                await this.isSucessfullTestsession(variation.testSessions[0])
+            success: test.variations.every(variation =>
+              this.isSucessfullTestsession(variation)
             ),
             lastUpdate: test.variations
               .map(variation => variation.testSessions[0].updatedAt)
@@ -128,38 +136,43 @@ export class DashboardService {
     return allTests;
   }
 
-  private async isSucessfullTestsession(
-    testSession: TestSession
-  ): Promise<boolean> {
+  private isSucessfullTestsession(variation: {
+    baseline: TestSession;
+    testSessions: {
+      updatedAt: string;
+      state: 'PENDING' | 'UNRESOLVED' | 'ACCEPTED' | 'DECLINED';
+      misMatchPercentage: number;
+      misMatchTolerance: number;
+      imageKey: string;
+      baselineRef: Variation;
+    }[];
+  }): boolean {
+    const testSession = variation.testSessions[0];
     return (
       (testSession.imageKey !== null &&
         testSession.misMatchPercentage !== null &&
         testSession.misMatchPercentage <= testSession.misMatchTolerance) ||
-      (testSession.misMatchPercentage === null &&
-        !!(await this.prisma.client
-          .testSession({ id: testSession.id })
-          .baselineRef()))
+      (testSession.misMatchPercentage === null && !!variation.baseline)
     );
   }
 }
 
 interface DashboardProjectFragment {
-  id: string;
+  id: number;
   name: string;
   tests: {
-    id: string;
+    id: number;
     name: string;
     variations: {
-      testSessions: TestSession[];
+      baseline: TestSession;
+      testSessions: {
+        updatedAt: string;
+        state: 'PENDING' | 'UNRESOLVED' | 'ACCEPTED' | 'DECLINED';
+        misMatchPercentage: number;
+        misMatchTolerance: number;
+        imageKey: string;
+        baselineRef: Variation;
+      }[];
     }[];
   }[];
-}
-
-interface DashboardUserFragment {
-  contractUserOwner: {
-    contractUserAwsConfig: {
-      apiKeyId: string;
-    };
-    planStripeId: string;
-  };
 }
