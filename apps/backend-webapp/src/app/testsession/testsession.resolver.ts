@@ -3,7 +3,10 @@ import { SignedTestSessionUrls } from './models/signed-urls';
 import { TestsessionService } from './testsession.service';
 import { TestSession } from './models/testsession';
 import { CurrentUser } from '../shared/decorators/current-user.decorator';
-import { User as PrismaUser } from '@platform-community-edition/prisma';
+import {
+  User as PrismaUser,
+  TestSessionUpdateInput
+} from '@platform-community-edition/prisma2';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guards/auth.guard';
 import { TestSessionWhereArgs } from './models/testsession-where.input';
@@ -16,7 +19,7 @@ export class TestsessionResolver {
   @Query(returns => SignedTestSessionUrls)
   @UseGuards(GqlAuthGuard)
   async getSignedUrls(
-    @Args('testSessionId') testSessionId: string,
+    @Args('testSessionId') testSessionId: number,
     @CurrentUser() user: PrismaUser
   ): Promise<SignedTestSessionUrls> {
     return this.testSessionService.getSignedUrls(testSessionId);
@@ -25,7 +28,7 @@ export class TestsessionResolver {
   @Query(returns => TestSession)
   @UseGuards(GqlAuthGuard)
   async testSession(
-    @Args('testSessionId') testSessionId: string,
+    @Args('testSessionId') testSessionId: number,
     @CurrentUser() user: PrismaUser
   ): Promise<TestSession> {
     return this.testSessionService.testSession(testSessionId, user.id);
@@ -55,7 +58,7 @@ export class TestsessionResolver {
   @UseGuards(GqlAuthGuard)
   async deleteTestSession(
     @CurrentUser() user: PrismaUser,
-    @Args('testSessionId') testSessionId: string
+    @Args('testSessionId') testSessionId: number
   ): Promise<TestSession> {
     return this.testSessionService.deleteTestSession(testSessionId, user.id);
   }
@@ -63,8 +66,14 @@ export class TestsessionResolver {
   @Mutation(returns => TestSession)
   @UseGuards(GqlAuthGuard)
   async updateTestSession(
-    @CurrentUser() user: PrismaUser
+    @CurrentUser() user: PrismaUser,
+    @Args('testSessionId') testSessionId: number,
+    @Args('data') data: TestSessionUpdateInput
   ): Promise<TestSession> {
-    return this.testSessionService.updateTestSession(user.id);
+    return this.testSessionService.updateTestSession(
+      testSessionId,
+      user.id,
+      data
+    );
   }
 }
