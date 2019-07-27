@@ -7,22 +7,78 @@ import { merge } from 'lodash';
 import { TestSessionWhereArgs } from './models/testsession-where.input';
 import {
   PhotonService,
-  TestSessionWhereInput
+  TestSessionWhereInput,
+  TestSessionUpdateInput
 } from '@platform-community-edition/prisma2';
+import { AwsS3Service } from '../shared/aws/aws-s3.service';
 
 const AWS_CONFIG = new Config({ region: environment.aws.region });
 
 @Injectable()
 export class TestsessionService {
-  constructor(private photonService: PhotonService) {}
+  constructor(
+    private photonService: PhotonService,
+    private s3Service: AwsS3Service
+  ) {}
 
-  updateTestSession(id: string) {
-    throw new Error('Method not implemented.');
-    return null;
+  async updateTestSession(
+    testSessionId: number,
+    userId: number,
+    data: TestSessionUpdateInput
+  ) {
+    const requestingUserHasAccess = await this.photonService.testSessions
+      .findOne({
+        where: { id: testSessionId }
+      })
+      .variation()
+      .test()
+      .project()
+      .users({ where: { id: userId } });
+
+    if (requestingUserHasAccess) {
+      return this.photonService.testSessions.update({
+        data,
+        where: {
+          id: testSessionId
+        }
+      });
+    }
+
+    throw new Error(
+      'Invalid permissions, you do not have access to this testSession.'
+    );
   }
-  deleteTestSession(testSessionId: string, id: string) {
-    throw new Error('Method not implemented.');
-    return null;
+  async deleteTestSession(testSessionId: number, userId: number) {
+    const requestingUserHasAccess = await this.photonService.testSessions
+      .findOne({
+        where: { id: testSessionId }
+      })
+      .variation()
+      .test()
+      .project()
+      .users({ where: { id: userId } });
+
+    if (requestingUserHasAccess) {
+      const deleted = await this.photonService.testSessions.delete({
+        where: {
+          id: testSessionId
+        }
+      });
+
+      const images = [deleted.imageKey, deleted.diffImageKey].filter(
+        val => !!val
+      );
+      try {
+        await this.s3Service.deleteS3Images(images);
+      } catch (err) {
+        console.log(err);
+      }
+      return deleted;
+    }
+
+    throw new Error(
+      'Invalid permissions, you do not have access to this testSession.'
+    );
   }
 
   async testSession(
