@@ -1,0 +1,49 @@
+<mat-toolbar>
+  <span *ngIf="isUnresolved()">
+    <button
+      class="accept-button"
+      mat-mini-fab
+      (click)="onClickAcceptButton()"
+      i18n-matTooltip
+      matTooltip="Accept new baseline"
+    >
+      <mat-icon class="mat-18">check</mat-icon>
+    </button>
+    <span class="spacer"></span>
+    <button color="warn" mat-mini-fab (click)="onClickDeclineButton()" i18n-matTooltip matTooltip="Decline screenshot">
+      <mat-icon class="mat-18">clear</mat-icon>
+    </button>
+  </span>
+  <span class="spacer"></span> <span>Screenshot</span>
+  <mat-slide-toggle
+    [checked]="isDiffView"
+    (change)="onSliderChanged($event)"
+    [disabled]="testSession && testSession.diffImageKey ? false : true"
+  >
+  </mat-slide-toggle>
+  <span>Diff</span> <span fxFlex></span>
+  <div fxLayout="column" class="variation-details">
+    <div fxFlex="1" fxLayout="row">
+      <span class="mr-1">{{ test?.name }}</span>
+      <span *ngIf="datetimeString; else shortDate" [matTooltip]="testSession.createdAt | date: 'short'">{{
+        datetimeString
+      }}</span>
+      <ng-template #shortDate>{{ testSession.createdAt | date: 'short' }}</ng-template>
+    </div>
+    <div fxFlex="1" fxLayout="row">
+      <span>STATE: {{ testSession.state }}</span>
+      <vk-os-icon class="ml-1" *ngIf="variation.deviceName" [os]="variation.deviceName"></vk-os-icon>
+      <vk-browser-icon class="ml-1" [browser]="variation.browserName"></vk-browser-icon>
+    </div>
+  </div>
+</mat-toolbar>
+
+<div fxLayout="row" class="screenshots">
+  <div fxFlex fxLayoutAlign="center center" class="screenshot-view left mat-elevation-z4">
+    <img [src]="variation.baselineVariationRef?.imageKey | imageStore" />
+  </div>
+  <div fxFlex fxLayoutAlign="center center" class="screenshot-view right mat-elevation-z4">
+    <img [src]="testSession.imageKey | imageStore" [hidden]="isDiffView" />
+    <vk-diff-view [image]="testSession.diffImageKey | imageStore" [hidden]="!isDiffView"></vk-diff-view>
+  </div>
+</div>

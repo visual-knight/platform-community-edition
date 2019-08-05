@@ -1,0 +1,43 @@
+.variation-list {
+  .header {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 8px 24px 0;
+    font-size: 20px;
+    background: #eee;
+  }
+}
+
+.card-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+mat-card {
+  // height: 300px;
+  margin: 20px;
+  width: 300px;
+}
+
+mat-card-content {
+  text-align: center;
+}
+
+img {
+  max-height: 200px;
+}
+
+.mat-card {
+  &:not([class*='mat-elevation-z']) {
+    &.failed {
+      box-shadow: 0 0px 10px 4px rgba(255, 0, 0, 0.603), 0 3px 3px 0 rgba(255, 0, 0, 0.425),
+      0 2px 5px 0 rgba(255, 0, 0, 0.397);
+    }
+    &.success {
+      box-shadow: 0 0px 10px 4px rgba(0, 255, 0, 0.603), 0 3px 3px 0 rgba(0, 255, 0, 0.425),
+      0 2px 5px 0 rgba(0, 255, 0, 0.397);
+    }
+  }
+}

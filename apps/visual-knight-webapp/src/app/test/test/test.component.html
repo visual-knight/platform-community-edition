@@ -1,0 +1,16 @@
+<div class="table-filtering">
+  <div class="container">
+    <vk-filters></vk-filters>
+
+    <div class="mat-elevation-z8 mt-1">
+      <vk-test-list [dataSource]="testDataSource"
+                    *ngIf="testList$ | async; else loadingTemplate"></vk-test-list>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTemplate>
+  <div class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

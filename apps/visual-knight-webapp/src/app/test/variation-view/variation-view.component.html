@@ -1,0 +1,31 @@
+<div class="testsessions">
+
+  <div class="container"
+       *ngIf="variation$ | async as variation">
+
+    <div *ngIf="selectedTestSession$ | async as selectedTestSession">
+      <vk-test-session-screenshot-views [testSession]="selectedTestSession"
+                                        [variation]="variation"
+                                        [test]="test$ | async"
+                                        (accept)="onStateChange($event, selectedTestSession, variation)"></vk-test-session-screenshot-views>
+    </div>
+
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title i18n>
+          TEST SESSIONS
+        </mat-panel-title>
+        <mat-panel-description>
+          <span *ngIf="!panelOpenState"
+                i18n>You can find all test sessions here</span>
+          <span *ngIf="panelOpenState"
+                i18n>Newest on top</span>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <vk-test-session-list [dataSource]="testSessionDataSource"></vk-test-session-list>
+
+    </mat-expansion-panel>
+  </div>
+</div>
