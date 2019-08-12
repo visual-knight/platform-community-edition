@@ -2,9 +2,9 @@ service: visual-knight-platform
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs10.x
   memorySize: 512
-  timeout: 20
+  timeout: 60
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-central-1'}
   profile: ${env:AWS_PROFILE_VISUAL_KNIGHT_PLATFORM}
@@ -15,87 +15,92 @@ provider:
     lambda: true
   environment: ${file(./config/env.yml)}
 
-plugins:
-  - serverless-offline
+layers:
+  nestjs:
+    path: layers/nestjs # required, path to layer contents on disk
+    name: ${self:provider.stage}-nestjs # optional, Deployed Lambda layer name
+    compatibleRuntimes: # optional, a list of runtimes this layer is compatible with
+      - nodejs10.x
+    retain: false # optional, false by default. If true, layer versions are not deleted as new ones are created
+  photon:
+    path: layers/photon # required, path to layer contents on disk
+    name: ${self:provider.stage}-photon # optional, Deployed Lambda layer name
+    compatibleRuntimes: # optional, a list of runtimes this layer is compatible with
+      - nodejs10.x
+    retain: false # optional, false by default. If true, layer versions are not deleted as new ones are created
 
 package:
   individually: true
 
 functions:
   webapp:
-    handler: apps/backend-webapp/dist/index.handler
+    handler: main.handler
     package:
-      artifact: apps/backend-webapp/dist/webapp.zip
-
-    events:
-      - http:
-          method: any
-          path: /webapp
-
-  comparison:
-    handler: apps/backend-comparison/dist/index.handler
-    package:
-      artifact: apps/backend-comparison/dist/comparison.zip
+      artifact: dist/apps/api/main.js.zip
+    layers:
+      - { Ref: NestjsLambdaLayer }
+      - { Ref: PhotonLambdaLayer }
 
     events:
       - http:
           cors: true
           method: any
-          path: /comparison
-      - http:
-          cors: true
-          path: '/comparison/{proxy+}'
-          method: any
-
-  processTestsessionImage:
-    handler: apps/lambdas/dist/processTestsessionImage.handler
-    package:
-      artifact: apps/lambdas/dist/processTestsessionImage.zip
-    events:
-      - s3:
-          bucket: visual-knight-platform-photos
-          event: s3:ObjectCreated:*
-          rules:
-            - suffix: .screenshot.png
-
-    environment:
-      threshold: 12
-      includeAA: true
-      imageBucketName: 'visual-knight-images'
-
-  invokeTestsession:
-    handler: apps/lambdas/dist/invokeTestsession.handler
-    package:
-      artifact: apps/lambdas/dist/invokeTestsession.zip
-
-    events:
-      - http:
-          path: /invokeTestsession
-          method: post
-          cors: true
-          integration: lambda-proxy
-      - http:
-          path: /invokeTestsession
-          method: get
-          cors: true
-          integration: lambda-proxy
-
-    environment:
-      threshold: 12
-      includeAA: true
-      imageBucketName: 'visual-knight-images'
-
-  getTestsessionStatus:
-    handler: apps/lambdas/dist/getTestsessionStatus.handler
-    package:
-      artifact: apps/lambdas/dist/getTestsessionStatus.zip
-
-    events:
-      - http:
-          path: /getTestsessionStatus
-          method: get
-          cors: true
-          integration: lambda-proxy
-
-    environment:
-      app_url: ${env:APP_URL}
+          path: /graphql
+  # comparison:
+  #   handler: apps/backend-comparison/dist/index.handler
+  #   package:
+  #     artifact: apps/backend-comparison/dist/comparison.zip
+  #   events:
+  #     - http:
+  #         cors: true
+  #         method: any
+  #         path: /comparison
+  #     - http:
+  #         cors: true
+  #         path: '/comparison/{proxy+}'
+  #         method: any
+  # processTestsessionImage:
+  #   handler: apps/lambdas/dist/processTestsessionImage.handler
+  #   package:
+  #     artifact: apps/lambdas/dist/processTestsessionImage.zip
+  #   events:
+  #     - s3:
+  #         bucket: visual-knight-platform-photos
+  #         event: s3:ObjectCreated:*
+  #         rules:
+  #           - suffix: .screenshot.png
+  #   environment:
+  #     threshold: 12
+  #     includeAA: true
+  #     imageBucketName: 'visual-knight-images'
+  # invokeTestsession:
+  #   handler: apps/lambdas/dist/invokeTestsession.handler
+  #   package:
+  #     artifact: apps/lambdas/dist/invokeTestsession.zip
+  #   events:
+  #     - http:
+  #         path: /invokeTestsession
+  #         method: post
+  #         cors: true
+  #         integration: lambda-proxy
+  #     - http:
+  #         path: /invokeTestsession
+  #         method: get
+  #         cors: true
+  #         integration: lambda-proxy
+  #   environment:
+  #     threshold: 12
+  #     includeAA: true
+  #     imageBucketName: 'visual-knight-images'
+  # getTestsessionStatus:
+  #   handler: apps/lambdas/dist/getTestsessionStatus.handler
+  #   package:
+  #     artifact: apps/lambdas/dist/getTestsessionStatus.zip
+  #   events:
+  #     - http:
+  #         path: /getTestsessionStatus
+  #         method: get
+  #         cors: true
+  #         integration: lambda-proxy
+  #   environment:
+  #     app_url: ${env:APP_URL}

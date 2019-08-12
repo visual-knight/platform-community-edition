@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../../dist/out-tsc/libs/prisma",
-    "module": "commonjs",
-    "types": ["jest", "node"]
-  },
-  "include": ["**/*.spec.ts", "**/*.d.ts"]
-}

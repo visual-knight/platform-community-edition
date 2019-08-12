@@ -1,5 +1,5 @@
 {
-  "npmScope": "platform-community-edition",
+  "npmScope": "visual-knight",
   "implicitDependencies": {
     "angular.json": "*",
     "package.json": "*",
@@ -8,22 +8,16 @@
     "nx.json": "*"
   },
   "projects": {
-    "visual-knight-webapp": {
-      "tags": ["webapp"]
-    },
-    "visual-knight-webapp-e2e": {
+    "visual-knight-e2e": {
       "tags": []
     },
-    "backend-webapp": {
-      "tags": ["backend", "webapp"]
+    "visual-knight": {
+      "tags": []
     },
-    "backend-comparison": {
-      "tags": ["backend"]
+    "api": {
+      "tags": []
     },
-    "prisma": {
-      "tags": ["shared"]
-    },
-    "prisma2": {
+    "api-interface": {
       "tags": []
     }
   }

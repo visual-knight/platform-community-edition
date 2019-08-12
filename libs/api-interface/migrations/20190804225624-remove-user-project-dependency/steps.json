@@ -1,0 +1,15 @@
+{
+  "version": "0.1.9",
+  "steps": [
+    {
+      "stepType": "DeleteField",
+      "model": "User",
+      "name": "projects"
+    },
+    {
+      "stepType": "DeleteField",
+      "model": "Project",
+      "name": "users"
+    }
+  ]
+}
