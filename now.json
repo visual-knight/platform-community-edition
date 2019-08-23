@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "name": "visual-knight-community-webapp",
+  "builds": [
+    {
+      "src": "dist/apps/visual-knight/**",
+      "use": "@now/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dist/apps/visual-knight/$1"
+    },
+    {
+      "src": "/",
+      "headers": {
+        "cache-control": "public,max-age=0,must-revalidate"
+      },
+      "dest": "dist/apps/visual-knight/index.html"
+    }
+  ]
+}

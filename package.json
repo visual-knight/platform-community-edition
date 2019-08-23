@@ -48,6 +48,7 @@
     "@nestjs/passport": "^6.1.0",
     "@nestjs/platform-express": "^6.5.3",
     "@nrwl/angular": "8.4.12",
+    "@zeit/ng-deploy": "^0.1.0",
     "apollo-server-core": "^2.8.0",
     "apollo-server-express": "^2.8.0",
     "aws-lambda": "^0.1.2",

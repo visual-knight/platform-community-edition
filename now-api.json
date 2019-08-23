@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "name": "visual-knight-api",
+  "builds": [
+    {
+      "src": "dist/apps/api/main.js",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dist/apps/api/main.js"
+    }
+  ]
+}

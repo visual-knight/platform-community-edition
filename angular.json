@@ -90,6 +90,12 @@
             "tsConfig": "apps/visual-knight/tsconfig.spec.json",
             "setupFile": "apps/visual-knight/src/test-setup.ts"
           }
+        },
+        "deploy": {
+          "builder": "@zeit/ng-deploy:deploy",
+          "options": {
+            "config": "now.json"
+          }
         }
       }
     },
@@ -177,6 +183,12 @@
           "options": {
             "jestConfig": "apps/api/jest.config.js",
             "tsConfig": "apps/api/tsconfig.spec.json"
+          }
+        },
+        "deploy": {
+          "builder": "@zeit/ng-deploy:deploy",
+          "options": {
+            "config": "now-api.json"
           }
         }
       }
