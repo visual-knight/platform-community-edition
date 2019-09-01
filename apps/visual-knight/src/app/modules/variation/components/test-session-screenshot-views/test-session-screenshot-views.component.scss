@@ -1,0 +1,41 @@
+img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.spacer {
+  margin: 0 10px;
+}
+
+mat-slide-toggle {
+  margin: 0 5px;
+}
+
+.mat-mini-fab.accept-button {
+  background-color: rgb(21, 116, 21);
+  color: #fff;
+}
+
+.screenshots {
+  margin: 10px 0;
+}
+
+.screenshot-view {
+  margin: 10px;
+  background-color: #f4f4f4;
+  &.left {
+    margin-left: 0;
+  }
+  &.right {
+    margin-right: 0;
+  }
+}
+
+.variation-details > * {
+  margin: 0 5px;
+  font-size: 15px;
+}
+
+[hidden] {
+  display: none !important;
+}
