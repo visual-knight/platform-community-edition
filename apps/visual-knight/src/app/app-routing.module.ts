@@ -28,13 +28,6 @@ const routes: Routes = [
       import('./modules/variation/variation.module').then(
         m => m.VariationModule
       )
-  },
-  {
-    path: 'testsession',
-    loadChildren: () =>
-      import('./modules/test-session/test-session.module').then(
-        m => m.TestSessionModule
-      )
   }
 ];
 

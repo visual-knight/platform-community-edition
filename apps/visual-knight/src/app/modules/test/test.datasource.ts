@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-// TODO: clearify import -> import { DataSource } from '@angular/cdk/collections';
+// TODO: clearify import // import { DataSource } from '@angular/cdk/collections';
 import { Test } from '@generated/photonjs';
 
 export class TestsDataSource extends DataSource<Test> {
