@@ -1,1 +1,87 @@
-<p>project works!</p>
+<mat-toolbar>
+  <mat-toolbar-row>
+    <span>Projects: {{ (projectList$ | async).length }}</span>
+    <span fxFlex></span>
+
+    <button
+      type="button"
+      color="primary"
+      mat-raised-button
+      (click)="createProject()"
+    >
+      Create Project
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div fxLayout="row wrap">
+  <div
+    *ngFor="
+      let project of (projectList$ | async);
+      trackBy: trackPojectItems;
+      let i = index
+    "
+    fxFlex="100"
+    fxFlex.gt-sm="25"
+    fxFlex.sm="50"
+    [@animate]="{
+      value: '*',
+      params: { scale: '.9', delay: 300 + i * 100 + 'ms' }
+    }"
+  >
+    <mat-card [style.background]="project.background">
+      <mat-card-content>
+        <div
+          class="name"
+          fxLayout="row"
+          fxLayoutAlign="center center"
+          fxFlex="auto"
+        >
+          {{ project.name }}
+        </div>
+      </mat-card-content>
+      <mat-card-footer>
+        <div class="name">{{ project.description }}</div>
+        <div class="id">ID: {{ project.id }}</div>
+      </mat-card-footer>
+
+      <div class="overlay">
+        <div
+          class="overlay-content"
+          fxLayout="column"
+          fxLayoutAlign="space-between"
+        >
+          <div class="overlay-actions" fxLayout="row" fxLayoutGap="16px">
+            <button
+              (click)="deleteProject(project)"
+              type="button"
+              matTooltip="Delete"
+              mat-icon-button
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              ngxClipboard
+              (cbOnSuccess)="copiedId(project)"
+              [cbContent]="project.id"
+              type="button"
+              matTooltip="Copy ID"
+              mat-icon-button
+            >
+              <mat-icon>attach_file</mat-icon>
+            </button>
+          </div>
+
+          <button
+            [routerLink]="['/test']"
+            [queryParams]="{ project_id: project.id }"
+            type="button"
+            mat-raised-button
+          >
+            View Tests
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

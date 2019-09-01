@@ -3,13 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'visual-knight-test',
   templateUrl: './test.component.html',
-  styleUrls: ['./test.component.css']
+  styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

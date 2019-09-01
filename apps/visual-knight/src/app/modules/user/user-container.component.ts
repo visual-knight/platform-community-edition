@@ -5,7 +5,7 @@ import { AuthServiceService } from '../core/auth-service.service';
 @Component({
   selector: 'visual-knight-user-container',
   templateUrl: './user-container.component.html',
-  styleUrls: ['./user-container.component.css']
+  styleUrls: ['./user-container.component.scss']
 })
 export class UserContainerComponent implements OnInit {
   public errorMessages$ = this.authService.authErrorMessages$;
