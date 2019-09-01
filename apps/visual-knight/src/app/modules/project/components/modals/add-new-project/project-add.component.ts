@@ -1,0 +1,23 @@
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+
+@Component({
+  selector: 'visual-knight-add',
+  templateUrl: './project-add.component.html',
+  styleUrls: ['./project-add.component.scss']
+})
+export class AddProjectModalComponent {
+  constructor(public dialogRef: MatDialogRef<AddProjectModalComponent>) {}
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
+      const { name, description } = form.value;
+      //TODO!: SEND name and description
+      this.dialogRef.close();
+    }
+  }
+
+  onAbortCreateNewProject(): void {
+    this.dialogRef.close();
+  }
+}
