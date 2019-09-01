@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { UserModule } from './user/user.module';
 
 const routes: Routes = [
   {
@@ -10,9 +9,8 @@ const routes: Routes = [
   },
   {
     path: 'user',
-    loadChildren: () => {
-      return UserModule;
-    }
+    loadChildren: async () =>
+      import('./modules/user/user.module').then(module => module.UserModule)
   }
 ];
 
