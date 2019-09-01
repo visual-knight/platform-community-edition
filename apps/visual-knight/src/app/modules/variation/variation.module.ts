@@ -7,6 +7,7 @@ import { VariationViewComponent } from './components/variation-view/variation-vi
 import { DeleteVariationModalComponent } from './components/modals/delete-variation/delete-variation.component';
 import { ScreenshotViewComponent } from './components/screenshot-view/screenshot-view.component';
 import { TestSessionListComponent } from './components/test-session-list/test-session-list.component';
+import { TestSessionScreenshotViewsComponent } from './components/test-session-screenshot-views/test-session-screenshot-views.component';
 
 const routes: Routes = [
   { path: ':testId', component: VariationListComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
     VariationListComponent,
     VariationViewComponent,
     TestSessionListComponent,
+    TestSessionScreenshotViewsComponent,
     DeleteVariationModalComponent,
     ScreenshotViewComponent
   ],
