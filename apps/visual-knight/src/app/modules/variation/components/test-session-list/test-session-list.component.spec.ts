@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VariationComponent } from './variation.component';
+import { TestSessionListComponent } from './test-session-list.component';
 
-describe('VariationComponent', () => {
-  let component: VariationComponent;
-  let fixture: ComponentFixture<VariationComponent>;
+describe('TestSessionListComponent', () => {
+  let component: TestSessionListComponent;
+  let fixture: ComponentFixture<TestSessionListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ VariationComponent ]
+      declarations: [ TestSessionListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VariationComponent);
+    fixture = TestBed.createComponent(TestSessionListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
