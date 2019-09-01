@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Project } from '@generated/photonjs';
 
 @Component({
   selector: 'visual-knight-project',
@@ -31,9 +32,9 @@ export class ProjectComponent implements OnInit {
   //   });
   // }
 
-  // onDeleteProject(project: Project) { }
+  onDeleteProject(project: Project) {}
 
-  // trackPojectItems(index, project: Project): string {
-  //   return project.id;
-  // }
+  trackPojectItems(index: number, project: Project): string {
+    return project.id;
+  }
 }

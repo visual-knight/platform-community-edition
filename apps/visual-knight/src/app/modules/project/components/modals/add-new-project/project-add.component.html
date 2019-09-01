@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>Create a new project</h1>
+<form (ngSubmit)="onSubmit(form)" #form="ngForm">
+  <div class="content">
+    <mat-form-field>
+      <input matInput ngModel required name="name" placeholder="Project name" />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        ngModel
+        required
+        name="description"
+        placeholder="Project description"
+      />
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button
+      mat-raised-button
+      color="primary"
+      type=" submit "
+      [disabled]="!form.valid"
+      tabindex="2 "
+    >
+      Submit
+    </button>
+    <button
+      mat-raised-button
+      colr="warn"
+      type="button "
+      (click)="onAbortCreateNewProject()"
+      tabindex="-1 "
+    >
+      Abort
+    </button>
+  </div>
+</form>
