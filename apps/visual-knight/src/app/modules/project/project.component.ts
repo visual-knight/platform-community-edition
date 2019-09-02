@@ -4,6 +4,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { AddProjectModalComponent } from './components/modals/add-new-project/project-add.component';
 import { DeleteModalComponent } from './components/modals/delete-modal/delete-modal.component';
 import { Observable } from 'rxjs';
+import { Hexcolor } from '../shared/utils/hexcolor';
 
 @Component({
   selector: 'visual-knight-project',
@@ -42,5 +43,15 @@ export class ProjectComponent implements OnInit {
 
   trackPojectItems(index: number, project: Project): string {
     return project.id;
+  }
+
+  getBackgroundForProject(project: Project) {
+    const from = '#' + Hexcolor.toHexColour(project.name);
+    const to = Hexcolor.shadeColor(from, -0.35);
+
+    return {
+      ...project,
+      background: `linear-gradient(to left, ${from}, ${to})`
+    } as Project;
   }
 }

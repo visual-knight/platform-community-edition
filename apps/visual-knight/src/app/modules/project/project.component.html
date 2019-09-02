@@ -29,7 +29,7 @@
       params: { scale: '.9', delay: 300 + i * 100 + 'ms' }
     }"
   >
-    <mat-card [style.background]="project.background">
+    <mat-card [style.background]="getBackgroundForProject(project)">
       <mat-card-content>
         <div
           class="name"
