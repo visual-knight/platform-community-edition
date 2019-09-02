@@ -5,6 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProjectComponent } from './project.component';
 import { DeleteModalComponent } from './components/modals/delete-modal/delete-modal.component';
 import { AddProjectModalComponent } from './components/modals/add-new-project/project-add.component';
+import { SharedModule } from '../shared/shared.module';
+import { ClipboardModule } from 'ngx-clipboard';
 
 const routes: Routes = [{ path: '', component: ProjectComponent }];
 
@@ -14,7 +16,7 @@ const routes: Routes = [{ path: '', component: ProjectComponent }];
     AddProjectModalComponent,
     DeleteModalComponent
   ],
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, SharedModule, ClipboardModule, RouterModule.forChild(routes)],
   entryComponents: [AddProjectModalComponent, DeleteModalComponent]
 })
 export class ProjectModule {}
