@@ -10,12 +10,7 @@ import {
 import { MatSlideToggleChange } from '@angular/material';
 // TODO: replace moment with fancy lib -> date-fns
 import * as moment from 'moment';
-import {
-  TestSession,
-  Test,
-  Variation,
-  TestSessionState
-} from '@generated/photonjs';
+import { TestSessionType, TestType, VariationType } from '../../../core/types';
 
 @Component({
   selector: 'visual-knight-test-session-screenshot-views',
@@ -23,9 +18,9 @@ import {
   styleUrls: ['./test-session-screenshot-views.component.scss']
 })
 export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
-  @Input() testSession: TestSession;
-  @Input() test: Test;
-  @Input() variation: Variation;
+  @Input() testSession: TestSessionType;
+  @Input() test: TestType;
+  @Input() variation: VariationType;
   @Output() accept: EventEmitter<boolean> = new EventEmitter();
 
   public isDiffView = false;
@@ -37,7 +32,7 @@ export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.testSession) {
-      const testSession: TestSession = changes.testSession.currentValue;
+      const testSession: TestSessionType = changes.testSession.currentValue;
       this.isDiffView =
         testSession.diffImageKey !== null &&
         testSession.misMatchPercentage > testSession.misMatchTolerance;
@@ -50,7 +45,8 @@ export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
   }
 
   isUnresolved() {
-    return this.testSession.state === TestSessionState.UNRESOLVED;
+    // TODO: state??
+    // return this.testSession.state === TestSessionState.UNRESOLVED;
   }
 
   onSliderChanged(value: MatSlideToggleChange) {

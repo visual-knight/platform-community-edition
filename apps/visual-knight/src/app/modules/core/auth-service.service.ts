@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User, CurrentUserGQL, SignupGQL, LoginGQL } from '../../../modules/core/types';
+import { User, CurrentUserGQL, SignupGQL, LoginGQL } from './types';
 import { map } from 'rxjs/operators';
 import { GraphQLError } from 'graphql';
 

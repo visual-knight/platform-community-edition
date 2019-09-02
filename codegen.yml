@@ -1,5 +1,5 @@
 generates:
-  ./apps/visual-knight/src/modules/core/types.ts:
+  ./apps/visual-knight/src/app/modules/core/types.ts:
     schema: ./apps/api/schema.graphql
     documents: ./apps/visual-knight/src/**/*.graphql
     hooks:

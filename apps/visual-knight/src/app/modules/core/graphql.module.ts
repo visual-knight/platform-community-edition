@@ -28,7 +28,7 @@ export function createApollo(httpLink: HttpLink, auth: AuthService) {
   });
 
   const logoutLink = onError(({ networkError }) => {
-    if ((networkError as ServerError).statusCode === 401) auth.logOut();
+    if ((networkError as ServerError).statusCode === 401) auth.logout();
   });
 
   return {

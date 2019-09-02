@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { Component, Input, OnInit } from '@angular/core';
 import { rowsAnimation } from '../../../shared/animations';
 import { TestsDataSource } from '../../test.datasource';
-import { Test, TestSession } from '@generated/photonjs';
+import { TestType, TestSessionType } from '../../../core/types';
 
 @Component({
   selector: 'visual-knight-test-list',
@@ -19,15 +19,15 @@ export class TestListComponent implements OnInit {
 
   ngOnInit() {}
 
-  onClickRow(row: Test) {
+  onClickRow(row: TestType) {
     // this.store.dispatch(new SelectTestIdAction(row.id));
   }
 
-  lastTestSessionIsSuccessfull(testSession: TestSession): boolean {
+  lastTestSessionIsSuccessfull(testSession: TestSessionType): boolean {
     return testSession.misMatchPercentage < testSession.misMatchTolerance;
   }
 
-  onDeleteTest(test: Test) {
+  onDeleteTest(test: TestType) {
     // this.store.dispatch(new TestDeleteAction(test));
   }
 

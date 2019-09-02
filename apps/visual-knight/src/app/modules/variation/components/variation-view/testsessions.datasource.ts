@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
-import { TestSession } from '@generated/photonjs';
+import { TestSessionType } from '../../../core/types';
 
-export class TestSessionsDataSource extends DataSource<TestSession> {
-  constructor(private testSessions$: Observable<TestSession[]>) {
+export class TestSessionsDataSource extends DataSource<TestSessionType> {
+  constructor(private testSessions$: Observable<TestSessionType[]>) {
     super();
   }
 

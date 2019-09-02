@@ -1,6 +1,6 @@
 import { Field, ObjectType, ID } from 'type-graphql';
 import { TestSessionType } from '../../testsession/models/testsession';
-import { JSONResolver } from 'graphql-scalars';
+import { JSONResolver, DateTimeResolver } from 'graphql-scalars';
 
 @ObjectType()
 export class VariationType {
@@ -12,6 +12,9 @@ export class VariationType {
 
   @Field()
   deviceName: string;
+
+  @Field(type => DateTimeResolver)
+  createdAt: String;
 
   @Field(type => JSONResolver, { nullable: true })
   additionalData?: any;

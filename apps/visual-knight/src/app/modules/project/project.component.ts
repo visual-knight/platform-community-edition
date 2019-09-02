@@ -4,7 +4,7 @@ import { AddProjectModalComponent } from './components/modals/add-new-project/pr
 import { DeleteModalComponent } from './components/modals/delete-modal/delete-modal.component';
 import { Observable } from 'rxjs';
 import { Hexcolor } from '../shared/utils/hexcolor';
-import { AllProjectsGQL, ProjectType } from '../../../modules/core/types';
+import { AllProjectsGQL, ProjectType } from '../core/types';
 import { map } from 'rxjs/operators';
 
 @Component({

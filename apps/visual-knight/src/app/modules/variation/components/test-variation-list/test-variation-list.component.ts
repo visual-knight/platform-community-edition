@@ -4,8 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DeleteVariationModalComponent } from '../modals/delete-variation/delete-variation.component';
 import { vkAnimations } from '../../../shared/animations';
-import { Variation } from '@generated/photonjs';
 import { ScreenshotViewComponent } from '../screenshot-view/screenshot-view.component';
+import { VariationType } from '../../../core/types';
 
 @Component({
   selector: 'visual-knight-test-variation-list',
@@ -14,7 +14,7 @@ import { ScreenshotViewComponent } from '../screenshot-view/screenshot-view.comp
   animations: [vkAnimations]
 })
 export class VariationListComponent implements OnInit {
-  variationList$: Observable<Variation[]>; // TODO: get variation list
+  variationList$: Observable<VariationType[]>; // TODO: get variation list
   public testId: string;
 
   constructor(private route: ActivatedRoute, public dialog: MatDialog) {}
@@ -33,7 +33,7 @@ export class VariationListComponent implements OnInit {
     });
   }
 
-  deleteVariation(variation: Variation, click: Event) {
+  deleteVariation(variation: VariationType, click: Event) {
     click.stopPropagation();
     this.dialog
       .open(DeleteVariationModalComponent, {
