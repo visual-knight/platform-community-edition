@@ -14,7 +14,7 @@ export const environment = {
   saltRounds: 10,
 
   // graphql
-  schemaPath : 'schema.graphql',
+  schemaPath : 'apps/api/schema.graphql',
 
   // aws
   aws: {

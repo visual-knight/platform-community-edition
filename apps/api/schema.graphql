@@ -13,11 +13,10 @@ type AuthToken {
   accessToken: String!
 }
 
-type Dashboard {
-  projectsSuccess: [ProjectSuccess!]
-  recentTests: [RecentTest!]
-  testStatistics: TestStatistic!
-}
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
 
 type Mutation {
   login(password: String!, email: String!): AuthPayload!
@@ -27,51 +26,44 @@ type Mutation {
   changePassword(password: String!): Boolean!
   forgotPassword(email: String!): Boolean!
   resetPassword(token: String!, password: String!): Boolean!
-  deleteUser(id: Float!): User!
+  deleteUser(id: String!): User!
   updateUser(data: UpdateUserInput!): User!
   inviteNewUser(email: String!): User!
   completeInvitation(password: String!, token: String!): AuthPayload!
-  deleteTestSession(testSessionId: Float!): TestSession!
-  updateTestSession(data: TestSessionDataArgs!, testSessionId: Float!): TestSession!
+  createProject(data: ProjectDataArgs!): ProjectType!
+  deleteProject(projectId: String!): ProjectType!
+  updateProject(data: ProjectDataArgs!, projectId: String!): ProjectType!
+  deleteTestSession(testSessionId: String!): TestSessionType!
+  updateTestSession(data: TestSessionDataArgs!, testSessionId: String!): TestSessionType!
+  deleteTest(testId: String!): TestType!
+  deleteVariation(variationId: String!): VariationType!
 }
 
-type ProjectSuccess {
+input ProjectDataArgs {
+  name: String
+  description: String
+}
+
+type ProjectType {
   id: ID!
   name: String!
-  totalTests: Int!
-  failedTests: Int!
+  description: String
 }
 
 type Query {
   me: User!
-  dashboard: Dashboard
-  getSignedUrls(testSessionId: Float!): SignedTestSessionUrls!
-  testSession(testSessionId: Float!): TestSession!
-  testSessions(where: TestSessionDataArgs): [TestSession!]!
+  project(projectId: String!): ProjectType!
+  projects: [ProjectType!]!
+  projectsCount: Int!
+  testSession(testSessionId: String!): TestSessionType!
+  testSessions(where: TestSessionDataArgs): [TestSessionType!]!
   testSessionsCount(where: TestSessionDataArgs): Int!
-}
-
-type RecentTest {
-  id: ID!
-  name: String!
-  success: Boolean!
-}
-
-type SignedTestSessionUrls {
-  signedImageKey: String
-  signedDiffImageKey: String
-}
-
-type TestSession {
-  id: ID!
-  diffImageKey: String
-  imageKey: String
-  misMatchPercentage: Float
-  misMatchTolerance: Float!
-  isSameDimensions: Boolean
-  state: String!
-  stateComment: String
-  autoBaseline: Boolean!
+  test(testId: String!): TestType!
+  tests: [TestType!]!
+  testsCount: Int!
+  variation(variationId: String!): VariationType!
+  variations: [VariationType!]!
+  variationsCount: Int!
 }
 
 input TestSessionDataArgs {
@@ -86,10 +78,23 @@ input TestSessionDataArgs {
   autoBaseline: Boolean!
 }
 
-type TestStatistic {
-  countFailedVariations: Int!
-  countVariations: Int!
-  countWaitingForReview: Int!
+type TestSessionType {
+  id: ID!
+  diffImageKey: String
+  imageKey: String
+  misMatchPercentage: Float
+  misMatchTolerance: Float!
+  isSameDimensions: Boolean
+  state: String!
+  stateComment: String
+  autoBaseline: Boolean!
+}
+
+type TestType {
+  id: ID!
+  name: String!
+  project: ProjectType
+  variations: [VariationType!]!
 }
 
 input UpdateUserInput {
@@ -103,6 +108,15 @@ type User {
   email: String!
   forename: String
   lastname: String
-  phoneNumber: String
+  apiKey: String!
   active: Boolean!
+}
+
+type VariationType {
+  id: ID!
+  browserName: String!
+  deviceName: String!
+  additionalData: JSON
+  baseline: TestSessionType
+  testSessions: [TestSessionType!]!
 }

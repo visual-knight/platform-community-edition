@@ -1,0 +1,23 @@
+query allProjects {
+  projects {
+    ...ProjectData
+  }
+}
+
+mutation addProject($name: String!, $description: String) {
+  createProject(name: $name, description: $description) {
+    ...ProjectData
+  }
+}
+
+mutation($projectId: ID!) {
+  deleteProject(where: { id: $projectId }) {
+    id
+  }
+}
+
+fragment ProjectData on Project {
+  id
+  name
+  description
+}

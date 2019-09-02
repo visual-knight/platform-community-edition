@@ -1,0 +1,47 @@
+query getVariation($variationId: ID!) {
+  variation(where: { id: $variationId }) {
+    ...VariationData
+  }
+}
+
+query allVariations($testId: ID!) {
+  variations(where: { test: { id: $testId } }) {
+    ...VariationData
+  }
+}
+
+mutation deleteVariation($id: ID!) {
+  deleteVariation(where: { id: $id }) {
+    id
+  }
+}
+
+fragment VariationData on Variation {
+  id
+  deviceName
+  additionalData
+  baselineVariationRef {
+    imageKey
+    id
+  }
+  browserName
+  testSessions(orderBy: createdAt_DESC) {
+    id
+    diffImageKey
+    baselineRef {
+      id
+    }
+    imageKey
+    misMatchPercentage
+    misMatchTolerance
+    createdAt
+    state
+    stateComment
+    autoBaseline
+    stateChangedByUser {
+      forename
+      lastname
+      email
+    }
+  }
+}
