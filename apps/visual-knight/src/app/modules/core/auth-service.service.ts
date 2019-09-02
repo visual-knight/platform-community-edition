@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Subject, BehaviorSubject, Observable } from 'rxjs';
-import { User, CurrentUserGQL } from '../../../modules/core/types';
+import { Observable } from 'rxjs';
+import { User, CurrentUserGQL, SignupGQL, LoginGQL } from '../../../modules/core/types';
 import { map } from 'rxjs/operators';
 import { GraphQLError } from 'graphql';
 
@@ -14,7 +14,7 @@ export class AuthService {
   public isLoading$: Observable<boolean>;
   public user$: Observable<User>;
 
-  constructor(private currentUserGQL: CurrentUserGQL) {
+  constructor(private currentUserGQL: CurrentUserGQL, private signupGQL: SignupGQL, private loginGQL: LoginGQL) {
     const currentUser$ = this.currentUserGQL.watch().valueChanges;
 
     this.user$ = currentUser$.pipe(map(result => result.data.me));
@@ -26,10 +26,11 @@ export class AuthService {
     return localStorage.getItem('token') !== null;
   }
 
-  public signUp({ email, password }) {}
-  public login({ email, password }) {}
-  public logOut() {}
-
-  private authenticateUser(UserCredential) {}
-  private handleSignUpLoginError(error: { code: string; message: string }) {}
+  public signup({ email, password }) {
+    return this.signupGQL.mutate({email, password})
+  }
+  public login({ email, password }) {
+    return this.loginGQL.mutate({email, password}).pipe(map(result => result.data.signup));
+  }
+  public logout() {}
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as Apollo from 'apollo-angular';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
-export type Scalars = {
+export interface Scalars {
   ID: string;
   String: string;
   Boolean: boolean;
@@ -11,21 +11,21 @@ export type Scalars = {
   Float: number;
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
-};
+}
 
-export type AuthPayload = {
+export interface AuthPayload {
   __typename?: 'AuthPayload';
   token: AuthToken;
   user: User;
-};
+}
 
-export type AuthToken = {
+export interface AuthToken {
   __typename?: 'AuthToken';
   expiresIn: Scalars['Int'];
   accessToken: Scalars['String'];
-};
+}
 
-export type Mutation = {
+export interface Mutation {
   __typename?: 'Mutation';
   login: AuthPayload;
   signup: AuthPayload;
@@ -45,95 +45,95 @@ export type Mutation = {
   updateTestSession: TestSessionType;
   deleteTest: TestType;
   deleteVariation: VariationType;
-};
+}
 
-export type MutationLoginArgs = {
+export interface MutationLoginArgs {
   password: Scalars['String'];
   email: Scalars['String'];
-};
+}
 
-export type MutationSignupArgs = {
+export interface MutationSignupArgs {
   password: Scalars['String'];
   email: Scalars['String'];
-};
+}
 
-export type MutationVerifyEmailArgs = {
+export interface MutationVerifyEmailArgs {
   token: Scalars['String'];
-};
+}
 
-export type MutationChangePasswordArgs = {
+export interface MutationChangePasswordArgs {
   password: Scalars['String'];
-};
+}
 
-export type MutationForgotPasswordArgs = {
+export interface MutationForgotPasswordArgs {
   email: Scalars['String'];
-};
+}
 
-export type MutationResetPasswordArgs = {
+export interface MutationResetPasswordArgs {
   token: Scalars['String'];
   password: Scalars['String'];
-};
+}
 
-export type MutationDeleteUserArgs = {
+export interface MutationDeleteUserArgs {
   id: Scalars['String'];
-};
+}
 
-export type MutationUpdateUserArgs = {
+export interface MutationUpdateUserArgs {
   data: UpdateUserInput;
-};
+}
 
-export type MutationInviteNewUserArgs = {
+export interface MutationInviteNewUserArgs {
   email: Scalars['String'];
-};
+}
 
-export type MutationCompleteInvitationArgs = {
+export interface MutationCompleteInvitationArgs {
   password: Scalars['String'];
   token: Scalars['String'];
-};
+}
 
-export type MutationCreateProjectArgs = {
+export interface MutationCreateProjectArgs {
   data: ProjectDataArgs;
-};
+}
 
-export type MutationDeleteProjectArgs = {
+export interface MutationDeleteProjectArgs {
   projectId: Scalars['String'];
-};
+}
 
-export type MutationUpdateProjectArgs = {
+export interface MutationUpdateProjectArgs {
   data: ProjectDataArgs;
   projectId: Scalars['String'];
-};
+}
 
-export type MutationDeleteTestSessionArgs = {
+export interface MutationDeleteTestSessionArgs {
   testSessionId: Scalars['String'];
-};
+}
 
-export type MutationUpdateTestSessionArgs = {
+export interface MutationUpdateTestSessionArgs {
   data: TestSessionDataArgs;
   testSessionId: Scalars['String'];
-};
+}
 
-export type MutationDeleteTestArgs = {
+export interface MutationDeleteTestArgs {
   testId: Scalars['String'];
-};
+}
 
-export type MutationDeleteVariationArgs = {
+export interface MutationDeleteVariationArgs {
   variationId: Scalars['String'];
-};
+}
 
-export type ProjectDataArgs = {
+export interface ProjectDataArgs {
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-};
+}
 
-export type ProjectType = {
+export interface ProjectType {
   __typename?: 'ProjectType';
   id: Scalars['ID'];
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-};
+}
 
-export type Query = {
+export interface Query {
   __typename?: 'Query';
   me: User;
   project: ProjectType;
@@ -148,41 +148,41 @@ export type Query = {
   variation: VariationType;
   variations: Array<VariationType>;
   variationsCount: Scalars['Int'];
-};
+}
 
-export type QueryProjectArgs = {
+export interface QueryProjectArgs {
   projectId: Scalars['String'];
-};
+}
 
-export type QueryTestSessionArgs = {
+export interface QueryTestSessionArgs {
   testSessionId: Scalars['String'];
-};
+}
 
-export type QueryTestSessionsArgs = {
+export interface QueryTestSessionsArgs {
   where?: Maybe<TestSessionDataArgs>;
-};
+}
 
-export type QueryTestSessionsCountArgs = {
+export interface QueryTestSessionsCountArgs {
   where?: Maybe<TestSessionDataArgs>;
-};
+}
 
-export type QueryTestArgs = {
+export interface QueryTestArgs {
   testId: Scalars['String'];
-};
+}
 
-export type QueryVariationArgs = {
+export interface QueryVariationArgs {
   variationId: Scalars['String'];
-};
+}
 
-export type QueryVariationsArgs = {
+export interface QueryVariationsArgs {
   testId: Scalars['String'];
-};
+}
 
-export type QueryVariationsCountArgs = {
+export interface QueryVariationsCountArgs {
   testId: Scalars['String'];
-};
+}
 
-export type TestSessionDataArgs = {
+export interface TestSessionDataArgs {
   id?: Maybe<Scalars['ID']>;
   diffImageKey?: Maybe<Scalars['String']>;
   imageKey?: Maybe<Scalars['String']>;
@@ -192,9 +192,9 @@ export type TestSessionDataArgs = {
   state: Scalars['String'];
   stateComment?: Maybe<Scalars['String']>;
   autoBaseline: Scalars['Boolean'];
-};
+}
 
-export type TestSessionType = {
+export interface TestSessionType {
   __typename?: 'TestSessionType';
   id: Scalars['ID'];
   diffImageKey?: Maybe<Scalars['String']>;
@@ -205,23 +205,23 @@ export type TestSessionType = {
   state: Scalars['String'];
   stateComment?: Maybe<Scalars['String']>;
   autoBaseline: Scalars['Boolean'];
-};
+}
 
-export type TestType = {
+export interface TestType {
   __typename?: 'TestType';
   id: Scalars['ID'];
   name: Scalars['String'];
   project?: Maybe<ProjectType>;
   variations: Array<VariationType>;
-};
+}
 
-export type UpdateUserInput = {
+export interface UpdateUserInput {
   email: Scalars['String'];
   forename?: Maybe<Scalars['String']>;
   lastname?: Maybe<Scalars['String']>;
-};
+}
 
-export type User = {
+export interface User {
   __typename?: 'User';
   id: Scalars['ID'];
   email: Scalars['String'];
@@ -229,9 +229,9 @@ export type User = {
   lastname?: Maybe<Scalars['String']>;
   apiKey: Scalars['String'];
   active: Scalars['Boolean'];
-};
+}
 
-export type VariationType = {
+export interface VariationType {
   __typename?: 'VariationType';
   id: Scalars['ID'];
   browserName: Scalars['String'];
@@ -239,34 +239,65 @@ export type VariationType = {
   additionalData?: Maybe<Scalars['JSON']>;
   baseline?: Maybe<TestSessionType>;
   testSessions: Array<TestSessionType>;
-};
-export type CurrentUserQueryVariables = {};
+}
+export interface CurrentUserQueryVariables {}
 
 export type CurrentUserQuery = { __typename?: 'Query' } & {
-  me: { __typename?: 'User' } & Pick<
-    User,
-    'id' | 'active' | 'email' | 'apiKey'
-  >;
+  me: { __typename?: 'User' } & UserDataFragment;
 };
 
-export type AllProjectsQueryVariables = {};
+export interface SignupMutationVariables {
+  email: Scalars['String'];
+  password: Scalars['String'];
+}
+
+export type SignupMutation = { __typename?: 'Mutation' } & {
+  signup: { __typename?: 'AuthPayload' } & {
+    token: { __typename?: 'AuthToken' } & AuthTokenFragment;
+    user: { __typename?: 'User' } & UserDataFragment;
+  };
+};
+
+export interface LoginMutationVariables {
+  email: Scalars['String'];
+  password: Scalars['String'];
+}
+
+export type LoginMutation = { __typename?: 'Mutation' } & {
+  signup: { __typename?: 'AuthPayload' } & {
+    token: { __typename?: 'AuthToken' } & AuthTokenFragment;
+    user: { __typename?: 'User' } & UserDataFragment;
+  };
+};
+
+export type AuthTokenFragment = { __typename?: 'AuthToken' } & Pick<
+  AuthToken,
+  'expiresIn' | 'accessToken'
+>;
+
+export type UserDataFragment = { __typename?: 'User' } & Pick<
+  User,
+  'id' | 'active' | 'email' | 'apiKey'
+>;
+
+export interface AllProjectsQueryVariables {}
 
 export type AllProjectsQuery = { __typename?: 'Query' } & {
   projects: Array<{ __typename?: 'ProjectType' } & ProjectDataFragment>;
 };
 
-export type AddProjectMutationVariables = {
+export interface AddProjectMutationVariables {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-};
+}
 
 export type AddProjectMutation = { __typename?: 'Mutation' } & {
   createProject: { __typename?: 'ProjectType' } & ProjectDataFragment;
 };
 
-export type DeleteProjectMutationVariables = {
+export interface DeleteProjectMutationVariables {
   projectId: Scalars['String'];
-};
+}
 
 export type DeleteProjectMutation = { __typename?: 'Mutation' } & {
   deleteProject: { __typename?: 'ProjectType' } & Pick<ProjectType, 'id'>;
@@ -277,25 +308,25 @@ export type ProjectDataFragment = { __typename?: 'ProjectType' } & Pick<
   'id' | 'name' | 'description'
 >;
 
-export type GetVariationQueryVariables = {
+export interface GetVariationQueryVariables {
   variationId: Scalars['String'];
-};
+}
 
 export type GetVariationQuery = { __typename?: 'Query' } & {
   variation: { __typename?: 'VariationType' } & VariationDataFragment;
 };
 
-export type AllVariationsQueryVariables = {
+export interface AllVariationsQueryVariables {
   testId: Scalars['String'];
-};
+}
 
 export type AllVariationsQuery = { __typename?: 'Query' } & {
   variations: Array<{ __typename?: 'VariationType' } & VariationDataFragment>;
 };
 
-export type DeleteVariationMutationVariables = {
+export interface DeleteVariationMutationVariables {
   id: Scalars['String'];
-};
+}
 
 export type DeleteVariationMutation = { __typename?: 'Mutation' } & {
   deleteVariation: { __typename?: 'VariationType' } & Pick<VariationType, 'id'>;
@@ -319,6 +350,20 @@ export type VariationDataFragment = { __typename?: 'VariationType' } & Pick<
       >
     >;
   };
+export const AuthTokenFragmentDoc = gql`
+  fragment AuthToken on AuthToken {
+    expiresIn
+    accessToken
+  }
+`;
+export const UserDataFragmentDoc = gql`
+  fragment UserData on User {
+    id
+    active
+    email
+    apiKey
+  }
+`;
 export const ProjectDataFragmentDoc = gql`
   fragment ProjectData on ProjectType {
     id
@@ -347,12 +392,10 @@ export const VariationDataFragmentDoc = gql`
 export const CurrentUserDocument = gql`
   query currentUser {
     me {
-      id
-      active
-      email
-      apiKey
+      ...UserData
     }
   }
+  ${UserDataFragmentDoc}
 `;
 
 @Injectable({
@@ -363,6 +406,54 @@ export class CurrentUserGQL extends Apollo.Query<
   CurrentUserQueryVariables
 > {
   document = CurrentUserDocument;
+}
+export const SignupDocument = gql`
+  mutation signup($email: String!, $password: String!) {
+    signup(email: $email, password: $password) {
+      token {
+        ...AuthToken
+      }
+      user {
+        ...UserData
+      }
+    }
+  }
+  ${AuthTokenFragmentDoc}
+  ${UserDataFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SignupGQL extends Apollo.Mutation<
+  SignupMutation,
+  SignupMutationVariables
+> {
+  document = SignupDocument;
+}
+export const LoginDocument = gql`
+  mutation login($email: String!, $password: String!) {
+    signup(email: $email, password: $password) {
+      token {
+        ...AuthToken
+      }
+      user {
+        ...UserData
+      }
+    }
+  }
+  ${AuthTokenFragmentDoc}
+  ${UserDataFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LoginGQL extends Apollo.Mutation<
+  LoginMutation,
+  LoginMutationVariables
+> {
+  document = LoginDocument;
 }
 export const AllProjectsDocument = gql`
   query allProjects {

@@ -1,8 +1,39 @@
 query currentUser {
   me {
-    id
-    active
-    email
-    apiKey
+    ...UserData
   }
+}
+
+mutation signup($email: String!, $password: String!) {
+  signup(email: $email, password: $password) {
+    token {
+      ...AuthToken
+    }
+    user {
+      ...UserData
+    }
+  }
+}
+
+mutation login($email: String!, $password: String!) {
+  signup(email: $email, password: $password) {
+    token {
+      ...AuthToken
+    }
+    user {
+      ...UserData
+    }
+  }
+}
+
+fragment AuthToken on AuthToken {
+  expiresIn
+  accessToken
+}
+
+fragment UserData on User {
+  id
+  active
+  email
+  apiKey
 }
