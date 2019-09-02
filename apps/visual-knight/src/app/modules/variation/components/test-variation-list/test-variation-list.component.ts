@@ -39,7 +39,7 @@ export class VariationListComponent implements OnInit {
       .open(DeleteVariationModalComponent, {
         data: { name: `${variation.deviceName} / ${variation.browserName}` }
       })
-      .beforeClose()
+      .beforeClosed()
       .subscribe((deleteVariation: boolean) => {
         if (deleteVariation) {
           // TODO: trigger delete variation
