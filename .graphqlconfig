@@ -1,0 +1,13 @@
+{
+  "schemaPath": "apps/api/schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "dev": {
+        "url": "http://localhost:3333/graphql",
+        "headers": {
+          "Authorization": "Bearer ${env:VK_AUTH_TOKEN}"
+        }
+      }
+    }
+  }
+}

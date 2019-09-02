@@ -8,7 +8,8 @@ import { ProjectModule } from './project/project.module';
 import { TestsessionModule } from './testsession/testsession.module';
 import { TestModule } from './test/test.module';
 import { VariationModule } from './variation/variation.module';
-import { environment } from '../environments/environment.prod';
+import { environment } from '../environments/environment';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { environment } from '../environments/environment.prod';
         return { req };
       },
       installSubscriptionHandlers: true,
-      autoSchemaFile: environment.schemaPath
+      autoSchemaFile: join(process.cwd(), environment.schemaPath)
     }),
     AuthModule,
     UserModule,

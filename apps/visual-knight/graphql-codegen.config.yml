@@ -1,0 +1,8 @@
+schema: ${VK_SCHEMA_PATH:http://localhost:3333/graphql}
+documents: ./src/**/*.graphql
+generates:
+  ./src/modules/core/types.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-apollo-angular
