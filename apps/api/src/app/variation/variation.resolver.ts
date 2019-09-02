@@ -19,14 +19,14 @@ export class VariationResolver {
 
   @Query(returns => [VariationType])
   @UseGuards(GqlAuthGuard)
-  async variations(): Promise<VariationType[]> {
-    return this.variationService.getVariations();
+  async variations(@Args('testId') testId: string): Promise<VariationType[]> {
+    return this.variationService.getVariations(testId);
   }
 
   @Query(returns => Int)
   @UseGuards(GqlAuthGuard)
-  async variationsCount(): Promise<number> {
-    return this.variationService.getVariationsCount();
+  async variationsCount(@Args('testId') testId: string): Promise<number> {
+    return this.variationService.getVariationsCount(testId);
   }
 
   @Mutation(returns => VariationType)

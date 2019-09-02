@@ -62,8 +62,8 @@ type Query {
   tests: [TestType!]!
   testsCount: Int!
   variation(variationId: String!): VariationType!
-  variations: [VariationType!]!
-  variationsCount: Int!
+  variations(testId: String!): [VariationType!]!
+  variationsCount(testId: String!): Int!
 }
 
 input TestSessionDataArgs {
