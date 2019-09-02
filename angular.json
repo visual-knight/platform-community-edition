@@ -25,7 +25,10 @@
               "apps/visual-knight/src/favicon.ico",
               "apps/visual-knight/src/assets"
             ],
-            "styles": ["apps/visual-knight/src/styles.scss"],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "apps/visual-knight/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {

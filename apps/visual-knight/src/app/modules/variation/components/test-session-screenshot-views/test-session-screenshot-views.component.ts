@@ -8,7 +8,7 @@ import {
   EventEmitter
 } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material';
-// TODO: replace moment with fancy lib
+// TODO: replace moment with fancy lib -> date-fns
 import * as moment from 'moment';
 import {
   TestSession,

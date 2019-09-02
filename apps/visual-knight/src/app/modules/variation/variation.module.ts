@@ -8,6 +8,7 @@ import { DeleteVariationModalComponent } from './components/modals/delete-variat
 import { ScreenshotViewComponent } from './components/screenshot-view/screenshot-view.component';
 import { TestSessionListComponent } from './components/test-session-list/test-session-list.component';
 import { TestSessionScreenshotViewsComponent } from './components/test-session-screenshot-views/test-session-screenshot-views.component';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   { path: ':testId', component: VariationListComponent },
@@ -23,7 +24,7 @@ const routes: Routes = [
     DeleteVariationModalComponent,
     ScreenshotViewComponent
   ],
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   entryComponents: [DeleteVariationModalComponent, ScreenshotViewComponent]
 })
 export class VariationModule {}
