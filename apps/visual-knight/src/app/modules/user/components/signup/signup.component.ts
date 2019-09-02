@@ -47,7 +47,7 @@ export class SignupComponent implements OnInit {
   }
 
   signup() {
-    this.authService.signup(this.signupForm.value).subscribe();
+    // TODO: implement signup -> sign in is not reusable....
 
     this.submitButton.disabled = true;
     this.progressBarMode = 'indeterminate';

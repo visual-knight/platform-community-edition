@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import * as moment from 'moment';
-import { TestSession } from '@generated/photonjs';
 import { TestSessionsDataSource } from '../variation-view/testsessions.datasource';
+import { TestSessionType } from '../../../core/types';
 
 @Component({
   selector: 'visual-knight-test-session-list',
@@ -24,24 +24,26 @@ export class TestSessionListComponent implements OnInit {
 
   ngOnInit() {}
 
-  showShortDate(testSession: TestSession) {
-    return moment().diff(testSession.createdAt, 'hours') <= 35;
+  showShortDate(testSession: TestSessionType) {
+    // TODO: add created
+    // return moment().diff(testSession.createdAt, 'hours') <= 35;
   }
 
-  getFromNow(testSession: TestSession) {
-    return moment(testSession.createdAt).fromNow();
+  getFromNow(testSession: TestSessionType) {
+    // TODO: add created
+    // return moment(testSession.createdAt).fromNow();
   }
 
-  onSelectTestSession(testSession: TestSession) {
+  onSelectTestSession(testSession: TestSessionType) {
     // TODO: select new test session
   }
 
-  getUsername(testSession: TestSession) {
+  getUsername(testSession: TestSessionType) {
     return getTestSessionUsername(testSession);
   }
 }
 
-export function getTestSessionUsername(testSession: TestSession): string {
+export function getTestSessionUsername(testSession: TestSessionType): string {
   // TODO: check data model test session -> missing user state change?
   // if (!testSession.stateChangedByUser && testSession.state === 'ACCEPTED') {
   //   return testSession.autoBaseline ? 'By System (autoBaseline)' : 'By System';

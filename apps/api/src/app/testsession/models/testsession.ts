@@ -1,5 +1,6 @@
 import { Field, ObjectType, ID, Float } from 'type-graphql';
 import { TestSessionState } from '@generated/photonjs';
+import { DateTimeResolver } from 'graphql-scalars';
 
 // export enum TestSessionState {
 //   PENDING,
@@ -41,4 +42,7 @@ export class TestSessionType {
 
   @Field(type => Boolean)
   autoBaseline: boolean;
+
+  @Field(type => DateTimeResolver)
+  createdAt: String;
 }

@@ -2,8 +2,8 @@ import { Observable } from 'rxjs';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TestSession, Variation, Test } from '@generated/photonjs';
 import { TestSessionsDataSource } from './testsessions.datasource';
+import { VariationType, TestSessionType, TestType } from '../../../core/types';
 
 @Component({
   selector: 'visual-knight-variation-view',
@@ -12,10 +12,10 @@ import { TestSessionsDataSource } from './testsessions.datasource';
 })
 export class VariationViewComponent
   implements OnInit, AfterViewInit, OnDestroy {
-  variation$: Observable<Variation>; // TODO: get current variation
-  selectedTestSession$: Observable<TestSession>; // TODO: get selected testsession
-  testSessions$: Observable<TestSession[]>; // TODO: get test sessions
-  test$: Observable<Test>; // TODO: Why do I need it?
+  variation$: Observable<VariationType>; // TODO: get current variation
+  selectedTestSession$: Observable<TestSessionType>; // TODO: get selected testsession
+  testSessions$: Observable<TestSessionType[]>; // TODO: get test sessions
+  test$: Observable<TestType>; // TODO: Why do I need it?
   public isDiffView = false;
   public testId: string;
   public testSessionDataSource: TestSessionsDataSource;
@@ -50,14 +50,14 @@ export class VariationViewComponent
     });
   }
 
-  isSuccessfull(testSession: TestSession) {
+  isSuccessfull(testSession: TestSessionType) {
     return testSession.misMatchPercentage < testSession.misMatchTolerance;
   }
 
   onStateChange(
     accept: boolean,
-    testSession: TestSession,
-    variation: Variation
+    testSession: TestSessionType,
+    variation: VariationType
   ) {
     const comment = null;
     if (accept) {
@@ -68,14 +68,14 @@ export class VariationViewComponent
   }
 
   acceptNewBaseline(
-    testSession: TestSession,
-    variation: Variation,
+    testSession: TestSessionType,
+    variation: VariationType,
     comment: string
   ) {
     // TODO: accept new baseline
   }
 
-  declineTestSession(testSession: TestSession, comment: string) {
+  declineTestSession(testSession: TestSessionType, comment: string) {
     // TODO: decline test session
   }
 

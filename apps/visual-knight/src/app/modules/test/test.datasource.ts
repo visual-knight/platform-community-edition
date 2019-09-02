@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs';
-// TODO: clearify import // import { DataSource } from '@angular/cdk/collections';
-import { Test } from '@generated/photonjs';
+import { DataSource } from '@angular/cdk/collections';
+import { TestType } from '../core/types';
 
-export class TestsDataSource extends DataSource<Test> {
-  constructor(private tests$: Observable<Test[]>) {
+export class TestsDataSource extends DataSource<TestType> {
+  constructor(private tests$: Observable<TestType[]>) {
     super();
   }
 

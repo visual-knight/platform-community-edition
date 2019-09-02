@@ -13,6 +13,9 @@ type AuthToken {
   accessToken: String!
 }
 
+"""Use JavaScript Date object for date/time fields."""
+scalar DateTime
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -88,6 +91,7 @@ type TestSessionType {
   state: String!
   stateComment: String
   autoBaseline: Boolean!
+  createdAt: DateTime!
 }
 
 type TestType {
@@ -116,6 +120,7 @@ type VariationType {
   id: ID!
   browserName: String!
   deviceName: String!
+  createdAt: DateTime!
   additionalData: JSON
   baseline: TestSessionType
   testSessions: [TestSessionType!]!

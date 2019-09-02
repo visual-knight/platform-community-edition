@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { TestSession } from '@generated/photonjs';
+import { TestSessionType } from '../types';
 
 @Injectable({ providedIn: 'root' })
 export class TestHelperService {
   constructor() {}
 
-  isTestSuccessfull(testSession: TestSession) {
+  isTestSuccessfull(testSession: TestSessionType) {
     return (
       (testSession.imageKey !== null &&
         testSession.misMatchPercentage !== null &&

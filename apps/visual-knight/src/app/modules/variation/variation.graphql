@@ -34,7 +34,7 @@ fragment VariationData on VariationType {
     imageKey
     misMatchPercentage
     misMatchTolerance
-    # createdAt
+    createdAt
     state
     stateComment
     autoBaseline

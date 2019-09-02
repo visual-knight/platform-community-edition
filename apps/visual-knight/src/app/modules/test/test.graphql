@@ -1,0 +1,22 @@
+query allTests {
+  tests {
+    ...TestData
+  }
+}
+
+mutation deleteTest($id: String!) {
+  deleteTest(testId: $id) {
+    id
+  }
+}
+
+fragment TestData on TestType {
+  id
+  name
+  variations {
+    id
+    createdAt
+    browserName
+    deviceName
+  }
+}

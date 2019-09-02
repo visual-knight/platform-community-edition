@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TestsDataSource } from './test.datasource';
 import { Observable } from 'rxjs';
-import { Test } from '@generated/photonjs';
+import { TestType } from '../core/types';
 
 @Component({
   selector: 'visual-knight-test',
@@ -12,7 +12,7 @@ export class TestComponent implements OnInit {
   testDataSource: TestsDataSource;
 
   // TODO: get filtered Testlist
-  filteredTestList$: Observable<Test[]>;
+  filteredTestList$: Observable<TestType[]>;
 
   constructor() {}
 
