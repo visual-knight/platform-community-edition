@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'visual-knight-add',
