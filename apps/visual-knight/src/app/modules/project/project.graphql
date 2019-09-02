@@ -5,18 +5,18 @@ query allProjects {
 }
 
 mutation addProject($name: String!, $description: String) {
-  createProject(name: $name, description: $description) {
+  createProject(data: { name: $name, description: $description }) {
     ...ProjectData
   }
 }
 
-mutation($projectId: ID!) {
-  deleteProject(where: { id: $projectId }) {
+mutation deleteProject($projectId: String!) {
+  deleteProject(projectId: $projectId) {
     id
   }
 }
 
-fragment ProjectData on Project {
+fragment ProjectData on ProjectType {
   id
   name
   description

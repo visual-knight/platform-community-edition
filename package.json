@@ -28,7 +28,10 @@
     "help": "nx help",
     "postinstall": "cd libs/api-interface && prisma2 generate",
     "zip": "cd dist/apps/api && zip main.js.zip main.js",
-    "deploy": "npm run zip && npx serverless deploy --verbose"
+    "deploy": "npm run zip && npx serverless deploy --verbose",
+    "generate": "npm run generate:photon && npm run generate:vk-types",
+    "generate:photon": "cd libs/api-interface && prisma2 generate",
+    "generate:vk-types": "graphql-codegen"
   },
   "private": true,
   "dependencies": {
@@ -75,6 +78,10 @@
     "@angular/cli": "8.1.1",
     "@angular/compiler-cli": "^8.0.0",
     "@angular/language-service": "^8.0.0",
+    "@graphql-codegen/cli": "^1.7.0",
+    "@graphql-codegen/typescript": "^1.7.0",
+    "@graphql-codegen/typescript-apollo-angular": "^1.7.0",
+    "@graphql-codegen/typescript-operations": "^1.7.0",
     "@nestjs/schematics": "^6.3.0",
     "@nestjs/testing": "^6.2.4",
     "@nrwl/cypress": "8.4.12",
@@ -87,7 +94,6 @@
     "codelyzer": "~5.0.1",
     "cypress": "3.4.0",
     "dotenv": "6.2.0",
-    "graphql-codegen": "^0.4.0",
     "jest": "24.1.0",
     "jest-preset-angular": "7.0.0",
     "prettier": "1.16.4",

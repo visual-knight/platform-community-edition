@@ -11,11 +11,12 @@ export class VariationService {
       include: { testSessions: true }
     });
   }
-  async getVariationsCount(): Promise<number> {
-    return (await this.getVariations()).length;
+  async getVariationsCount(testId: string): Promise<number> {
+    return (await this.getVariations(testId)).length;
   }
-  async getVariations() {
+  async getVariations(testId: string) {
     return this.photonService.variations.findMany({
+      where: { test: { id: testId } },
       include: { testSessions: true }
     });
   }
