@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthServiceService } from '../core/auth-service.service';
+import { AuthService } from '../core/auth-service.service';
 
 @Component({
   selector: 'visual-knight-user-container',
@@ -16,7 +16,7 @@ export class UserContainerComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthServiceService
+    private authService: AuthService
   ) {}
 
   ngOnInit() {

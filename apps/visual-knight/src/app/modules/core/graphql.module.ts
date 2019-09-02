@@ -5,9 +5,12 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { environment } from '../../../environments/environment';
 import { ApolloLink, concat } from 'apollo-link';
 import { HttpHeaders } from '@angular/common/http';
+import { onError } from 'apollo-link-error';
+import { AuthService } from './auth-service.service';
+import { ServerError } from 'apollo-link-http-common';
 
 const uri = environment.graphql.uri; // <-- add the URL of the GraphQL server here
-export function createApollo(httpLink: HttpLink) {
+export function createApollo(httpLink: HttpLink, auth: AuthService) {
   const http = httpLink.create({ uri: environment.graphql.uri });
 
   const authMiddleware = new ApolloLink((operation, forward) => {
@@ -24,8 +27,12 @@ export function createApollo(httpLink: HttpLink) {
     return forward(operation);
   });
 
+  const logoutLink = onError(({ networkError }) => {
+    if ((networkError as ServerError).statusCode === 401) auth.logOut();
+  });
+
   return {
-    link: concat(authMiddleware, http),
+    link: logoutLink.concat(concat(authMiddleware, http)),
     cache: new InMemoryCache()
   };
 }
@@ -36,7 +43,7 @@ export function createApollo(httpLink: HttpLink) {
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
-      deps: [HttpLink]
+      deps: [HttpLink, AuthService]
     }
   ]
 })

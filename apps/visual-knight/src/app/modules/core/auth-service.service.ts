@@ -4,7 +4,7 @@ import { Subject, BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServiceService {
+export class AuthService {
   // expose all data
 
   public authErrorMessages$ = new Subject<string>();
