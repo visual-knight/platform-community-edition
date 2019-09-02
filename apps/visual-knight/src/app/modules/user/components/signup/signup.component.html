@@ -1,0 +1,180 @@
+<div class="page-wrap mat-bg-primary">
+  <div class="session-form-hold">
+    <mat-progress-bar
+      [mode]="progressBarMode"
+      class="session-progress"
+    ></mat-progress-bar>
+    <mat-card>
+      <mat-card-content>
+        <div class="text-center pb-1">
+          <p class="text-muted m-0">Sign up to use our service</p>
+        </div>
+        <form [formGroup]="signupForm" (ngSubmit)="signup()">
+          <div class="">
+            <mat-form-field class="full-width">
+              <input
+                matInput
+                type="email"
+                name="email"
+                formControlName="email"
+                placeholder="Your Email"
+                value=""
+              />
+            </mat-form-field>
+            <small
+              *ngIf="
+                signupForm.controls['email'].hasError('required') &&
+                signupForm.controls['email'].touched
+              "
+              class="form-error-msg"
+            >
+              Email is required
+            </small>
+
+            <small
+              *ngIf="
+                signupForm.controls['email'].hasError('email') &&
+                signupForm.controls['email'].touched
+              "
+              class="form-error-msg"
+            >
+              Invaild email address
+            </small>
+          </div>
+
+          <div class="">
+            <mat-form-field class="full-width">
+              <input
+                type="password"
+                name="password"
+                matInput
+                formControlName="password"
+                placeholder="Password"
+                value=""
+              />
+            </mat-form-field>
+            <small
+              *ngIf="
+                signupForm.controls['password'].hasError('required') &&
+                signupForm.controls['password'].touched
+              "
+              class="form-error-msg"
+            >
+              Password is required
+            </small>
+
+            <mat-error
+              class="error-message"
+              *ngIf="
+                signupForm.get('password').touched &&
+                signupForm.get('password').hasError('validatePassword')
+              "
+            >
+              Your password is not strong enough!
+              <i
+                class="material-icons"
+                id="toolTipSize"
+                [matTooltipPosition]="'above'"
+                matSuffix
+                matTooltip="Your password must contain minimum: 8 characters, a mixture of both uppercase and lowercase letters, a mixture of letters and numbers"
+                >error</i
+              >
+            </mat-error>
+          </div>
+
+          <div class="">
+            <mat-form-field class="full-width">
+              <input
+                type="password"
+                name="passwordRepeat"
+                matInput
+                formControlName="passwordRepeat"
+                placeholder="Confirm Password"
+                value=""
+              />
+            </mat-form-field>
+            <small
+              *ngIf="
+                signupForm.get('passwordRepeat').hasError('required') &&
+                signupForm.get('passwordRepeat').touched
+              "
+              class="form-error-msg"
+              >Confirm password is required.</small
+            >
+            <small
+              *ngIf="
+                signupForm.get('passwordRepeat').touched &&
+                signupForm.get('passwordRepeat').hasError('matchPassword')
+              "
+              class="form-error-msg"
+              >Passwords do not match.</small
+            >
+          </div>
+
+          <div class="pb-1">
+            <div>
+              <mat-checkbox
+                name="termsAndConditions"
+                formControlName="termsAndConditions"
+              >
+                I have read and agree to the
+                <a
+                  href="/legal/terms-and-conditions"
+                  target="_blank"
+                  class="inline-link"
+                  >Terms and Conditions</a
+                >
+                and
+              </mat-checkbox>
+            </div>
+            <div>
+              <mat-checkbox
+                name="privacyPolicy"
+                formControlName="privacyPolicy"
+              >
+                <a
+                  href="/legal/privacy-policy"
+                  target="_blank"
+                  class="inline-link"
+                  >Privacy Policy</a
+                >.
+              </mat-checkbox>
+            </div>
+
+            <small
+              *ngIf="
+                (signupForm.controls['privacyPolicy'].hasError('agreed') &&
+                  signupForm.controls['privacyPolicy'].touched) ||
+                (signupForm.controls['termsAndConditions'].hasError('agreed') &&
+                  signupForm.controls['termsAndConditions'].touched)
+              "
+              class="form-error-msg"
+            >
+              You must agree to the terms and conditions and privacy
+              policy</small
+            >
+          </div>
+
+          <div class="pb-1" fxLayoutAlign="center center">
+            <re-captcha formControlName="recaptcha" required></re-captcha>
+          </div>
+
+          <button
+            mat-raised-button
+            class="mat-primary full-width mb-1"
+            [disabled]="signupForm.invalid"
+          >
+            Sign up
+          </button>
+          <div class="text-center">
+            <a
+              [routerLink]="'/sessions/signin'"
+              class="mat-primary text-center full-width"
+              >Sign in to existing account</a
+            >
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
