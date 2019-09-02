@@ -240,6 +240,15 @@ export type VariationType = {
   baseline?: Maybe<TestSessionType>;
   testSessions: Array<TestSessionType>;
 };
+export type CurrentUserQueryVariables = {};
+
+export type CurrentUserQuery = { __typename?: 'Query' } & {
+  me: { __typename?: 'User' } & Pick<
+    User,
+    'id' | 'active' | 'email' | 'apiKey'
+  >;
+};
+
 export type AllProjectsQueryVariables = {};
 
 export type AllProjectsQuery = { __typename?: 'Query' } & {
@@ -335,6 +344,26 @@ export const VariationDataFragmentDoc = gql`
     }
   }
 `;
+export const CurrentUserDocument = gql`
+  query currentUser {
+    me {
+      id
+      active
+      email
+      apiKey
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CurrentUserGQL extends Apollo.Query<
+  CurrentUserQuery,
+  CurrentUserQueryVariables
+> {
+  document = CurrentUserDocument;
+}
 export const AllProjectsDocument = gql`
   query allProjects {
     projects {

@@ -1,0 +1,8 @@
+query currentUser {
+  me {
+    id
+    active
+    email
+    apiKey
+  }
+}

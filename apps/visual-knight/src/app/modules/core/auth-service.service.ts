@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
+import { User, CurrentUserGQL } from '../../../modules/core/types';
+import { map } from 'rxjs/operators';
+import { GraphQLError } from 'graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -7,13 +10,22 @@ import { Subject, BehaviorSubject } from 'rxjs';
 export class AuthService {
   // expose all data
 
-  public authErrorMessages$ = new Subject<string>();
-  public isLoading$ = new BehaviorSubject<boolean>(true);
-  public user$ = new Subject<any>();
+  public authErrorMessages$: Observable<readonly GraphQLError[]>;
+  public isLoading$: Observable<boolean>;
+  public user$: Observable<User>;
 
-  constructor() {}
+  constructor(private currentUserGQL: CurrentUserGQL) {
+    const currentUser$ = this.currentUserGQL.watch().valueChanges;
 
-  private isLoggedIn() {}
+    this.user$ = currentUser$.pipe(map(result => result.data.me));
+    this.isLoading$ = currentUser$.pipe(map(result => result.loading));
+    this.authErrorMessages$ = currentUser$.pipe(map(result => result.errors));
+  }
+
+  get authenticated(): boolean {
+    return localStorage.getItem('token') !== null;
+  }
+
   public signUp({ email, password }) {}
   public login({ email, password }) {}
   public logOut() {}
