@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit {
   signin() {
     const signinData = this.signinForm.value;
 
-    this.submitButton.disabled = true;
-    this.progressBar.mode = 'indeterminate';
+    // this.submitButton.disabled = true;
+    // this.progressBar.mode = 'indeterminate';
 
     this.authService
       .login(signinData)
