@@ -4,13 +4,23 @@ import { AddProjectModalComponent } from './components/modals/add-new-project/pr
 import { DeleteModalComponent } from './components/modals/delete-modal/delete-modal.component';
 import { Observable } from 'rxjs';
 import { Hexcolor } from '../shared/utils/hexcolor';
-import { AllProjectsGQL, ProjectType } from '../core/types';
+import {
+  AllProjectsGQL,
+  ProjectType,
+  DeleteProjectGQL,
+  AddProjectGQL,
+  AllProjectsDocument,
+  AllProjectsQuery
+} from '../core/types';
 import { map } from 'rxjs/operators';
+import { vkAnimations } from '../shared/animations';
+import { ProjectService } from './services/project.service';
 
 @Component({
   selector: 'visual-knight-project',
   templateUrl: './project.component.html',
-  styleUrls: ['./project.component.scss']
+  styleUrls: ['./project.component.scss'],
+  animations: [vkAnimations]
 })
 export class ProjectComponent implements OnInit {
   projectList$: Observable<
@@ -22,13 +32,22 @@ export class ProjectComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private projectGQL: AllProjectsGQL
+    private projectService: ProjectService,
+    private projectGQL: AllProjectsGQL,
+    private deleteProjectGQL: DeleteProjectGQL
   ) {}
 
   ngOnInit() {}
 
   createProject() {
-    this.dialog.open(AddProjectModalComponent);
+    this.dialog
+      .open(AddProjectModalComponent)
+      .beforeClosed()
+      .subscribe(({ name, description }) => {
+        if (name) {
+          this.projectService.addProject({ name, description }).toPromise();
+        }
+      });
   }
 
   deleteProject(project: ProjectType) {
@@ -37,7 +56,9 @@ export class ProjectComponent implements OnInit {
       .beforeClosed()
       .subscribe(result => {
         if (result) {
-          this.onDeleteProject(project);
+          this.projectService
+            .deleteProject({ projectId: project.id })
+            .toPromise();
         }
       });
   }
@@ -47,8 +68,6 @@ export class ProjectComponent implements OnInit {
       duration: 5000
     });
   }
-
-  onDeleteProject(project: ProjectType) {}
 
   trackPojectItems(index: number, project: ProjectType): string {
     return project.id;

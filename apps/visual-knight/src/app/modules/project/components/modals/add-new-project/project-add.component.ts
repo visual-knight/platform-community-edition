@@ -12,9 +12,7 @@ export class AddProjectModalComponent {
 
   onSubmit(form: NgForm) {
     if (form.valid) {
-      const { name, description } = form.value;
-      //TODO!: SEND name and description
-      this.dialogRef.close();
+      this.dialogRef.close(form.value);
     }
   }
 
