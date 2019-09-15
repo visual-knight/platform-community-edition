@@ -8,7 +8,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { onError } from 'apollo-link-error';
 import { Router } from '@angular/router';
 
-const uri = environment.graphql.uri; // <-- add the URL of the GraphQL server here
+const uri = environment.graphql.uri;
 export function createApollo(httpLink: HttpLink, router: Router) {
   const http = httpLink.create({ uri });
 
