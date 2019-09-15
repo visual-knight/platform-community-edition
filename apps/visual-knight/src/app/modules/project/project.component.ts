@@ -4,15 +4,7 @@ import { AddProjectModalComponent } from './components/modals/add-new-project/pr
 import { DeleteModalComponent } from './components/modals/delete-modal/delete-modal.component';
 import { Observable } from 'rxjs';
 import { Hexcolor } from '../shared/utils/hexcolor';
-import {
-  AllProjectsGQL,
-  ProjectType,
-  DeleteProjectGQL,
-  AddProjectGQL,
-  AllProjectsDocument,
-  AllProjectsQuery
-} from '../core/types';
-import { map } from 'rxjs/operators';
+import { ProjectType } from '../core/types';
 import { vkAnimations } from '../shared/animations';
 import { ProjectService } from './services/project.service';
 
@@ -23,18 +15,12 @@ import { ProjectService } from './services/project.service';
   animations: [vkAnimations]
 })
 export class ProjectComponent implements OnInit {
-  projectList$: Observable<
-    ProjectType[]
-  > = this.projectGQL
-    .watch()
-    .valueChanges.pipe(map(result => result.data.projects));
+  projectList$: Observable<ProjectType[]> = this.projectService.projectList();
 
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private projectService: ProjectService,
-    private projectGQL: AllProjectsGQL,
-    private deleteProjectGQL: DeleteProjectGQL
+    private projectService: ProjectService
   ) {}
 
   ngOnInit() {}
