@@ -5,14 +5,17 @@ import {
   AllProjectsQuery,
   AllProjectsDocument,
   DeleteProjectMutationVariables,
-  DeleteProjectGQL
+  DeleteProjectGQL,
+  AllProjectsGQL
 } from '../../core/types';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
   constructor(
+    private allProjectsGQL: AllProjectsGQL,
     private addProjectGQL: AddProjectGQL,
     private deleteProjectGQL: DeleteProjectGQL
   ) {}
@@ -46,5 +49,11 @@ export class ProjectService {
         store.writeQuery({ query: AllProjectsDocument, data });
       }
     });
+  }
+
+  projectList() {
+    return this.allProjectsGQL
+      .watch()
+      .valueChanges.pipe(map(result => result.data.projects));
   }
 }
