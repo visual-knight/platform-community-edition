@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatCardModule, MatIconModule, MatButtonModule, MatSnackBarModule, MatInputModule, MatTableModule, MatTooltipModule, MatExpansionModule, MatToolbarModule, MatProgressBarModule, MatCheckboxModule } from '@angular/material';
+import { MatCardModule, MatIconModule, MatButtonModule, MatSnackBarModule, MatInputModule, MatTableModule, MatTooltipModule, MatExpansionModule, MatToolbarModule, MatProgressBarModule, MatCheckboxModule, MatDialogModule } from '@angular/material';
 
 const SHARED_MODULES = [
   CommonModule,
@@ -11,6 +11,7 @@ const SHARED_MODULES = [
   MatIconModule,
   MatButtonModule,
   MatCheckboxModule,
+  MatDialogModule,
   // MatDividerModule,
   // MatBadgeModule,
   // MatFormFieldModule,

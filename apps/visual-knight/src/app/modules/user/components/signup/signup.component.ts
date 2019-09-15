@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatButton } from '@angular/material';
+import { MatButton, MatProgressBar } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/auth-service.service';
 import { PasswordStrengthValidators } from '../../../shared/utils/passwordPatternValidator';
 import { MatchValidators } from '../../../shared/utils/passwordMatchValidator';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-signup',
@@ -12,6 +13,7 @@ import { MatchValidators } from '../../../shared/utils/passwordMatchValidator';
 })
 export class SignupComponent implements OnInit {
   @ViewChild(MatButton, { static: true }) submitButton: MatButton;
+  @ViewChild(MatProgressBar, { static: true }) progressBar: MatProgressBar;
 
   progressBarMode: 'indeterminate';
   signupForm: FormGroup;
@@ -47,9 +49,20 @@ export class SignupComponent implements OnInit {
   }
 
   signup() {
-    // TODO: implement signup -> sign in is not reusable....
+    const signupData = this.signupForm.value;
 
     this.submitButton.disabled = true;
-    this.progressBarMode = 'indeterminate';
+    this.progressBar.mode = 'indeterminate';
+
+    this.authService
+      .login(signupData)
+      .pipe(first())
+      .subscribe(
+        () => {},
+        error => {
+          this.submitButton.disabled = false;
+          this.progressBar.mode = 'determinate';
+        }
+      );
   }
 }

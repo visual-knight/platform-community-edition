@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit {
   signin() {
     const signinData = this.signinForm.value;
 
-    // this.submitButton.disabled = true;
-    // this.progressBar.mode = 'indeterminate';
+    this.submitButton.disabled = true;
+    this.progressBar.mode = 'indeterminate';
 
     this.authService
       .login(signinData)
@@ -48,11 +48,12 @@ export class LoginComponent implements OnInit {
       .subscribe(
         () => {
           const referUrl =
-            this.route.snapshot.queryParams['referUrl'] || '/projects';
+            this.route.snapshot.queryParams['referUrl'] || '/project';
           this.router.navigateByUrl(referUrl);
         },
         error => {
-          console.log('Do something', error);
+          this.submitButton.disabled = false;
+          this.progressBar.mode = 'determinate';
         }
       );
   }

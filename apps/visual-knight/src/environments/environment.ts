@@ -5,8 +5,9 @@
 export const environment = {
   production: false,
   graphql: {
-    uri: 'http://localhost:333/graphql'
-  }
+    uri: 'http://localhost:3333/graphql'
+  },
+  recaptchaKey: '6LcRq0AUAAAAAHI6b5r4s9Yvsb7L9F9l-k9_fPm7'
 };
 
 /*

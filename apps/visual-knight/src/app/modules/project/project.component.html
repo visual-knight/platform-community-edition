@@ -1,6 +1,6 @@
 <mat-toolbar>
   <mat-toolbar-row>
-    <span>Projects: {{ (projectList$ | async).length }}</span>
+    <span>Projects: {{ (projectList$ | async)?.length }}</span>
     <span fxFlex></span>
 
     <button
