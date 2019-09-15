@@ -1,49 +1,52 @@
 import { NgModule } from '@angular/core';
-import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
+import { ApolloModule, APOLLO_OPTIONS, Apollo } from 'apollo-angular';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { environment } from '../../../environments/environment';
-import { ApolloLink, concat } from 'apollo-link';
+import { ApolloLink } from 'apollo-link';
 import { HttpHeaders } from '@angular/common/http';
 import { onError } from 'apollo-link-error';
-import { AuthService } from './auth-service.service';
-import { ServerError } from 'apollo-link-http-common';
+import { Router } from '@angular/router';
 
 const uri = environment.graphql.uri; // <-- add the URL of the GraphQL server here
-export function createApollo(httpLink: HttpLink, auth: AuthService) {
-  const http = httpLink.create({ uri: environment.graphql.uri });
+export function createApollo(httpLink: HttpLink, router: Router) {
+  const http = httpLink.create({ uri });
 
   const authMiddleware = new ApolloLink((operation, forward) => {
-    // add the authorization to the headers
+    const token = localStorage.getItem('visual-knight-token');
+    if (!token) return forward(operation);
+
     operation.setContext({
-      headers: new HttpHeaders().set(
-        'Authorization',
-        localStorage.getItem('token')
-          ? `Bearer: ${localStorage.getItem('token')}`
-          : null
-      )
+      headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
     });
 
     return forward(operation);
   });
 
-  const logoutLink = onError(({ networkError }) => {
-    if ((networkError as ServerError).statusCode === 401) auth.logout();
+  const logoutLink = onError(({ graphQLErrors }) => {
+    if (
+      graphQLErrors[0].extensions.code === 'INTERNAL_SERVER_ERROR' &&
+      graphQLErrors[0].extensions.exception.status === 401
+    ) {
+      localStorage.removeItem('visual-knight-token');
+      router.navigateByUrl('/user');
+    }
   });
 
   return {
-    link: logoutLink.concat(concat(authMiddleware, http)),
+    link: authMiddleware.concat(logoutLink.concat(http)),
     cache: new InMemoryCache()
   };
 }
 
 @NgModule({
+  imports: [ApolloModule, HttpLinkModule],
   exports: [ApolloModule, HttpLinkModule],
   providers: [
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
-      deps: [HttpLink, AuthService]
+      deps: [HttpLink, Router]
     }
   ]
 })

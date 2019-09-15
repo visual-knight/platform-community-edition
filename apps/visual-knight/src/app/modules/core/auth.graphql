@@ -16,7 +16,7 @@ mutation signup($email: String!, $password: String!) {
 }
 
 mutation login($email: String!, $password: String!) {
-  signup(email: $email, password: $password) {
+  login(email: $email, password: $password) {
     token {
       ...AuthToken
     }
@@ -24,6 +24,14 @@ mutation login($email: String!, $password: String!) {
       ...UserData
     }
   }
+}
+
+mutation forgotPassword($email: String!) {
+  forgotPassword(email: $email)
+}
+
+mutation resetPassword($password: String!, $token: String!) {
+  resetPassword(token: $token, password: $password)
 }
 
 fragment AuthToken on AuthToken {

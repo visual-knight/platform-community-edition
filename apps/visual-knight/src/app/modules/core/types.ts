@@ -268,11 +268,30 @@ export type LoginMutationVariables = {
 };
 
 export type LoginMutation = { __typename?: 'Mutation' } & {
-  signup: { __typename?: 'AuthPayload' } & {
+  login: { __typename?: 'AuthPayload' } & {
     token: { __typename?: 'AuthToken' } & AuthTokenFragment;
     user: { __typename?: 'User' } & UserDataFragment;
   };
 };
+
+export type ForgotPasswordMutationVariables = {
+  email: Scalars['String'];
+};
+
+export type ForgotPasswordMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'forgotPassword'
+>;
+
+export type ResetPasswordMutationVariables = {
+  password: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type ResetPasswordMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'resetPassword'
+>;
 
 export type AuthTokenFragment = { __typename?: 'AuthToken' } & Pick<
   AuthToken,
@@ -477,7 +496,7 @@ export class SignupGQL extends Apollo.Mutation<
 }
 export const LoginDocument = gql`
   mutation login($email: String!, $password: String!) {
-    signup(email: $email, password: $password) {
+    login(email: $email, password: $password) {
       token {
         ...AuthToken
       }
@@ -498,6 +517,36 @@ export class LoginGQL extends Apollo.Mutation<
   LoginMutationVariables
 > {
   document = LoginDocument;
+}
+export const ForgotPasswordDocument = gql`
+  mutation forgotPassword($email: String!) {
+    forgotPassword(email: $email)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ForgotPasswordGQL extends Apollo.Mutation<
+  ForgotPasswordMutation,
+  ForgotPasswordMutationVariables
+> {
+  document = ForgotPasswordDocument;
+}
+export const ResetPasswordDocument = gql`
+  mutation resetPassword($password: String!, $token: String!) {
+    resetPassword(token: $token, password: $password)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ResetPasswordGQL extends Apollo.Mutation<
+  ResetPasswordMutation,
+  ResetPasswordMutationVariables
+> {
+  document = ResetPasswordDocument;
 }
 export const AllProjectsDocument = gql`
   query allProjects {

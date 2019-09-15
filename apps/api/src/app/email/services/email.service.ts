@@ -58,7 +58,7 @@ export class EmailService {
 
     data.resetPasswordLink = `${
       environment.appDomain
-    }sessions/reset-password?token=${token}`;
+    }users/reset-password?token=${token}`;
 
     const sendMailOptions = {
       from: `Password Reset <${environment.email.user}>`,

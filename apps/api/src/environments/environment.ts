@@ -46,5 +46,5 @@ export const environment = {
     )
   },
 
-  appDomain: process.env.APP_DOMAIN
+  appDomain: 'http://localhost:4200/'
 };

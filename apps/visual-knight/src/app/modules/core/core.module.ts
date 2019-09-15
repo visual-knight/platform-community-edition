@@ -4,6 +4,8 @@ import { GraphQLModule } from './graphql.module';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, GraphQLModule]
+  providers: [],
+  imports: [CommonModule, GraphQLModule],
+  exports: [GraphQLModule]
 })
 export class CoreModule {}

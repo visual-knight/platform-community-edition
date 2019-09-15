@@ -6,7 +6,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { RecaptchaModule } from 'ng-recaptcha';
+import {
+  RecaptchaModule,
+  RECAPTCHA_SETTINGS,
+  RecaptchaSettings,
+  RecaptchaFormsModule
+} from 'ng-recaptcha';
+import { environment } from '../../../environments/environment';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -16,16 +23,36 @@ const routes: Routes = [
   {
     path: 'signup',
     component: SignupComponent
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent
   }
 ];
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, ForgotPasswordComponent],
+  declarations: [
+    LoginComponent,
+    SignupComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
+  ],
+  providers: [
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: { siteKey: environment.recaptchaKey } as RecaptchaSettings
+    }
+  ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
-    RecaptchaModule
+    RecaptchaModule.forRoot(),
+    RecaptchaFormsModule
   ]
 })
 export class UserModule {}
