@@ -14,9 +14,12 @@ import {
   MatToolbarModule,
   MatProgressBarModule,
   MatCheckboxModule,
-  MatDialogModule
+  MatDialogModule,
+  MatProgressSpinnerModule,
+  MatSelectModule,
+  MatMenuModule
 } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const SHARED_MODULES = [
   CommonModule,
@@ -29,18 +32,20 @@ const SHARED_MODULES = [
   // MatDividerModule,
   // MatBadgeModule,
   // MatFormFieldModule,
+  MatSelectModule,
   MatInputModule,
   MatSnackBarModule,
   MatProgressBarModule,
-  // MatProgressSpinnerModule,
-  // MatMenuModule,
+  MatMenuModule,
   MatExpansionModule,
   MatTableModule,
   MatTooltipModule,
+  MatProgressSpinnerModule,
 
   ReactiveFormsModule,
   FormsModule,
-  RouterModule
+  RouterModule,
+  FlexLayoutModule
 ];
 const SHARED_COMPONENTS = [];
 @NgModule({

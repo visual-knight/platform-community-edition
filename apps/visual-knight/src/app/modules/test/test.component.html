@@ -5,7 +5,7 @@
     <div class="mat-elevation-z8 mt-1">
       <visual-knight-test-list
         [dataSource]="testDataSource"
-        *ngIf="(testList$ | async); else loadingTemplate"
+        *ngIf="(filteredTestList$ | async); else loadingTemplate"
       ></visual-knight-test-list>
     </div>
   </div>

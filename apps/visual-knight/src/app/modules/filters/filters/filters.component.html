@@ -1,0 +1,97 @@
+<mat-accordion>
+  <mat-expansion-panel
+    (opened)="panelOpenState = true"
+    (closed)="panelOpenState = false"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Filters
+      </mat-panel-title>
+      <mat-panel-description>
+        Active Filters: {{ activeFilterCount$ | async }}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form
+      [formGroup]="filterForm"
+      novalidate
+      ngxsForm="filter"
+      fxLayout="column"
+      fxLayout.gt-sm="row wrap"
+      fxLayoutGap="10px"
+    >
+      <mat-form-field flex>
+        <mat-select
+          [disableOptionCentering]="true"
+          placeholder="Projects"
+          formControlName="projectFilter"
+          multiple
+        >
+          <mat-option
+            *ngFor="let project of (projectList$ | async)"
+            [value]="project"
+            >{{ project.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field flex>
+        <mat-select
+          [disableOptionCentering]="true"
+          placeholder="Browsers"
+          formControlName="browserFilter"
+          multiple
+        >
+          <mat-option
+            *ngFor="let browser of (browserList$ | async)"
+            [value]="browser"
+            >{{ browser }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field flex>
+        <mat-select
+          [disableOptionCentering]="true"
+          placeholder="Devices"
+          formControlName="deviceFilter"
+          multiple
+        >
+          <mat-option
+            *ngFor="let device of (deviceList$ | async)"
+            [value]="device"
+            >{{ device }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field flex>
+        <mat-select
+          [disableOptionCentering]="true"
+          placeholder="Test Status"
+          formControlName="testStateFilter"
+          multiple
+        >
+          <mat-option
+            *ngFor="let testSessionState of (testSessionStateList$ | async)"
+            [value]="testSessionState"
+            >{{ testSessionState }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field flex>
+        <mat-label>Test name</mat-label>
+        <input
+          matInput
+          placeholder="Test name"
+          formControlName="testNameFilter"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <!-- CUSTOM -->
+
+      <button mat-flat-button (click)="clearFilters()">Clear All</button>
+    </form>
+  </mat-expansion-panel>
+</mat-accordion>
