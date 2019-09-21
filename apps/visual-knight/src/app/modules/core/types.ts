@@ -142,6 +142,7 @@ export type Query = {
   projects: Array<ProjectType>;
   projectsCount: Scalars['Int'];
   testSession: TestSessionType;
+  testSessionWatch?: Maybe<TestSessionType>;
   testSessions: Array<TestSessionType>;
   testSessionsCount: Scalars['Int'];
   test: TestType;
@@ -157,6 +158,10 @@ export type QueryProjectArgs = {
 };
 
 export type QueryTestSessionArgs = {
+  testSessionId: Scalars['String'];
+};
+
+export type QueryTestSessionWatchArgs = {
   testSessionId: Scalars['String'];
 };
 
