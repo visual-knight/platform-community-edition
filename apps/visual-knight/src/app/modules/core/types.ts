@@ -349,11 +349,19 @@ export type TestDataFragment = { __typename?: 'TestType' } & Pick<
   TestType,
   'id' | 'name'
 > & {
+    project: Maybe<{ __typename?: 'ProjectType' } & Pick<ProjectType, 'id'>>;
     variations: Array<
       { __typename?: 'VariationType' } & Pick<
         VariationType,
         'id' | 'createdAt' | 'browserName' | 'deviceName'
-      >
+      > & {
+          testSessions: Array<
+            { __typename?: 'TestSessionType' } & Pick<
+              TestSessionType,
+              'id' | 'state'
+            >
+          >;
+        }
     >;
   };
 
@@ -425,11 +433,18 @@ export const TestDataFragmentDoc = gql`
   fragment TestData on TestType {
     id
     name
+    project {
+      id
+    }
     variations {
       id
       createdAt
       browserName
       deviceName
+      testSessions {
+        id
+        state
+      }
     }
   }
 `;
