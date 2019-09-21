@@ -59,6 +59,7 @@ type Query {
   projects: [ProjectType!]!
   projectsCount: Int!
   testSession(testSessionId: String!): TestSessionType!
+  testSessionWatch(testSessionId: String!): TestSessionType
   testSessions(where: TestSessionDataArgs): [TestSessionType!]!
   testSessionsCount(where: TestSessionDataArgs): Int!
   test(testId: String!): TestType!

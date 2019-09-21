@@ -38,9 +38,16 @@ export class TestsessionService {
     return deleted;
   }
 
-  async testSession(testSessionId: string): Promise<TestSessionType> {
+  async testSession(testSessionId: string) {
     return this.photonService.testSessions.findOne({
-      where: { id: testSessionId }
+      where: { id: testSessionId },
+      include: {
+        variation: {
+          include: {
+            baseline: true
+          }
+        }
+      }
     });
   }
 
