@@ -4,8 +4,9 @@ import { Observable, of, combineLatest } from 'rxjs';
 import { ProjectType } from '../../core/types';
 import { Device } from '../../shared/device.model';
 import { Browser } from '../../shared/browser.model';
-import { map, tap, pluck } from 'rxjs/operators';
+import { map, tap, first } from 'rxjs/operators';
 import { FiltersService } from '../services/filters.service';
+import { ProjectService } from '../../project/services/project.service';
 
 @Component({
   selector: 'visual-knight-filters',
@@ -18,13 +19,12 @@ export class FiltersComponent implements OnInit {
     browserFilter: null,
     deviceFilter: null,
     projectFilter: null,
-    testStateFilter: null,
-    customFilter: null
+    testStateFilter: null
   });
 
   panelOpenState = false;
 
-  projectList$: Observable<ProjectType[]>;
+  projectList$: Observable<ProjectType[]> = this.projectService.projectList();
   browserList$: Observable<any[]> = of(Browser.getBrowserList());
   deviceList$: Observable<any[]> = of(Device.getDeviceList());
   testSessionStateList$: Observable<
@@ -36,28 +36,7 @@ export class FiltersComponent implements OnInit {
     this.filtersService.browserFilter,
     this.filtersService.deviceFilter,
     this.filtersService.projectFilter,
-    this.filtersService.testStateFilter,
-    this.filtersService.customFilter
-  ).pipe(
-    tap(
-      ([
-        testNameFilter,
-        browserFilter,
-        deviceFilter,
-        projectFilter,
-        testStateFilter,
-        customFilter
-      ]) => {
-        this.filterForm.setValue({
-          testNameFilter,
-          browserFilter,
-          deviceFilter,
-          projectFilter,
-          testStateFilter,
-          customFilter
-        });
-      }
-    )
+    this.filtersService.testStateFilter
   );
 
   activeFilterCount$: Observable<number> = this.filters$.pipe(
@@ -67,21 +46,20 @@ export class FiltersComponent implements OnInit {
         browserFilter,
         deviceFilter,
         projectFilter,
-        testStateFilter,
-        customFilter
+        testStateFilter
       ]) =>
         projectFilter.length +
         browserFilter.length +
         deviceFilter.length +
         (testNameFilter ? 1 : 0) +
-        (customFilter ? 1 : 0) +
         testStateFilter.length
     )
   );
 
   constructor(
     private formBuilder: FormBuilder,
-    private filtersService: FiltersService
+    private filtersService: FiltersService,
+    private projectService: ProjectService
   ) {}
 
   ngOnInit() {
@@ -91,17 +69,37 @@ export class FiltersComponent implements OnInit {
         browserFilter,
         deviceFilter,
         projectFilter,
-        testStateFilter,
-        customFilter
+        testStateFilter
       }) => {
         this.filtersService.testNameFilter.next(testNameFilter);
         this.filtersService.browserFilter.next(browserFilter);
         this.filtersService.deviceFilter.next(deviceFilter);
         this.filtersService.projectFilter.next(projectFilter);
         this.filtersService.testStateFilter.next(testStateFilter);
-        this.filtersService.customFilter.next(customFilter);
       }
     );
+    this.filters$
+      .pipe(
+        first(),
+        tap(
+          ([
+            testNameFilter,
+            browserFilter,
+            deviceFilter,
+            projectFilter,
+            testStateFilter
+          ]) => {
+            this.filterForm.setValue({
+              testNameFilter,
+              browserFilter,
+              deviceFilter,
+              projectFilter,
+              testStateFilter
+            });
+          }
+        )
+      )
+      .subscribe();
   }
 
   clearFilters() {}

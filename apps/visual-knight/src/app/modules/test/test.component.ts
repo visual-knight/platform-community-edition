@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TestsDataSource } from './test.datasource';
-import { Observable } from 'rxjs';
-import { TestType } from '../core/types';
+import { FiltersService } from '../filters/services/filters.service';
 
 @Component({
   selector: 'visual-knight-test',
@@ -11,10 +10,9 @@ import { TestType } from '../core/types';
 export class TestComponent implements OnInit {
   testDataSource: TestsDataSource;
 
-  // TODO: get filtered Testlist
-  filteredTestList$: Observable<TestType[]>;
+  filteredTestList$ = this.filterService.filteredTestList$();
 
-  constructor() {}
+  constructor(private filterService: FiltersService) {}
 
   ngOnInit() {
     this.testDataSource = new TestsDataSource(this.filteredTestList$);

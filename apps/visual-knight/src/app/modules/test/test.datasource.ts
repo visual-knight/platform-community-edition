@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
-import { TestType } from '../core/types';
+import { TestDataFragment } from '../core/types';
 
-export class TestsDataSource extends DataSource<TestType> {
-  constructor(private tests$: Observable<TestType[]>) {
+export class TestsDataSource extends DataSource<TestDataFragment> {
+  constructor(private tests$: Observable<TestDataFragment[]>) {
     super();
   }
 

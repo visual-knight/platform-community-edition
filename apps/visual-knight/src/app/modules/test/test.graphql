@@ -13,10 +13,17 @@ mutation deleteTest($id: String!) {
 fragment TestData on TestType {
   id
   name
+  project {
+    id
+  }
   variations {
     id
     createdAt
     browserName
     deviceName
+    testSessions {
+      id
+      state
+    }
   }
 }
