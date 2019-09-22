@@ -10,6 +10,7 @@ import { TestModule } from './test/test.module';
 import { VariationModule } from './variation/variation.module';
 import { environment } from '../environments/environment';
 import { join } from 'path';
+import { ComparisonModule } from './comparison/comparison.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { join } from 'path';
     ProjectModule,
     TestsessionModule,
     TestModule,
-    VariationModule
+    VariationModule,
+    ComparisonModule
   ]
 })
 export class AppModule {}

@@ -40,14 +40,7 @@ export class TestsessionService {
 
   async testSession(testSessionId: string) {
     return this.photonService.testSessions.findOne({
-      where: { id: testSessionId },
-      include: {
-        variation: {
-          include: {
-            baseline: true
-          }
-        }
-      }
+      where: { id: testSessionId }
     });
   }
 

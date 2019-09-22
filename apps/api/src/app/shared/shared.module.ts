@@ -7,11 +7,12 @@ import {
 import { APIGateway, Lambda, S3 } from 'aws-sdk';
 import { AwsS3Service } from './aws/aws-s3.service';
 import { PhotonModule } from '@visual-knight/api-interface';
+import { CloudProviderZeitModule } from '@visual-knight/cloud-provider-zeit';
 
 const services: Provider[] = [Logger];
 
 @Module({
-  imports: [PhotonModule],
+  imports: [PhotonModule, CloudProviderZeitModule],
   providers: [
     AwsConfigService,
     {
@@ -42,7 +43,8 @@ const services: Provider[] = [Logger];
     AwsApiGatewayService,
     AwsS3Service,
     AwsLambdaService,
-    PhotonModule
+    PhotonModule,
+    CloudProviderZeitModule
   ]
 })
 export class SharedModule {}
