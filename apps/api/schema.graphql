@@ -40,6 +40,7 @@ type Mutation {
   updateTestSession(data: TestSessionDataArgs!, testSessionId: String!): TestSessionType!
   deleteTest(testId: String!): TestType!
   deleteVariation(variationId: String!): VariationType!
+  invokeTestSession: String!
 }
 
 input ProjectDataArgs {
@@ -59,7 +60,6 @@ type Query {
   projects: [ProjectType!]!
   projectsCount: Int!
   testSession(testSessionId: String!): TestSessionType!
-  testSessionWatch(testSessionId: String!): TestSessionType
   testSessions(where: TestSessionDataArgs): [TestSessionType!]!
   testSessionsCount(where: TestSessionDataArgs): Int!
   test(testId: String!): TestType!
@@ -68,6 +68,21 @@ type Query {
   variation(variationId: String!): VariationType!
   variations(testId: String!): [VariationType!]!
   variationsCount(testId: String!): Int!
+  testSessionWatch(testSessionId: String!): TestSessionComparison
+}
+
+type TestSessionComparison {
+  id: ID!
+  diffImageKey: String
+  imageKey: String
+  misMatchPercentage: Float
+  misMatchTolerance: Float!
+  isSameDimensions: Boolean
+  state: String!
+  stateComment: String
+  autoBaseline: Boolean!
+  createdAt: DateTime!
+  link: String!
 }
 
 input TestSessionDataArgs {

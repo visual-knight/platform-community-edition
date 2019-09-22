@@ -16,7 +16,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@visual-knight/api-interface": ["libs/api-interface/src/index.ts"]
+      "@visual-knight/api-interface": ["libs/api-interface/src/index.ts"],
+      "@visual-knight/cloud-provider-zeit": [
+        "libs/cloud-provider-zeit/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
