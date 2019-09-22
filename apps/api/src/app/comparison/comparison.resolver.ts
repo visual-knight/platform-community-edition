@@ -7,6 +7,9 @@ import { TestSessionComparison } from './models/testsession-comparison';
 import { environment } from '../../environments/environment';
 import { ComparisonService } from './services/comparison.service';
 import { InvokeTestsession } from './models/invoke-testsession.model';
+import { DesiredCapabilities } from '../shared/services/browser-and-devices';
+import { Float } from 'type-graphql';
+import { JSONResolver } from 'graphql-scalars';
 
 @Resolver()
 export class ComparisonResolver {
@@ -41,9 +44,23 @@ export class ComparisonResolver {
     );
   }
 
-  @Mutation(returns => String)
+  @Mutation(returns => InvokeTestsession)
   @UseGuards(GqlAuthGuard)
-  invokeTestSession() {
-    return this.comparisonService.getScreenshotUploadUrl();
+  invokeTestSession(
+    @Args('testname') testname: string,
+    @Args('project') project: string,
+    @Args({ name: 'misMatchTolerance', type: () => Float })
+    misMatchTolerance: number,
+    @Args({ name: 'capabilities', type: () => JSONResolver })
+    capabilities: DesiredCapabilities,
+    @Args('autoBaseline') autoBaseline: boolean
+  ) {
+    return this.comparisonService.invokeTestSession(
+      testname,
+      project,
+      misMatchTolerance,
+      capabilities,
+      autoBaseline
+    );
   }
 }
