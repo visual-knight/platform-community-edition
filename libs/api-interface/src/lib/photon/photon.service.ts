@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import Photon, { PhotonOptions } from '@generated/photonjs';
+import { Photon } from '@generated/photonjs';
 
 @Injectable()
 export class PhotonService extends Photon

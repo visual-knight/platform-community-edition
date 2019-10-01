@@ -27,6 +27,12 @@ export type AuthToken = {
   accessToken: Scalars['String'];
 };
 
+export type InvokeTestsession = {
+  __typename?: 'InvokeTestsession';
+  url: Scalars['String'];
+  testSessionId: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   login: AuthPayload;
@@ -47,6 +53,7 @@ export type Mutation = {
   updateTestSession: TestSessionType;
   deleteTest: TestType;
   deleteVariation: VariationType;
+  invokeTestSession: InvokeTestsession;
 };
 
 export type MutationLoginArgs = {
@@ -123,6 +130,14 @@ export type MutationDeleteVariationArgs = {
   variationId: Scalars['String'];
 };
 
+export type MutationInvokeTestSessionArgs = {
+  autoBaseline: Scalars['Boolean'];
+  capabilities: Scalars['JSON'];
+  misMatchTolerance: Scalars['Float'];
+  project: Scalars['String'];
+  testname: Scalars['String'];
+};
+
 export type ProjectDataArgs = {
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -142,7 +157,6 @@ export type Query = {
   projects: Array<ProjectType>;
   projectsCount: Scalars['Int'];
   testSession: TestSessionType;
-  testSessionWatch?: Maybe<TestSessionType>;
   testSessions: Array<TestSessionType>;
   testSessionsCount: Scalars['Int'];
   test: TestType;
@@ -151,6 +165,7 @@ export type Query = {
   variation: VariationType;
   variations: Array<VariationType>;
   variationsCount: Scalars['Int'];
+  testSessionWatch?: Maybe<TestSessionComparison>;
 };
 
 export type QueryProjectArgs = {
@@ -158,10 +173,6 @@ export type QueryProjectArgs = {
 };
 
 export type QueryTestSessionArgs = {
-  testSessionId: Scalars['String'];
-};
-
-export type QueryTestSessionWatchArgs = {
   testSessionId: Scalars['String'];
 };
 
@@ -187,6 +198,25 @@ export type QueryVariationsArgs = {
 
 export type QueryVariationsCountArgs = {
   testId: Scalars['String'];
+};
+
+export type QueryTestSessionWatchArgs = {
+  testSessionId: Scalars['String'];
+};
+
+export type TestSessionComparison = {
+  __typename?: 'TestSessionComparison';
+  id: Scalars['ID'];
+  diffImageKey?: Maybe<Scalars['String']>;
+  imageKey?: Maybe<Scalars['String']>;
+  misMatchPercentage?: Maybe<Scalars['Float']>;
+  misMatchTolerance: Scalars['Float'];
+  isSameDimensions?: Maybe<Scalars['Boolean']>;
+  state: Scalars['String'];
+  stateComment?: Maybe<Scalars['String']>;
+  autoBaseline: Scalars['Boolean'];
+  createdAt: Scalars['DateTime'];
+  link: Scalars['String'];
 };
 
 export type TestSessionDataArgs = {

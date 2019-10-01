@@ -88,7 +88,7 @@ export function getBrowserAndDevice(
   };
 }
 
-export interface DesiredCapabilities {
+export class DesiredCapabilities {
   device?: string;
   browserName?: string;
   deviceName?: string;
