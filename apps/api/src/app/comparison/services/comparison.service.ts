@@ -76,8 +76,8 @@ export class ComparisonService {
       const testSessionId = await this.createTestSession(
         test,
         projectId,
-        browserName,
         deviceName,
+        browserName,
         misMatchTolerance,
         autoBaseline || false
       );
@@ -134,24 +134,35 @@ export class ComparisonService {
       }
     } else {
       // create test, test session and variation
-      testSession = await this.photonService.testSessions.create({
+
+      const { name, id } = await this.photonService.tests.create({
         data: {
-          misMatchTolerance,
-          autoBaseline,
-          variation: {
-            create: {
-              browserName,
-              deviceName,
-              test: {
-                create: {
-                  name: test.name,
-                  project: { connect: { id: projectId } }
-                }
-              }
-            }
-          }
+          name: test.name,
+          project: { connect: { id: projectId } }
         }
       });
+
+      console.log(name, id);
+
+      return id;
+      // testSession = await this.photonService.testSessions.create({
+      //   data: {
+      //     misMatchTolerance,
+      //     autoBaseline,
+      //     variation: {
+      //       create: {
+      //         browserName,
+      //         deviceName,
+      //         test: {
+      //           create: {
+      //             name: test.name,
+      //             project: { connect: { id: projectId } }
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // });
     }
 
     return testSession.id;
