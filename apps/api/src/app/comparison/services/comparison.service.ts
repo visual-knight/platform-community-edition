@@ -101,68 +101,72 @@ export class ComparisonService {
     let testSession: TestSession;
 
     if (test.id) {
-      const variations = await this.photonService.variations({
-        where: { test: { id: test.id }, deviceName, browserName }
-      });
-
-      // create test session and connect to existing variation
-      if (variations.length > 0) {
-        testSession = await this.photonService.testSessions.create({
-          data: {
-            misMatchTolerance,
-            autoBaseline,
-            variation: {
-              connect: { id: variations[0].id }
-            }
-          }
-        });
-      } else {
-        // create test session and variation
-        testSession = await this.photonService.testSessions.create({
-          data: {
-            misMatchTolerance,
-            autoBaseline,
-            variation: {
-              create: {
-                browserName,
-                deviceName,
-                test: { connect: { id: test.id } }
-              }
-            }
-          }
-        });
-      }
-    } else {
-      // create test, test session and variation
-
-      const { name, id } = await this.photonService.tests.create({
-        data: {
-          name: test.name,
-          project: { connect: { id: projectId } }
+      const [variation] = await this.photonService.variations({
+        where: {
+          test: { id: test.id },
+          AND: [
+            { deviceName: { equals: deviceName } },
+            { browserName: { equals: browserName } }
+          ]
         }
       });
 
-      console.log(name, id);
+      try {
+        if (variation) {
+          // create test session and connect
+          console.log('// create test session and connect');
+          testSession = await this.photonService.testSessions.create({
+            data: {
+              misMatchTolerance,
+              autoBaseline,
+              variation: {
+                connect: { id: variation.id }
+              }
+            }
+          });
+        } else {
+          // create test session and variation
+          console.log('// create test session and variation');
+          testSession = await this.photonService.testSessions.create({
+            data: {
+              misMatchTolerance,
+              autoBaseline,
+              variation: {
+                create: {
+                  browserName,
+                  deviceName,
+                  test: { connect: { id: test.id } }
+                }
+              }
+            }
+          });
+        }
 
-      return id;
-      // testSession = await this.photonService.testSessions.create({
-      //   data: {
-      //     misMatchTolerance,
-      //     autoBaseline,
-      //     variation: {
-      //       create: {
-      //         browserName,
-      //         deviceName,
-      //         test: {
-      //           create: {
-      //             name: test.name,
-      //             project: { connect: { id: projectId } }
-      //           }
-      //         }
-      //       }
-      //     }
-      //   }
-      // });
+        return testSession.id;
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      // create test, test session and variation
+      console.log('// create test, test session and variation');
+      testSession = await this.photonService.testSessions.create({
+        data: {
+          misMatchTolerance,
+          autoBaseline,
+          variation: {
+            create: {
+              browserName,
+              deviceName,
+              test: {
+                create: {
+                  name: test.name,
+                  project: { connect: { id: projectId } }
+                }
+              }
+            }
+          }
+        }
+      });
     }
 
     return testSession.id;
