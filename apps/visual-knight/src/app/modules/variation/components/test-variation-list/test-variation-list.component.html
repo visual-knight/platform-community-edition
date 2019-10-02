@@ -12,7 +12,7 @@
           let i = index
         "
         [class.failed]="!variation.isLastTestSuccessfull"
-        [routerLink]="['../', 'variation', variation.id]"
+        [routerLink]="[variation.id]"
       >
         <mat-card-header>
           <mat-card-title>{{ variation.browserName }}</mat-card-title>
