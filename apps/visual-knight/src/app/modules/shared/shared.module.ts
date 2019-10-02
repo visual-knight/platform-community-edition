@@ -17,9 +17,11 @@ import {
   MatDialogModule,
   MatProgressSpinnerModule,
   MatSelectModule,
-  MatMenuModule
+  MatMenuModule,
+  MatSlideToggleModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { IconModule } from './modules/icon/icon.module';
 
 const SHARED_MODULES = [
   CommonModule,
@@ -41,11 +43,13 @@ const SHARED_MODULES = [
   MatTableModule,
   MatTooltipModule,
   MatProgressSpinnerModule,
+  MatSlideToggleModule,
 
   ReactiveFormsModule,
   FormsModule,
   RouterModule,
-  FlexLayoutModule
+  FlexLayoutModule,
+  IconModule
 ];
 const SHARED_COMPONENTS = [];
 @NgModule({

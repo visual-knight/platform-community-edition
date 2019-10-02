@@ -1,0 +1,11 @@
+<div class="browser-icon">
+  <img
+    *ngIf="imageMapping"
+    [ngStyle]="{ height: size + 'px' }"
+    #imageRef
+    [src]="browserImagePath"
+    [alt]="browser"
+    [matTooltip]="browser"
+  />
+  <span *ngIf="!imageMapping">{{ browser }}</span>
+</div>
