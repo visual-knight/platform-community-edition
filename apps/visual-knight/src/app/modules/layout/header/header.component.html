@@ -1,1 +1,129 @@
-<p>header works!</p>
+<div class="header-topnav mat-elevation-z2">
+    <div class="container">
+      <div class="topnav">
+        <!-- App Logo -->
+        <div class="topbar-branding">
+          <img src="assets/images/logo/Visual_knight_Logo.png"
+               [routerLink]="['/']"
+               alt=""
+               class="app-logo">
+        </div>
+
+        <ul class="menu"
+            *ngIf="!layoutConf.isMobile">
+          <li *ngFor="let item of menuItems; let i = index;">
+            <div *ngIf="item.type !== 'separator'"
+                 routerLinkActive="open">
+              <a matRipple
+                 routerLink="/{{item.state}}"
+                 *ngIf="item.type === 'link'; else ext_link">
+                <mat-icon>{{item.icon}}</mat-icon>
+                {{item.name}}
+              </a>
+              <div *ngIf="item.type === 'dropDown'">
+                <label matRipple
+                       for="drop-{{i}}"
+                       class="toggle">
+                  <mat-icon>{{item.icon}}</mat-icon> {{item.name}}
+                </label>
+                <a matRipple>
+                  <mat-icon>{{item.icon}}</mat-icon> {{item.name}}
+                </a>
+                <input type="checkbox"
+                       id="drop-{{i}}" />
+                <ul>
+                  <li *ngFor="let itemLvL2 of item.sub; let j = index;"
+                      routerLinkActive="open">
+                    <a matRipple
+                       routerLink="{{item.state ? '/'+item.state : ''}}/{{itemLvL2.state}}"
+                       *ngIf="itemLvL2.type !== 'dropDown'">
+                      <mat-icon *ngIf="itemLvL2.icon">{{itemLvL2.icon}}</mat-icon>
+                      {{itemLvL2.name}}
+                    </a>
+
+                    <div *ngIf="itemLvL2.type === 'dropDown'">
+                      <label matRipple
+                             for="drop-{{i}}{{j}}"
+                             class="toggle">{{itemLvL2.name}}</label>
+                      <a matRipple>
+                        <mat-icon *ngIf="itemLvL2.icon">{{itemLvL2.icon}}</mat-icon> {{itemLvL2.name}}
+                      </a>
+                      <input type="checkbox"
+                             id="drop-{{i}}{{j}}" />
+                      <!-- Level 3 -->
+                      <ul>
+                        <li *ngFor="let itemLvL3 of itemLvL2.sub"
+                            routerLinkActive="open">
+                          <a matRipple
+                             routerLink="{{item.state ? '/'+item.state : ''}}{{itemLvL2.state ? '/'+itemLvL2.state : ''}}/{{itemLvL3.state}}">
+                            <mat-icon *ngIf="itemLvL3.icon">{{itemLvL3.icon}}</mat-icon>
+                            {{itemLvL3.name}}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <ng-template #ext_link>
+                <a [href]="item.state">
+                  <mat-icon>{{item.icon}}</mat-icon>
+                  {{item.name}}
+                </a>
+              </ng-template>
+            </div>
+          </li>
+        </ul>
+        <span fxFlex></span>
+        <!-- End Navigation -->
+
+        <!-- Notification toggle button -->
+        <!-- <button mat-icon-button
+                matTooltip="Notifications"
+                (click)="toggleNotific()"
+                [style.overflow]="'visible'"
+                class="topbar-button-right">
+          <mat-icon>notifications</mat-icon>
+          <span class="notification-number mat-bg-warn">3</span>
+        </button> -->
+        <!-- Top left user menu -->
+        <button mat-icon-button
+                [matMenuTriggerFor]="accountMenu"
+                class="topbar-button-right mr-1 img-button">
+          <img src="assets/images/avatars/noavatar.png"
+               [src]="profilePicture$ | async"
+               alt="">
+        </button>
+        <mat-menu #accountMenu="matMenu">
+          <button mat-menu-item
+                  [routerLink]="['/user']">
+            <mat-icon>account_box</mat-icon>
+            <span>Profile</span>
+          </button>
+          <!-- <button mat-menu-item
+                  [routerLink]="['/profile/settings']">
+            <mat-icon>settings</mat-icon>
+            <span>Account Settings</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>notifications_off</mat-icon>
+            <span>Disable alerts</span>
+          </button> -->
+          <button mat-menu-item
+                  (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+        <!-- Mobile screen menu toggle -->
+        <button mat-icon-button
+                class="mr-1"
+                (click)="toggleSidenav()"
+                *ngIf="layoutConf.isMobile">
+          <mat-icon>menu</mat-icon>
+        </button>
+
+      </div>
+    </div>
+  </div>
