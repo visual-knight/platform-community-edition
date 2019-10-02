@@ -3,7 +3,8 @@ import {
   AllVariationsGQL,
   DeleteVariationGQL,
   AllVariationsQuery,
-  AllVariationsDocument
+  AllVariationsDocument,
+  GetVariationGQL
 } from '../../core/types';
 import { map } from 'rxjs/operators';
 
@@ -13,13 +14,20 @@ import { map } from 'rxjs/operators';
 export class VariationService {
   constructor(
     private allVariationsGQL: AllVariationsGQL,
-    private deleteVariationGQL: DeleteVariationGQL
+    private deleteVariationGQL: DeleteVariationGQL,
+    private getVariaitonGQL: GetVariationGQL
   ) {}
 
   variationList(testId: string) {
     return this.allVariationsGQL
       .watch({ testId })
       .valueChanges.pipe(map(result => result.data.variations));
+  }
+
+  variation(variationId: string) {
+    return this.getVariaitonGQL
+      .watch({ variationId })
+      .valueChanges.pipe(map(({ data }) => data.variation));
   }
 
   delete(variationId: string) {

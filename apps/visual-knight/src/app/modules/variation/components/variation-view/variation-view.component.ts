@@ -3,7 +3,14 @@ import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TestSessionsDataSource } from './testsessions.datasource';
-import { VariationType, TestSessionType, TestType } from '../../../core/types';
+import {
+  VariationType,
+  TestSessionType,
+  TestType,
+  VariationDataFragment
+} from '../../../core/types';
+import { VariationService } from '../../services/variation.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-variation-view',
@@ -12,24 +19,38 @@ import { VariationType, TestSessionType, TestType } from '../../../core/types';
 })
 export class VariationViewComponent
   implements OnInit, AfterViewInit, OnDestroy {
-  variation$: Observable<VariationType>; // TODO: get current variation
+  variation$: Observable<VariationDataFragment>; // TODO: get current variation
   selectedTestSession$: Observable<TestSessionType>; // TODO: get selected testsession
   testSessions$: Observable<TestSessionType[]>; // TODO: get test sessions
   test$: Observable<TestType>; // TODO: Why do I need it?
   public isDiffView = false;
   public testId: string;
+  public variationId: string;
   public testSessionDataSource: TestSessionsDataSource;
   public panelOpenState: boolean;
 
   private routeParamSub: Subscription;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private variationService: VariationService
+  ) {}
 
   ngOnInit() {
     this.routeParamSub = this.route.params.subscribe(
       (params: VariationViewParameter) => {
-        // TODO: load variation
         this.testId = params.testId;
+        this.variationId = params.variationId;
+
+        this.variation$ = this.variationService.variation(params.variationId);
+        this.testSessions$ = this.variation$.pipe(
+          map(variation => variation.testSessions)
+        );
+
+        // TODO: get selected testsession from local state
+        this.selectedTestSession$ = this.testSessions$.pipe(
+          map(testSessions => testSessions[0])
+        );
       }
     );
     this.selectedTestSession$.subscribe(testSession => {
