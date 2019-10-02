@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IMenuItem, IChildItem } from './user-navigation.model';
 import { AuthService } from '../../core/auth-service.service';
 import { ILayoutConf, LayoutService } from '../layout.service';
+import { map } from 'rxjs/operators';
+import { getGravatarImageHash } from '../../shared/utils/gravatar';
 
 @Component({
   selector: 'visual-knight-header',
@@ -11,9 +13,10 @@ export class HeaderComponent implements OnInit {
   layoutConf: ILayoutConf;
   menuItems: IMenuItem[];
 
-  profilePicture$: string;
+  profilePicture$ = this.authService.user$.pipe(
+    map(user => getGravatarImageHash(user.email, 40))
+  );
 
-  @Input() notificPanel;
   constructor(
     private authService: AuthService,
     private layout: LayoutService
@@ -41,10 +44,6 @@ export class HeaderComponent implements OnInit {
       sub: subItems
     });
     this.menuItems = mainItems;
-  }
-
-  toggleNotific() {
-    this.notificPanel.toggle();
   }
 
   toggleSidenav() {
