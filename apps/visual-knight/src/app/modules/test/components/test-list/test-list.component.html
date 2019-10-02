@@ -36,7 +36,10 @@
         </div>
 
         <mat-menu #cardMenuRef="matMenu">
-          <button mat-menu-item [routerLink]="[test.id, 'variation-list']">
+          <button
+            mat-menu-item
+            [routerLink]="['/variation', test.id]"
+          >
             <mat-icon>refresh</mat-icon>
             <span>View all</span>
           </button>
@@ -52,7 +55,7 @@
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row
     *matRowDef="let test; columns: displayedColumns"
-    [routerLink]="[test.id, 'variation-list']"
+    [routerLink]="['/variation', test.id]"
     [@rowsAnimation]="{ value: '*' }"
   ></mat-row>
 </mat-table>

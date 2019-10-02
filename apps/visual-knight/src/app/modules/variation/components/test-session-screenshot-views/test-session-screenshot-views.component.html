@@ -42,15 +42,15 @@
     </div>
     <div fxFlex="1" fxLayout="row">
       <span>STATE: {{ testSession.state }}</span>
-      <vk-os-icon
+      <visual-knight-os-icon
         class="ml-1"
         *ngIf="variation.deviceName"
         [os]="variation.deviceName"
-      ></vk-os-icon>
-      <vk-browser-icon
+      ></visual-knight-os-icon>
+      <visual-knight-browser-icon
         class="ml-1"
         [browser]="variation.browserName"
-      ></vk-browser-icon>
+      ></visual-knight-browser-icon>
     </div>
   </div>
 </mat-toolbar>
@@ -61,17 +61,18 @@
     fxLayoutAlign="center center"
     class="screenshot-view left mat-elevation-z4"
   >
-    <img [src]="variation.baselineVariationRef?.imageKey | imageStore" />
+    TODO: add baseline Ref image
+    <!-- <img [src]="variation.baselineVariationRef?.imageKey" /> -->
   </div>
   <div
     fxFlex
     fxLayoutAlign="center center"
     class="screenshot-view right mat-elevation-z4"
   >
-    <img [src]="testSession.imageKey | imageStore" [hidden]="isDiffView" />
-    <vk-diff-view
-      [image]="testSession.diffImageKey | imageStore"
+    <img [src]="testSession.imageKey" [hidden]="isDiffView" />
+    <visual-knight-diff-view
+      [image]="testSession.diffImageKey"
       [hidden]="!isDiffView"
-    ></vk-diff-view>
+    ></visual-knight-diff-view>
   </div>
 </div>

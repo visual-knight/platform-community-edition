@@ -1,6 +1,7 @@
 <div class="variation-list">
   <div class="container">
     <div class="card-container">
+      <!-- [class.success]="variation.isLastTestSuccessfull" -->
       <mat-card
         [@animate]="{
           value: '*',
@@ -10,7 +11,6 @@
           let variation of (variationList$ | async) as variationList;
           let i = index
         "
-        [class.success]="variation.isLastTestSuccessfull"
         [class.failed]="!variation.isLastTestSuccessfull"
         [routerLink]="['../', 'variation', variation.id]"
       >

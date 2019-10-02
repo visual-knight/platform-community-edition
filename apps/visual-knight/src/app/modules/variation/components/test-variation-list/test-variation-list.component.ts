@@ -5,7 +5,9 @@ import { MatDialog } from '@angular/material';
 import { DeleteVariationModalComponent } from '../modals/delete-variation/delete-variation.component';
 import { vkAnimations } from '../../../shared/animations';
 import { ScreenshotViewComponent } from '../screenshot-view/screenshot-view.component';
-import { VariationType } from '../../../core/types';
+import { VariationType, VariationDataFragment } from '../../../core/types';
+import { VariationService } from '../../services/variation.service';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-test-variation-list',
@@ -14,14 +16,18 @@ import { VariationType } from '../../../core/types';
   animations: [vkAnimations]
 })
 export class VariationListComponent implements OnInit {
-  variationList$: Observable<VariationType[]>; // TODO: get variation list
+  variationList$: Observable<VariationDataFragment[]>; // TODO: get variation list
   public testId: string;
 
-  constructor(private route: ActivatedRoute, public dialog: MatDialog) {}
+  constructor(
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+    private variationService: VariationService
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: VariationListParameter) => {
-      // TODO: Load the variation list
+      this.variationList$ = this.variationService.variationList(params.testId);
       this.testId = params.testId;
     });
   }
@@ -42,7 +48,10 @@ export class VariationListComponent implements OnInit {
       .beforeClosed()
       .subscribe((deleteVariation: boolean) => {
         if (deleteVariation) {
-          // TODO: trigger delete variation
+          this.variationService
+            .delete(variation.id)
+            .pipe(first())
+            .subscribe();
         }
       });
   }

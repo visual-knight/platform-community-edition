@@ -9,6 +9,7 @@ import { ScreenshotViewComponent } from './components/screenshot-view/screenshot
 import { TestSessionListComponent } from './components/test-session-list/test-session-list.component';
 import { TestSessionScreenshotViewsComponent } from './components/test-session-screenshot-views/test-session-screenshot-views.component';
 import { SharedModule } from '../shared/shared.module';
+import { DiffViewComponent } from './components/diff-view/diff-view.component';
 
 const routes: Routes = [
   { path: ':testId', component: VariationListComponent },
@@ -22,7 +23,8 @@ const routes: Routes = [
     TestSessionListComponent,
     TestSessionScreenshotViewsComponent,
     DeleteVariationModalComponent,
-    ScreenshotViewComponent
+    ScreenshotViewComponent,
+    DiffViewComponent
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
   entryComponents: [DeleteVariationModalComponent, ScreenshotViewComponent]

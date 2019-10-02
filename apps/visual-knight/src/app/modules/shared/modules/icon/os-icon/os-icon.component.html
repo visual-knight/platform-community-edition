@@ -1,0 +1,4 @@
+<div class="os-icon">
+  <span *ngIf="imageMapping" [class]="imageClass" [matTooltip]="os"></span>
+  <span *ngIf="!imageMapping">{{ os }}</span>
+</div>
