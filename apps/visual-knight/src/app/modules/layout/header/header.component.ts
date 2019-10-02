@@ -11,8 +11,7 @@ export class HeaderComponent implements OnInit {
   layoutConf: ILayoutConf;
   menuItems: IMenuItem[];
 
-  // @Select(AuthState.profilePicture) profilePicture$: string;
-  // @Select(AppState.userNavigation) userNavigation$: Observable<IMenuItem[]>;
+  profilePicture$: string;
 
   @Input() notificPanel;
   constructor(
