@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { Browser } from '../../shared/browser.model';
 import { Device } from '../../shared/device.model';
 import { ProjectType, TestType } from '../../core/types';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { TestService } from '../../test/services/test.service';
 
 @Injectable({ providedIn: 'root' })
@@ -13,7 +13,10 @@ export class FiltersService {
   deviceFilter: BehaviorSubject<Device[]> = new BehaviorSubject([]);
   projectFilter: BehaviorSubject<ProjectType[]> = new BehaviorSubject([]);
   testStateFilter: BehaviorSubject<string[]> = new BehaviorSubject([]);
-  testList$ = this.testService.testList();
+  testList$ = this.testService.testList().pipe(
+    filter(({ data }) => !!data),
+    map(({ data }) => data.tests)
+  );
 
   constructor(private testService: TestService) {}
 

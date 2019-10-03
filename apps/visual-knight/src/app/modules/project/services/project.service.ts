@@ -52,8 +52,6 @@ export class ProjectService {
   }
 
   projectList() {
-    return this.allProjectsGQL
-      .watch()
-      .valueChanges.pipe(map(result => result.data.projects));
+    return this.allProjectsGQL.watch().valueChanges;
   }
 }

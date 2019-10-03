@@ -39,7 +39,13 @@ export function createApollo(httpLink: HttpLink, router: Router) {
 
   return {
     link: authMiddleware.concat(logoutLink.concat(http)),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
+    defaultOptions: {
+      query: { fetchPolicy: 'network-only' },
+      watchQuery: {
+        fetchPolicy: 'cache-and-network'
+      }
+    }
   };
 }
 

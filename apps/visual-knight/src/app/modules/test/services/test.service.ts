@@ -9,8 +9,6 @@ export class TestService {
   constructor(private allTests: AllTestsGQL) {}
 
   testList() {
-    return this.allTests
-      .watch()
-      .valueChanges.pipe(map(result => result.data.tests));
+    return this.allTests.watch().valueChanges;
   }
 }

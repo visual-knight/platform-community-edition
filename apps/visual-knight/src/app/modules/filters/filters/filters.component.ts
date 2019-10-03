@@ -4,7 +4,7 @@ import { Observable, of, combineLatest } from 'rxjs';
 import { ProjectType } from '../../core/types';
 import { Device } from '../../shared/device.model';
 import { Browser } from '../../shared/browser.model';
-import { map, tap, first } from 'rxjs/operators';
+import { map, tap, first, filter } from 'rxjs/operators';
 import { FiltersService } from '../services/filters.service';
 import { ProjectService } from '../../project/services/project.service';
 
@@ -24,7 +24,12 @@ export class FiltersComponent implements OnInit {
 
   panelOpenState = false;
 
-  projectList$: Observable<ProjectType[]> = this.projectService.projectList();
+  projectList$: Observable<
+    ProjectType[]
+  > = this.projectService.projectList().pipe(
+    filter(({ data }) => !!data),
+    map(({ data }) => data.projects)
+  );
   browserList$: Observable<any[]> = of(Browser.getBrowserList());
   deviceList$: Observable<any[]> = of(Device.getDeviceList());
   testSessionStateList$: Observable<

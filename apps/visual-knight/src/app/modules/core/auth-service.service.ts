@@ -8,7 +8,7 @@ import {
   ForgotPasswordGQL,
   ResetPasswordGQL
 } from './types';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, filter } from 'rxjs/operators';
 import { GraphQLError } from 'graphql';
 // import { Apollo } from 'apollo-angular';
 import { Router } from '@angular/router';
@@ -34,7 +34,10 @@ export class AuthService {
   ) {
     const currentUser$ = this.currentUserGQL.watch().valueChanges;
 
-    this.user$ = currentUser$.pipe(map(result => result.data.me));
+    this.user$ = currentUser$.pipe(
+      filter(({ data }) => !!data),
+      map(({ data }) => data.me)
+    );
     this.isLoading$ = currentUser$.pipe(map(result => result.loading));
     this.authErrorMessages$ = currentUser$.pipe(
       map(result => result.errors)
@@ -52,7 +55,10 @@ export class AuthService {
     return this.loginGQL.mutate({ email, password }).pipe(
       map(result => result.data.login),
       tap(loginData => {
-        localStorage.setItem('visual-knight-token', loginData.token.accessToken);
+        localStorage.setItem(
+          'visual-knight-token',
+          loginData.token.accessToken
+        );
       })
     );
   }
