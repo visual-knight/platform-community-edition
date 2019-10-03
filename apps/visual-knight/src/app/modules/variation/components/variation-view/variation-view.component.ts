@@ -10,7 +10,7 @@ import {
   VariationDataFragment
 } from '../../../core/types';
 import { VariationService } from '../../services/variation.service';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-variation-view',
@@ -42,7 +42,12 @@ export class VariationViewComponent
         this.testId = params.testId;
         this.variationId = params.variationId;
 
-        this.variation$ = this.variationService.variation(params.variationId);
+        this.variation$ = this.variationService
+          .variation(params.variationId)
+          .pipe(
+            filter(({ data }) => !!data),
+            map(({ data }) => data.variation)
+          );
         this.testSessions$ = this.variation$.pipe(
           map(variation => variation.testSessions)
         );
