@@ -23,13 +23,17 @@ export function createApollo(httpLink: HttpLink, router: Router) {
     return forward(operation);
   });
 
-  const logoutLink = onError(({ graphQLErrors }) => {
-    if (
-      graphQLErrors[0].extensions.code === 'INTERNAL_SERVER_ERROR' &&
-      graphQLErrors[0].extensions.exception.status === 401
-    ) {
-      localStorage.removeItem('visual-knight-token');
-      router.navigateByUrl('/user');
+  const logoutLink = onError(({ graphQLErrors, response }) => {
+    if (graphQLErrors) {
+      for (const err of graphQLErrors) {
+        if (
+          err.extensions.code === 'INTERNAL_SERVER_ERROR' &&
+          err.extensions.exception.status === 401
+        ) {
+          localStorage.removeItem('visual-knight-token');
+          router.navigateByUrl('/user');
+        }
+      }
     }
   });
 
