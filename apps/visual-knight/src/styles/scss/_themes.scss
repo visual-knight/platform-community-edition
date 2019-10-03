@@ -1,0 +1,13 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+// Keep atleast one file
+@import "themes/visual-knight";
+
+$background: map-get($visual-knight-theme, background);
+$foreground: map-get($visual-knight-theme, foreground);
+
+// @import "themes/egret-indigo";
+
+// $background: map-get($egret-theme, background);
+// $foreground: map-get($egret-theme, foreground);
