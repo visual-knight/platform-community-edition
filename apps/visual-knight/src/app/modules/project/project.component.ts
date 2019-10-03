@@ -7,6 +7,7 @@ import { Hexcolor } from '../shared/utils/hexcolor';
 import { ProjectType } from '../core/types';
 import { vkAnimations } from '../shared/animations';
 import { ProjectService } from './services/project.service';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-project',
@@ -15,7 +16,12 @@ import { ProjectService } from './services/project.service';
   animations: [vkAnimations]
 })
 export class ProjectComponent implements OnInit {
-  projectList$: Observable<ProjectType[]> = this.projectService.projectList();
+  projectList$: Observable<
+    ProjectType[]
+  > = this.projectService.projectList().pipe(
+    filter(({ data }) => !!data),
+    map(({ data }) => data.projects)
+  );
 
   constructor(
     private dialog: MatDialog,

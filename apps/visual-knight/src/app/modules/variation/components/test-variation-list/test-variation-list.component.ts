@@ -7,7 +7,7 @@ import { vkAnimations } from '../../../shared/animations';
 import { ScreenshotViewComponent } from '../screenshot-view/screenshot-view.component';
 import { VariationType, VariationDataFragment } from '../../../core/types';
 import { VariationService } from '../../services/variation.service';
-import { first } from 'rxjs/operators';
+import { first, map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-test-variation-list',
@@ -16,7 +16,8 @@ import { first } from 'rxjs/operators';
   animations: [vkAnimations]
 })
 export class VariationListComponent implements OnInit {
-  variationList$: Observable<VariationDataFragment[]>; // TODO: get variation list
+  variationList$: Observable<VariationDataFragment[]>;
+  variationListLoading$: Observable<boolean>;
   public testId: string;
 
   constructor(
@@ -27,7 +28,14 @@ export class VariationListComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params: VariationListParameter) => {
-      this.variationList$ = this.variationService.variationList(params.testId);
+      const response$ = this.variationService.variationList(params.testId);
+      this.variationList$ = response$.pipe(
+        filter(({ data }) => !!data),
+        map(({ data }) => data.variations)
+      );
+      this.variationListLoading$ = response$.pipe(
+        map(({ loading }) => loading)
+      );
       this.testId = params.testId;
     });
   }

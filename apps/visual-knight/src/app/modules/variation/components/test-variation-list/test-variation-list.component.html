@@ -1,6 +1,9 @@
 <div class="variation-list">
   <div class="container">
-    <div class="card-container">
+    <div
+      class="card-container"
+      *ngIf="!(variationListLoading$ | async); else loadingList"
+    >
       <!-- [class.success]="variation.isLastTestSuccessfull" -->
       <mat-card
         [@animate]="{
@@ -31,3 +34,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #loadingList>
+  Loading Variation List...
+</ng-template>

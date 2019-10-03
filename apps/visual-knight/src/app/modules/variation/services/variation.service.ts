@@ -19,9 +19,7 @@ export class VariationService {
   ) {}
 
   variationList(testId: string) {
-    return this.allVariationsGQL
-      .watch({ testId })
-      .valueChanges.pipe(map(result => result.data.variations));
+    return this.allVariationsGQL.watch({ testId }).valueChanges;
   }
 
   variation(variationId: string) {
@@ -31,28 +29,26 @@ export class VariationService {
   }
 
   delete(variationId: string) {
-    return this.deleteVariationGQL
-      .mutate(
-        { id: variationId },
-        {
-          update: (
-            store,
-            {
-              data: {
-                deleteVariation: { id }
-              }
+    return this.deleteVariationGQL.mutate(
+      { id: variationId },
+      {
+        update: (
+          store,
+          {
+            data: {
+              deleteVariation: { id }
             }
-          ) => {
-            const data: AllVariationsQuery = store.readQuery({
-              query: AllVariationsDocument
-            });
-            data.variations = data.variations.filter(
-              variation => variation.id !== variationId
-            );
-            store.writeQuery({ query: AllVariationsDocument, data });
           }
+        ) => {
+          const data: AllVariationsQuery = store.readQuery({
+            query: AllVariationsDocument
+          });
+          data.variations = data.variations.filter(
+            variation => variation.id !== variationId
+          );
+          store.writeQuery({ query: AllVariationsDocument, data });
         }
-      )
-      .pipe(map(({ data }) => data.deleteVariation.id));
+      }
+    );
   }
 }
