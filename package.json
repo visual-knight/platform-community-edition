@@ -77,6 +77,7 @@
     "ngx-clipboard": "^12.2.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "perfect-scrollbar": "^1.4.0",
     "prisma2": "^2.0.0-preview-13.2",
     "reflect-metadata": "^0.1.12",
     "rxjs": "~6.4.0",
