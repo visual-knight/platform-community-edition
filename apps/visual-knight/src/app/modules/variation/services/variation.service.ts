@@ -23,9 +23,7 @@ export class VariationService {
   }
 
   variation(variationId: string) {
-    return this.getVariaitonGQL
-      .watch({ variationId })
-      .valueChanges.pipe(map(({ data }) => data.variation));
+    return this.getVariaitonGQL.watch({ variationId }).valueChanges;
   }
 
   delete(variationId: string) {

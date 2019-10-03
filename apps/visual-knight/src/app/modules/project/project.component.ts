@@ -16,12 +16,12 @@ import { filter, map } from 'rxjs/operators';
   animations: [vkAnimations]
 })
 export class ProjectComponent implements OnInit {
-  projectList$: Observable<
-    ProjectType[]
-  > = this.projectService.projectList().pipe(
+  private projects$ = this.projectService.projectList();
+  projectList$: Observable<ProjectType[]> = this.projects$.pipe(
     filter(({ data }) => !!data),
     map(({ data }) => data.projects)
   );
+  projectListIsLoading$ = this.projects$.pipe(map(({ loading }) => loading));
 
   constructor(
     private dialog: MatDialog,

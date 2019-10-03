@@ -14,7 +14,7 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div fxLayout="row wrap">
+<div fxLayout="row wrap" *ngIf="!(projectListIsLoading$ | async); else isLoading">
   <div
     *ngFor="
       let project of (projectList$ | async);
@@ -85,3 +85,7 @@
     </mat-card>
   </div>
 </div>
+
+<ng-template #isLoading>
+  Loading Projects...
+</ng-template>
