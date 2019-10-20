@@ -83,7 +83,7 @@ export class ComparisonService {
       );
 
       console.log(`Created test session with id: ${testSessionId}`);
-      const url = this.getScreenshotUploadUrl(testSessionId);
+      const url = await this.getScreenshotUploadUrl(testSessionId);
       console.log(`Signed url created: ${url}`);
       return { url, testSessionId };
     } catch (error) {
