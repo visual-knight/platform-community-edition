@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class CloudProviderService {
-  async saveScreenshotImage(image: Buffer, filename: string): Promise<boolean> {
+  saveScreenshotImage(image: Buffer, filename: string): Observable<boolean> {
     throw new Error('Method not implemented.');
   }
 }

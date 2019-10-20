@@ -8,6 +8,10 @@ import {
   getBrowserAndDevice
 } from '../../shared/services/browser-and-devices';
 import { Test, TestSession } from '@generated/photonjs';
+import { Observable, defer, zip, range, timer } from 'rxjs';
+import { TestSessionComparison } from '../models/testsession-comparison';
+import { map, retryWhen, mergeMap, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class ComparisonService {
@@ -27,6 +31,31 @@ export class ComparisonService {
         }
       }
     });
+  }
+
+  testSessionWatch(testSessionId: string): Observable<TestSessionComparison> {
+    return defer(() => this.testSession(testSessionId)).pipe(
+      map(testSession => {
+        if (
+          ((testSession.misMatchPercentage === null &&
+            testSession.variation.baseline !== null) ||
+            (testSession.misMatchPercentage === null &&
+              testSession.autoBaseline === true)) &&
+          testSession.isSameDimensions !== false
+        ) {
+          console.log('No misMatchPercentage yet');
+          throw new Error('No misMatchPercentage yet');
+        }
+
+        return {
+          ...testSession,
+          link: `${environment.appDomain}/variation/${testSession.variation.id}`
+        };
+      }),
+      retryWhen(errors =>
+        zip(range(1, 100), errors).pipe(mergeMap(i => timer(400)))
+      )
+    );
   }
 
   async getOrCreateProject(projectName: string): Promise<string> {
@@ -171,13 +200,22 @@ export class ComparisonService {
     return testSession.id;
   }
 
-  async uploadScreenshot(
+  uploadScreenshot(
     base64Image: string,
     testSessionId: string
-  ): Promise<boolean> {
-    return this.cloudProviderService.saveScreenshotImage(
-      Buffer.from(base64Image, 'base64'),
-      `${testSessionId}.png`
-    );
+  ): Observable<boolean> {
+    return this.cloudProviderService
+      .saveScreenshotImage(
+        Buffer.from(base64Image, 'base64'),
+        `${testSessionId}.png`
+      )
+      .pipe(
+        tap(
+          () => {
+            // TODO: start update test session state
+          },
+          err => {}
+        )
+      );
   }
 }
