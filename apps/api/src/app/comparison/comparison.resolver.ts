@@ -1,22 +1,21 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '../auth/guards/auth.guard';
 import { Observable, zip, defer, range, timer } from 'rxjs';
 import { map, retryWhen, mergeMap } from 'rxjs/operators';
 import { TestSessionComparison } from './models/testsession-comparison';
 import { environment } from '../../environments/environment';
 import { ComparisonService } from './services/comparison.service';
-import { InvokeTestsession } from './models/invoke-testsession.model';
 import { DesiredCapabilities } from '../shared/services/browser-and-devices';
 import { Float } from 'type-graphql';
 import { JSONResolver } from 'graphql-scalars';
+import { GqlApiGuard } from '../auth/guards/api.guard';
 
 @Resolver()
 export class ComparisonResolver {
   constructor(private comparisonService: ComparisonService) {}
 
   @Query(returns => TestSessionComparison, { nullable: true })
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlApiGuard)
   testSessionWatch(
     @Args('testSessionId') testSessionId: string
   ): Observable<TestSessionComparison> {
@@ -44,8 +43,8 @@ export class ComparisonResolver {
     );
   }
 
-  @Mutation(returns => InvokeTestsession)
-  @UseGuards(GqlAuthGuard)
+  @Mutation(returns => String)
+  @UseGuards(GqlApiGuard)
   invokeTestSession(
     @Args('testname') testname: string,
     @Args('project') project: string,
@@ -55,6 +54,7 @@ export class ComparisonResolver {
     capabilities: DesiredCapabilities,
     @Args('autoBaseline') autoBaseline: boolean
   ) {
+    console.log('invoke GqlApiGuard')
     return this.comparisonService.invokeTestSession(
       testname,
       project,
@@ -62,5 +62,14 @@ export class ComparisonResolver {
       capabilities,
       autoBaseline
     );
+  }
+
+  @Mutation(returns => Boolean)
+  @UseGuards(GqlApiGuard)
+  uploadScreenshot(
+    @Args('base64Image') base64Image: string,
+    @Args('testSessionId') testSessionId: string
+  ) {
+    return this.comparisonService.uploadScreenshot(base64Image, testSessionId);
   }
 }

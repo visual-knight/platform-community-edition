@@ -83,13 +83,12 @@ export class ComparisonService {
       );
 
       console.log(`Created test session with id: ${testSessionId}`);
-      const url = await this.getScreenshotUploadUrl(testSessionId);
-      console.log(`Signed url created: ${url}`);
-      return { url, testSessionId };
+      return testSessionId;
     } catch (error) {
       return { message: `Can't create test session`, stack: error };
     }
   }
+
   async createTestSession(
     test: Test,
     projectId: string,
@@ -172,7 +171,13 @@ export class ComparisonService {
     return testSession.id;
   }
 
-  async getScreenshotUploadUrl(testSessionId: string): Promise<string> {
-    return await this.cloudProviderService.generateScreenshotUploadUrl();
+  async uploadScreenshot(
+    base64Image: string,
+    testSessionId: string
+  ): Promise<boolean> {
+    return this.cloudProviderService.saveScreenshotImage(
+      Buffer.from(base64Image, 'base64'),
+      `${testSessionId}.png`
+    );
   }
 }

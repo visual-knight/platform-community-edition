@@ -1,22 +1,31 @@
-import { Module } from '@nestjs/common';
+import { Module, DynamicModule } from '@nestjs/common';
 import { CloudProviderOnpremService } from './cloud-provider-onprem.service';
-import { MulterModule } from '@nestjs/platform-express';
-import { CloudProviderOnpremController } from './cloud-provider-onprem.controller';
 import { CloudProviderService } from '@visual-knight/api-interface';
+import { resolve } from 'path';
 
 @Module({
-  imports: [
-    MulterModule.register({
-      dest: 'screenshotUploads'
-    })
-  ],
   providers: [
     {
       provide: CloudProviderService,
       useClass: CloudProviderOnpremService
+    },
+    {
+      provide: 'IMAGE_DESTINATION_PATH',
+      useValue: resolve(process.cwd(), 'screenshotUploads')
     }
   ],
-  exports: [CloudProviderService],
-  controllers: [CloudProviderOnpremController]
+  exports: [CloudProviderService]
 })
-export class CloudProviderOnpremModule {}
+export class CloudProviderOnpremModule {
+  static register(config: { dest: string }): DynamicModule {
+    return {
+      module: CloudProviderOnpremModule,
+      providers: [
+        {
+          provide: 'IMAGE_DESTINATION_PATH',
+          useValue: config.dest
+        }
+      ]
+    };
+  }
+}

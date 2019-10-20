@@ -9,10 +9,17 @@ import { JwtStrategy } from './jwt.strategy';
 import { GqlAuthGuard } from './guards/auth.guard';
 import { SharedModule } from '../shared/shared.module';
 import { EmailModule } from '../email/email.module';
+import { GqlApiGuard } from './guards/api.guard';
 
 @Global()
 @Module({
-  providers: [AuthResolver, AuthService, JwtStrategy, GqlAuthGuard],
+  providers: [
+    AuthResolver,
+    AuthService,
+    JwtStrategy,
+    GqlAuthGuard,
+    GqlApiGuard
+  ],
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({

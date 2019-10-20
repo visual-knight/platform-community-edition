@@ -1,9 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { CloudProviderService } from '@visual-knight/api-interface';
+import { writeFile } from 'fs';
+import { resolve } from 'path';
 
 @Injectable()
 export class CloudProviderOnpremService extends CloudProviderService {
-  async generateScreenshotUploadUrl(): Promise<string> {
-    return Promise.resolve('http://localhost:3333/cloud-provider-onprem/uploadScreenshot');
+  constructor(
+    @Inject('IMAGE_DESTINATION_PATH') private imageDestinationPath: string
+  ) {
+    super();
+  }
+
+  async saveScreenshotImage(image: Buffer, filename: string): Promise<boolean> {
+    return new Promise((resolvePromise, reject) => {
+      writeFile(resolve(this.imageDestinationPath, filename), image, err => {
+        if (err) reject(err);
+        resolvePromise(true);
+      });
+    });
   }
 }
