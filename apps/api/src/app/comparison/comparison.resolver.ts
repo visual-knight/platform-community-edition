@@ -25,7 +25,6 @@ export class ComparisonResolver {
     capabilities: DesiredCapabilities,
     @Args('autoBaseline') autoBaseline: boolean
   ) {
-    console.log('invoke GqlApiGuard');
     return this.comparisonService.invokeTestSession(
       testname,
       project,
