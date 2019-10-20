@@ -3,7 +3,7 @@ import { CloudProviderService } from '@visual-knight/api-interface';
 
 @Injectable()
 export class CloudProviderZeitService extends CloudProviderService {
-  async generateScreenshotUploadUrl(): Promise<string> {
-    return Promise.resolve('url');
+  async saveScreenshotImage(image: Buffer, filename: string): Promise<boolean> {
+    throw new Error('Method not implemented.');
   }
 }

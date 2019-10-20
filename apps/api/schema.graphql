@@ -16,11 +16,6 @@ type AuthToken {
 """Use JavaScript Date object for date/time fields."""
 scalar DateTime
 
-type InvokeTestsession {
-  url: String!
-  testSessionId: String!
-}
-
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -45,7 +40,8 @@ type Mutation {
   updateTestSession(data: TestSessionDataArgs!, testSessionId: String!): TestSessionType!
   deleteTest(testId: String!): TestType!
   deleteVariation(variationId: String!): VariationType!
-  invokeTestSession(autoBaseline: Boolean!, capabilities: JSON!, misMatchTolerance: Float!, project: String!, testname: String!): InvokeTestsession!
+  invokeTestSession(autoBaseline: Boolean!, capabilities: JSON!, misMatchTolerance: Float!, project: String!, testname: String!): String!
+  uploadScreenshot(testSessionId: String!, base64Image: String!): Boolean!
 }
 
 input ProjectDataArgs {
