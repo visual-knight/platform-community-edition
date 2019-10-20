@@ -1,7 +1,7 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { Observable, zip, defer, range, timer } from 'rxjs';
-import { map, retryWhen, mergeMap } from 'rxjs/operators';
+import { map, retryWhen, mergeMap, switchMap } from 'rxjs/operators';
 import { TestSessionComparison } from './models/testsession-comparison';
 import { environment } from '../../environments/environment';
 import { ComparisonService } from './services/comparison.service';
@@ -14,35 +14,6 @@ import { GqlApiGuard } from '../auth/guards/api.guard';
 export class ComparisonResolver {
   constructor(private comparisonService: ComparisonService) {}
 
-  @Query(returns => TestSessionComparison, { nullable: true })
-  @UseGuards(GqlApiGuard)
-  testSessionWatch(
-    @Args('testSessionId') testSessionId: string
-  ): Observable<TestSessionComparison> {
-    return defer(() => this.comparisonService.testSession(testSessionId)).pipe(
-      map(testSession => {
-        if (
-          ((testSession.misMatchPercentage === null &&
-            testSession.variation.baseline !== null) ||
-            (testSession.misMatchPercentage === null &&
-              testSession.autoBaseline === true)) &&
-          testSession.isSameDimensions !== false
-        ) {
-          console.log('No misMatchPercentage yet');
-          throw new Error('No misMatchPercentage yet');
-        }
-
-        return {
-          ...testSession,
-          link: `${environment.appDomain}/variation/${testSession.variation.id}`
-        };
-      }),
-      retryWhen(errors =>
-        zip(range(1, 100), errors).pipe(mergeMap(i => timer(400)))
-      )
-    );
-  }
-
   @Mutation(returns => String)
   @UseGuards(GqlApiGuard)
   invokeTestSession(
@@ -54,7 +25,7 @@ export class ComparisonResolver {
     capabilities: DesiredCapabilities,
     @Args('autoBaseline') autoBaseline: boolean
   ) {
-    console.log('invoke GqlApiGuard')
+    console.log('invoke GqlApiGuard');
     return this.comparisonService.invokeTestSession(
       testname,
       project,
@@ -64,12 +35,16 @@ export class ComparisonResolver {
     );
   }
 
-  @Mutation(returns => Boolean)
+  @Mutation(returns => TestSessionComparison, { nullable: true })
   @UseGuards(GqlApiGuard)
   uploadScreenshot(
     @Args('base64Image') base64Image: string,
     @Args('testSessionId') testSessionId: string
-  ) {
-    return this.comparisonService.uploadScreenshot(base64Image, testSessionId);
+  ): Observable<TestSessionComparison> {
+    return this.comparisonService
+      .uploadScreenshot(base64Image, testSessionId)
+      .pipe(
+        switchMap(() => this.comparisonService.testSessionWatch(testSessionId))
+      );
   }
 }

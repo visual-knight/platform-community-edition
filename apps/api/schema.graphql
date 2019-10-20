@@ -41,7 +41,7 @@ type Mutation {
   deleteTest(testId: String!): TestType!
   deleteVariation(variationId: String!): VariationType!
   invokeTestSession(autoBaseline: Boolean!, capabilities: JSON!, misMatchTolerance: Float!, project: String!, testname: String!): String!
-  uploadScreenshot(testSessionId: String!, base64Image: String!): Boolean!
+  uploadScreenshot(testSessionId: String!, base64Image: String!): TestSessionComparison
 }
 
 input ProjectDataArgs {
@@ -69,7 +69,6 @@ type Query {
   variation(variationId: String!): VariationType!
   variations(testId: String!): [VariationType!]!
   variationsCount(testId: String!): Int!
-  testSessionWatch(testSessionId: String!): TestSessionComparison
 }
 
 type TestSessionComparison {
