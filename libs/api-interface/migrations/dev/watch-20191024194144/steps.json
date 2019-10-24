@@ -1,0 +1,25 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "testSessions",
+      "type": {
+        "Relation": {
+          "to": "TestSession",
+          "to_fields": [],
+          "name": "TestSessionToUser",
+          "on_delete": "None"
+        }
+      },
+      "arity": "list",
+      "isUnique": false
+    },
+    {
+      "stepType": "DeleteField",
+      "model": "User",
+      "name": "testSession"
+    }
+  ]
+}
