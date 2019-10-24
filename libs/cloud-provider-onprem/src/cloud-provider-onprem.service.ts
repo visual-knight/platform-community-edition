@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CloudProviderService } from '@visual-knight/api-interface';
-import { writeFile } from 'fs';
+import { writeFile, readFile } from 'fs';
 import { resolve } from 'path';
 import { Observable, Subject } from 'rxjs';
 
@@ -17,6 +17,16 @@ export class CloudProviderOnpremService extends CloudProviderService {
     writeFile(resolve(this.imageDestinationPath, filename), image, err => {
       if (err) subject.error(err);
       subject.next(true);
+      subject.complete();
+    });
+    return subject.asObservable();
+  }
+
+  loadImage(filename: string): Observable<Buffer> {
+    const subject: Subject<Buffer> = new Subject();
+    readFile(resolve(this.imageDestinationPath, filename), (err, data) => {
+      if (err) subject.error(err);
+      subject.next(data);
       subject.complete();
     });
     return subject.asObservable();

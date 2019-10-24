@@ -14,7 +14,7 @@ export const environment = {
   saltRounds: 10,
 
   // graphql
-  schemaPath : 'apps/api/schema.graphql',
+  schemaPath: 'apps/api/schema.graphql',
 
   // aws
   aws: {
@@ -46,5 +46,10 @@ export const environment = {
     )
   },
 
-  appDomain: 'http://localhost:4200/'
+  appDomain: 'http://localhost:4200/',
+
+  diffOptions: {
+    threshold: 0.01,
+    includeAA: true
+  }
 };

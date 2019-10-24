@@ -12,7 +12,7 @@ export const environment = {
   saltRounds: 10,
 
   // graphql
-  schemaPath : '/tmp/schema.graphql',
+  schemaPath: '/tmp/schema.graphql',
 
   // aws
   aws: {
@@ -38,5 +38,10 @@ export const environment = {
     invitationExpiresIn: Math.floor(Date.now() / 1000) + 60 * 60 * 72 // 72h valid
   },
 
-  appDomain: process.env.APP_DOMAIN
+  appDomain: process.env.APP_DOMAIN,
+
+  diffOptions: {
+    threshold: 0.01,
+    includeAA: true
+  }
 };
