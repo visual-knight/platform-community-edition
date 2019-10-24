@@ -7,11 +7,24 @@ import {
   DesiredCapabilities,
   getBrowserAndDevice
 } from '../../shared/services/browser-and-devices';
-import { Test, TestSession } from '@generated/photonjs';
-import { Observable, defer, zip, range, timer } from 'rxjs';
+import { Test, TestSession, TestSessionState } from '@generated/photonjs';
+import {
+  Observable,
+  defer,
+  zip,
+  range,
+  timer,
+  combineLatest,
+  Subject,
+  of,
+  from
+} from 'rxjs';
 import { TestSessionComparison } from '../models/testsession-comparison';
-import { map, retryWhen, mergeMap, tap } from 'rxjs/operators';
+import { map, retryWhen, tap, switchMap, mergeMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { CreateDiffResult } from '../models/diffresult.model';
+import { PNG } from 'pngjs';
+import Pixelmatch from 'pixelmatch';
 
 @Injectable()
 export class ComparisonService {
@@ -203,19 +216,215 @@ export class ComparisonService {
   uploadScreenshot(
     base64Image: string,
     testSessionId: string
-  ): Observable<boolean> {
+  ): Observable<TestSession> /* TODO: add correct type */ {
     return this.cloudProviderService
       .saveScreenshotImage(
         Buffer.from(base64Image, 'base64'),
-        `${testSessionId}.png`
+        `${testSessionId}.screenshot.png`
       )
-      .pipe(
-        tap(
-          () => {
-            // TODO: start update test session state
-          },
-          err => {}
-        )
-      );
+      .pipe(switchMap(() => this.processTestSessionImage(testSessionId)));
+  }
+
+  createDiff(
+    srcImageFilename: string,
+    baselineImageFilename: string,
+    testSessionId: string
+  ): Observable<CreateDiffResult> {
+    return combineLatest(
+      this.cloudProviderService.loadImage(baselineImageFilename),
+      this.cloudProviderService.loadImage(srcImageFilename)
+    ).pipe(
+      switchMap(([baselineImage, srcImage]) => {
+        const baseline = PNG.sync.read(new Buffer(baselineImage.toString()));
+        const test = PNG.sync.read(new Buffer(srcImage.toString()));
+        const isSameDimensions =
+          baseline.width === test.width && baseline.height === test.height;
+
+        if (!isSameDimensions) {
+          return of({
+            isSameDimensions
+          });
+        }
+
+        const diffImageKey = `${testSessionId}.diff.png`;
+        const diff = new PNG({
+          width: baseline.width,
+          height: baseline.height
+        });
+        const pixelMisMatchCount = Pixelmatch(
+          baseline.data,
+          test.data,
+          diff.data,
+          baseline.width,
+          baseline.height,
+          {
+            threshold: environment.diffOptions.threshold,
+            includeAA: environment.diffOptions.includeAA
+          }
+        );
+
+        const subject: Subject<Buffer> = new Subject();
+        diff.pack();
+        const chunks = [];
+        diff.on('data', function(chunk) {
+          chunks.push(chunk);
+        });
+        diff.on('end', function() {
+          subject.next(Buffer.concat(chunks));
+          subject.complete();
+        });
+
+        return subject.asObservable().pipe(
+          switchMap(buffer => {
+            return this.cloudProviderService
+              .saveScreenshotImage(buffer, diffImageKey)
+              .pipe(
+                map(() => ({
+                  misMatchPercentage:
+                    (pixelMisMatchCount * 100) /
+                    (baseline.width * baseline.height) /
+                    100,
+                  isSameDimensions,
+                  diffImageKey
+                }))
+              );
+          })
+        );
+      })
+    );
+  }
+
+  private processTestSessionImage(
+    testSessionId: string
+  ): Observable<TestSession> {
+    return this.loadTestSessionData(testSessionId).pipe(
+      switchMap(
+        ({
+          misMatchTolerance,
+          baselineRef,
+          autoBaseline,
+          variationId,
+          testSession
+        }) => {
+          if (baselineRef) {
+            console.log(`Create diff`);
+            return this.createDiff(
+              testSession.imageKey,
+              baselineRef.imageKey,
+              testSessionId
+            ).pipe(
+              switchMap(
+                ({ misMatchPercentage, diffImageKey, isSameDimensions }) => {
+                  console.log('Updated imaged data');
+                  return this.updateImageData(
+                    testSessionId,
+                    testSession.imageKey,
+                    misMatchTolerance < misMatchPercentage || !isSameDimensions
+                      ? 'UNRESOLVED'
+                      : 'ACCEPTED',
+                    diffImageKey,
+                    baselineRef.id,
+                    misMatchPercentage,
+                    isSameDimensions
+                  );
+                }
+              )
+            );
+          } else if (autoBaseline) {
+            console.log('Update auto baseline');
+            return this.updateAutoBaseline(
+              testSession.imageKey,
+              testSessionId,
+              variationId
+            );
+          } else {
+            console.log('No baseline image exists');
+            return this.updateImageData(
+              testSessionId,
+              testSession.imageKey,
+              'UNRESOLVED'
+            );
+          }
+        }
+      )
+    );
+  }
+
+  updateAutoBaseline(
+    imageKey: string,
+    testSessionId: string,
+    variationId: string
+  ): Observable<any> {
+    return from(
+      this.photonService.variations
+        .update({
+          where: { id: variationId },
+          data: {
+            baseline: { connect: { id: testSessionId } },
+            testSessions: {
+              update: {
+                where: { id: testSessionId },
+                data: {
+                  imageKey: imageKey,
+                  isSameDimensions: true,
+                  misMatchPercentage: 0,
+                  state: 'ACCEPTED'
+                }
+              }
+            }
+          }
+        })
+        .then()
+    );
+  }
+
+  private loadTestSessionData(testSessionId: string) {
+    return from(
+      this.photonService.testSessions.findOne({
+        where: { id: testSessionId },
+        include: {
+          variation: {
+            include: {
+              baseline: true
+            }
+          }
+        }
+      })
+    ).pipe(
+      map(testSession => ({
+        testSession,
+        baselineRef: testSession.variation.baseline,
+        misMatchTolerance: testSession.misMatchTolerance,
+        autoBaseline: testSession.autoBaseline,
+        variationId: testSession.variation.id
+      }))
+    );
+  }
+
+  private updateImageData(
+    testSessionId: string,
+    imageKey: string,
+    state: TestSessionState,
+    diffImageKey?: string,
+    diffBaselineRef?: string,
+    misMatchPercentage?: number,
+    isSameDimensions?: boolean
+  ): Observable<TestSession> {
+    const testSession = this.photonService.testSessions.update({
+      where: { id: testSessionId },
+      data: {
+        imageKey,
+        diffImageKey,
+        misMatchPercentage,
+        isSameDimensions,
+        state,
+        baselineForDiffRef: diffBaselineRef
+          ? { connect: { id: diffBaselineRef } }
+          : null
+      }
+    });
+
+    console.log('Update image data');
+    return from(testSession.then());
   }
 }

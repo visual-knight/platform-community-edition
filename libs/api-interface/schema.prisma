@@ -5,13 +5,13 @@ datasource db {
 
 generator photon {
   provider  = "photonjs"
-  platforms = ["native", "linux-glibc-libssl1.0.2"]
+  binaryTarget = ["native", "linux-glibc-libssl1.0.2"]
   output    = "../../node_modules/@generated/photonjs"
 }
 
 generator photon_layer {
   provider  = "photonjs"
-  platforms = ["linux-glibc-libssl1.0.2"]
+  binaryTarget = ["linux-glibc-libssl1.0.2"]
   output    = "../../layers/photon/nodejs/node_modules/@generated/photonjs"
 }
 
