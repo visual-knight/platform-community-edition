@@ -220,7 +220,7 @@ export class ComparisonService {
   uploadScreenshot(
     base64Image: string,
     testSessionId: string
-  ): Observable<TestSession> /* TODO: add correct type */ {
+  ): Observable<TestSession> {
     return this.cloudProviderService
       .saveScreenshotImage(
         Buffer.from(base64Image, 'base64'),

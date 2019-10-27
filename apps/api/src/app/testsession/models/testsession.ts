@@ -1,6 +1,7 @@
 import { Field, ObjectType, ID, Float } from 'type-graphql';
 import { TestSessionState } from '@generated/photonjs';
 import { DateTimeResolver } from 'graphql-scalars';
+import { VariationType } from '../../variation/models/variation';
 
 // export enum TestSessionState {
 //   PENDING,
@@ -45,4 +46,7 @@ export class TestSessionType {
 
   @Field(type => DateTimeResolver)
   createdAt: Date;
+
+  // @Field(type => VariationType, { nullable: true })
+  // baselineRef: VariationType;
 }

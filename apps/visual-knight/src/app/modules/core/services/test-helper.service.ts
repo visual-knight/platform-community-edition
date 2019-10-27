@@ -3,7 +3,9 @@ import { TestSessionType } from '../types';
 
 @Injectable({ providedIn: 'root' })
 export class TestHelperService {
-  constructor() {}
+  constructor() {
+
+  }
 
   isTestSuccessfull(testSession: TestSessionType) {
     return (

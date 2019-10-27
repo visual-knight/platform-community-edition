@@ -5,6 +5,7 @@ import { AuthService } from '../../../core/auth-service.service';
 import { PasswordStrengthValidators } from '../../../shared/utils/passwordPatternValidator';
 import { MatchValidators } from '../../../shared/utils/passwordMatchValidator';
 import { first } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'visual-knight-signup',
@@ -17,7 +18,11 @@ export class SignupComponent implements OnInit {
 
   progressBarMode: 'indeterminate';
   signupForm: FormGroup;
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.signupForm = new FormGroup(
@@ -55,10 +60,13 @@ export class SignupComponent implements OnInit {
     this.progressBar.mode = 'indeterminate';
 
     this.authService
-      .login(signupData)
+      .signup(signupData)
       .pipe(first())
       .subscribe(
-        () => {},
+        () => {
+          const referUrl = '/project';
+          this.router.navigateByUrl(referUrl);
+        },
         error => {
           this.submitButton.disabled = false;
           this.progressBar.mode = 'determinate';

@@ -4,15 +4,15 @@ datasource db {
 }
 
 generator photon {
-  provider  = "photonjs"
+  provider     = "photonjs"
   binaryTarget = ["native", "linux-glibc-libssl1.0.2"]
-  output    = "../../node_modules/@generated/photonjs"
+  output       = "../../node_modules/@generated/photonjs"
 }
 
 generator photon_layer {
-  provider  = "photonjs"
+  provider     = "photonjs"
   binaryTarget = ["linux-glibc-libssl1.0.2"]
-  output    = "../../layers/photon/nodejs/node_modules/@generated/photonjs"
+  output       = "../../layers/photon/nodejs/node_modules/@generated/photonjs"
 }
 
 model User {
@@ -36,7 +36,7 @@ model Project {
 
   name        String
   description String?
-  tests       Test[] @relation(onDelete: CASCADE)
+  tests       Test[]
 }
 
 model Test {
@@ -46,7 +46,7 @@ model Test {
 
   name       String
   project    Project
-  variations Variation[] @relation(onDelete: CASCADE)
+  variations Variation[]
 }
 
 model Variation {
@@ -58,7 +58,7 @@ model Variation {
   deviceName  String
   test        Test
 
-  testSessions   TestSession[] @relation(onDelete: CASCADE)
+  testSessions   TestSession[]
   additionalData String?
   baseline       TestSession?  @relation(name: "VariationBaseline")
 }
