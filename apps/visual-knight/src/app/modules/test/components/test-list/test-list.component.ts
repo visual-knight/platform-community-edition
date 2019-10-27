@@ -4,6 +4,7 @@ import { rowsAnimation } from '../../../shared/animations';
 import { TestsDataSource } from '../../test.datasource';
 import { TestType, TestSessionType } from '../../../core/types';
 import { TestService } from '../../services/test.service';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-test-list',
@@ -30,7 +31,10 @@ export class TestListComponent implements OnInit {
   }
 
   onDeleteTest(test: TestType) {
-    this.testService.removeTest(test.id);
+    this.testService
+      .removeTest(test.id)
+      .pipe(first())
+      .subscribe();
   }
 
   stopPropagationClick($event: Event) {

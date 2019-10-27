@@ -49,7 +49,15 @@ export class AuthService {
   }
 
   public signup({ email, password }) {
-    return this.signupGQL.mutate({ email, password });
+    return this.signupGQL.mutate({ email, password }).pipe(
+      map(result => result.data.signup),
+      tap(signupData => {
+        localStorage.setItem(
+          'visual-knight-token',
+          signupData.token.accessToken
+        );
+      })
+    );
   }
   public login({ email, password }) {
     return this.loginGQL.mutate({ email, password }).pipe(

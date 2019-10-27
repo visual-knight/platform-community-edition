@@ -10,7 +10,7 @@
           "to": "Test",
           "to_fields": [],
           "name": "ProjectToTest",
-          "on_delete": "Cascade"
+          "on_delete": "None"
         }
       }
     },
@@ -23,7 +23,7 @@
           "to": "Variation",
           "to_fields": [],
           "name": "TestToVariation",
-          "on_delete": "Cascade"
+          "on_delete": "None"
         }
       }
     },
@@ -36,7 +36,7 @@
           "to": "TestSession",
           "to_fields": [],
           "name": "TestSessionToVariation",
-          "on_delete": "Cascade"
+          "on_delete": "None"
         }
       }
     }

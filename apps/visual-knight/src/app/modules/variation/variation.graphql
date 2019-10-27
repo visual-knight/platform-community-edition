@@ -28,9 +28,9 @@ fragment VariationData on VariationType {
   testSessions {
     id
     diffImageKey
-    # baselineRef {
-    #   id
-    # }
+    baselineRef {
+      id
+    }
     imageKey
     misMatchPercentage
     misMatchTolerance
