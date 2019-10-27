@@ -60,6 +60,10 @@ export class ComparisonService {
           throw new Error('No misMatchPercentage yet');
         }
 
+        console.log({
+          ...testSession,
+          link: `${environment.appDomain}/variation/${testSession.variation.id}`
+        })
         return {
           ...testSession,
           link: `${environment.appDomain}/variation/${testSession.variation.id}`

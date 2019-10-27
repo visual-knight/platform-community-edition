@@ -44,5 +44,5 @@ export class TestSessionType {
   autoBaseline: boolean;
 
   @Field(type => DateTimeResolver)
-  createdAt: String;
+  createdAt: Date;
 }
