@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   get authenticated(): boolean {
-    return localStorage.getItem('token') !== null;
+    return localStorage.getItem('visual-knight-token') !== null;
   }
 
   public signup({ email, password }) {
