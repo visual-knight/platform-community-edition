@@ -43,7 +43,10 @@ export class ComparisonResolver {
     return this.comparisonService
       .uploadScreenshot(base64Image, testSessionId)
       .pipe(
-        switchMap(() => this.comparisonService.testSessionWatch(testSessionId))
+        switchMap(() => {
+          console.log('switchmap');
+          return this.comparisonService.testSessionWatch(testSessionId);
+        })
       );
   }
 }
