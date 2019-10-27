@@ -42,7 +42,7 @@ export class VariationService {
             query: AllVariationsDocument
           });
           data.variations = data.variations.filter(
-            variation => variation.id !== variationId
+            variation => variation.id !== id
           );
           store.writeQuery({ query: AllVariationsDocument, data });
         }
