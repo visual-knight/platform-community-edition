@@ -20,17 +20,17 @@ fragment VariationData on VariationType {
   id
   deviceName
   additionalData
-  # baselineVariationRef {
-  #   imageKey
-  #   id
-  # }
+  baseline {
+    imageKey
+    id
+  }
   browserName
   testSessions {
     id
     diffImageKey
-    baselineRef {
-      id
-    }
+    # baselineRef {
+    #   id
+    # }
     imageKey
     misMatchPercentage
     misMatchTolerance
