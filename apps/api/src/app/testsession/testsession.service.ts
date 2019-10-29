@@ -46,7 +46,10 @@ export class TestsessionService {
 
   async testSessions(where: TestSessionDataArgs) {
     return this.photonService.testSessions.findMany({
-      where: merge(where || {})
+      where: merge(where || {}),
+      include: {
+        baselineRef: true
+      }
     });
   }
 

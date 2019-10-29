@@ -27,12 +27,6 @@ export type AuthToken = {
   accessToken: Scalars['String'];
 };
 
-export type InvokeTestsession = {
-  __typename?: 'InvokeTestsession';
-  url: Scalars['String'];
-  testSessionId: Scalars['String'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   login: AuthPayload;
@@ -53,7 +47,8 @@ export type Mutation = {
   updateTestSession: TestSessionType;
   deleteTest: TestType;
   deleteVariation: VariationType;
-  invokeTestSession: InvokeTestsession;
+  invokeTestSession: Scalars['String'];
+  uploadScreenshot?: Maybe<TestSessionComparison>;
 };
 
 export type MutationLoginArgs = {
@@ -138,6 +133,11 @@ export type MutationInvokeTestSessionArgs = {
   testname: Scalars['String'];
 };
 
+export type MutationUploadScreenshotArgs = {
+  testSessionId: Scalars['String'];
+  base64Image: Scalars['String'];
+};
+
 export type ProjectDataArgs = {
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -165,7 +165,6 @@ export type Query = {
   variation: VariationType;
   variations: Array<VariationType>;
   variationsCount: Scalars['Int'];
-  testSessionWatch?: Maybe<TestSessionComparison>;
 };
 
 export type QueryProjectArgs = {
@@ -198,10 +197,6 @@ export type QueryVariationsArgs = {
 
 export type QueryVariationsCountArgs = {
   testId: Scalars['String'];
-};
-
-export type QueryTestSessionWatchArgs = {
-  testSessionId: Scalars['String'];
 };
 
 export type TestSessionComparison = {
@@ -428,6 +423,12 @@ export type VariationDataFragment = { __typename?: 'VariationType' } & Pick<
   VariationType,
   'id' | 'deviceName' | 'additionalData' | 'browserName'
 > & {
+    baseline: Maybe<
+      { __typename?: 'TestSessionType' } & Pick<
+        TestSessionType,
+        'imageKey' | 'id'
+      >
+    >;
     testSessions: Array<
       { __typename?: 'TestSessionType' } & Pick<
         TestSessionType,
@@ -488,6 +489,10 @@ export const VariationDataFragmentDoc = gql`
     id
     deviceName
     additionalData
+    baseline {
+      imageKey
+      id
+    }
     browserName
     testSessions {
       id
