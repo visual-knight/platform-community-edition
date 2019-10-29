@@ -22,7 +22,7 @@
           <mat-card-subtitle>{{ variation.deviceName }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <img [src]="variation.testSessions[0].imageKey" />
+          <img [src]="variation.testSessions[0].imageKey | screenshotImage" />
         </mat-card-content>
         <mat-card-actions>
           <button mat-button>Test sessions</button>

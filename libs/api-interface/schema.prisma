@@ -9,11 +9,11 @@ generator photon {
   output       = "../../node_modules/@generated/photonjs"
 }
 
-generator photon_layer {
-  provider     = "photonjs"
-  binaryTarget = ["linux-glibc-libssl1.0.2"]
-  output       = "../../layers/photon/nodejs/node_modules/@generated/photonjs"
-}
+// generator photon_layer {
+//   provider     = "photonjs"
+//   binaryTarget = ["linux-glibc-libssl1.0.2"]
+//   output       = "../../layers/photon/nodejs/node_modules/@generated/photonjs"
+// }
 
 model User {
   id        String   @id @default(cuid())

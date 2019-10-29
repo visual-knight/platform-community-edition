@@ -1,4 +1,8 @@
 {
+  "/screenshots": {
+    "target": "http://localhost:3333/screenshots/",
+    "secure": false
+  },
   "/api": {
     "target": "http://localhost:3333",
     "secure": false

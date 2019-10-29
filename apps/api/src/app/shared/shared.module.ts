@@ -8,6 +8,7 @@ import { APIGateway, Lambda, S3 } from 'aws-sdk';
 import { AwsS3Service } from './aws/aws-s3.service';
 import { PhotonModule } from '@visual-knight/api-interface';
 import { CloudProviderOnpremModule } from '@visual-knight/cloud-provider-onprem';
+import { StaticController } from './static/static.controller';
 
 const services: Provider[] = [Logger];
 
@@ -45,6 +46,7 @@ const services: Provider[] = [Logger];
     AwsLambdaService,
     PhotonModule,
     CloudProviderOnpremModule
-  ]
+  ],
+  controllers: [StaticController]
 })
 export class SharedModule {}

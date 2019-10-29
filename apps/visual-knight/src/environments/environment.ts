@@ -7,7 +7,8 @@ export const environment = {
   graphql: {
     uri: 'http://localhost:3333/graphql'
   },
-  recaptchaKey: '6LcRq0AUAAAAAHI6b5r4s9Yvsb7L9F9l-k9_fPm7'
+  recaptchaKey: '6LcRq0AUAAAAAHI6b5r4s9Yvsb7L9F9l-k9_fPm7',
+  screenshotsPath: 'http://localhost:3333/screenshots/'
 };
 
 /*
