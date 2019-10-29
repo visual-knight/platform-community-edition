@@ -22,6 +22,7 @@ import {
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { IconModule } from './modules/icon/icon.module';
+import { ScreenshotImagePipe } from './pipes/screenshot-image.pipe';
 
 const SHARED_MODULES = [
   CommonModule,
@@ -51,7 +52,7 @@ const SHARED_MODULES = [
   FlexLayoutModule,
   IconModule
 ];
-const SHARED_COMPONENTS = [];
+const SHARED_COMPONENTS = [ScreenshotImagePipe];
 @NgModule({
   imports: [...SHARED_MODULES],
   declarations: [...SHARED_COMPONENTS],

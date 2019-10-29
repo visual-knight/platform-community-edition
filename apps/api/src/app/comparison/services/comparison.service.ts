@@ -60,10 +60,6 @@ export class ComparisonService {
           throw new Error('No misMatchPercentage yet');
         }
 
-        console.log({
-          ...testSession,
-          link: `${environment.appDomain}/variation/${testSession.variation.id}`
-        })
         return {
           ...testSession,
           link: `${environment.appDomain}/variation/${testSession.variation.id}`
@@ -226,7 +222,19 @@ export class ComparisonService {
         Buffer.from(base64Image, 'base64'),
         `${testSessionId}.screenshot.png`
       )
-      .pipe(switchMap(() => this.processTestSessionImage(testSessionId)));
+      .pipe(
+        switchMap(() =>
+          from(
+            this.photonService.testSessions
+              .update({
+                where: { id: testSessionId },
+                data: { imageKey: `${testSessionId}.screenshot.png` }
+              })
+              .then()
+          )
+        ),
+        switchMap(() => this.processTestSessionImage(testSessionId))
+      );
   }
 
   createDiff(
@@ -239,8 +247,8 @@ export class ComparisonService {
       this.cloudProviderService.loadImage(srcImageFilename)
     ).pipe(
       switchMap(([baselineImage, srcImage]) => {
-        const baseline = PNG.sync.read(new Buffer(baselineImage.toString()));
-        const test = PNG.sync.read(new Buffer(srcImage.toString()));
+        const baseline = PNG.sync.read(baselineImage);
+        const test = PNG.sync.read(srcImage);
         const isSameDimensions =
           baseline.width === test.width && baseline.height === test.height;
 
@@ -283,6 +291,16 @@ export class ComparisonService {
             return this.cloudProviderService
               .saveScreenshotImage(buffer, diffImageKey)
               .pipe(
+                switchMap(() =>
+                  from(
+                    this.photonService.testSessions
+                      .update({
+                        where: { id: testSessionId },
+                        data: { imageKey: diffImageKey }
+                      })
+                      .then()
+                  )
+                ),
                 map(() => ({
                   misMatchPercentage:
                     (pixelMisMatchCount * 100) /
