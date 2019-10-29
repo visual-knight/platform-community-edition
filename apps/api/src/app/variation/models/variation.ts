@@ -14,7 +14,7 @@ export class VariationType {
   deviceName: string;
 
   @Field(type => DateTimeResolver)
-  createdAt: String;
+  createdAt: Date;
 
   @Field(type => JSONResolver, { nullable: true })
   additionalData?: any;
