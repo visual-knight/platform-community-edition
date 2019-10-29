@@ -69,9 +69,6 @@ export class ProjectComponent implements OnInit {
     const from = '#' + Hexcolor.toHexColour(project.name);
     const to = Hexcolor.shadeColor(from, -0.35);
 
-    return {
-      ...project,
-      background: `linear-gradient(to left, ${from}, ${to})`
-    } as ProjectType;
+    return `linear-gradient(to left, ${from}, ${to})`;
   }
 }
