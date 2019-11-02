@@ -49,6 +49,7 @@ export type Mutation = {
   deleteVariation: VariationType;
   invokeTestSession: Scalars['String'];
   uploadScreenshot?: Maybe<TestSessionComparison>;
+  selectTestSession: Scalars['ID'];
 };
 
 export type MutationLoginArgs = {
@@ -138,6 +139,10 @@ export type MutationUploadScreenshotArgs = {
   base64Image: Scalars['String'];
 };
 
+export type MutationSelectTestSessionArgs = {
+  testSessionId: Scalars['ID'];
+};
+
 export type ProjectDataArgs = {
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -165,6 +170,7 @@ export type Query = {
   variation: VariationType;
   variations: Array<VariationType>;
   variationsCount: Scalars['Int'];
+  selectedTestSession: Scalars['ID'];
 };
 
 export type QueryProjectArgs = {
@@ -444,6 +450,13 @@ export type VariationDataFragment = { __typename?: 'VariationType' } & Pick<
       >
     >;
   };
+
+export type SelectedTestSessionQueryVariables = {};
+
+export type SelectedTestSessionQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'selectedTestSession'
+>;
 export const AuthTokenFragmentDoc = gql`
   fragment AuthToken on AuthToken {
     expiresIn
@@ -743,4 +756,19 @@ export class DeleteVariationGQL extends Apollo.Mutation<
   DeleteVariationMutationVariables
 > {
   document = DeleteVariationDocument;
+}
+export const SelectedTestSessionDocument = gql`
+  query selectedTestSession {
+    selectedTestSession @client
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SelectedTestSessionGQL extends Apollo.Query<
+  SelectedTestSessionQuery,
+  SelectedTestSessionQueryVariables
+> {
+  document = SelectedTestSessionDocument;
 }

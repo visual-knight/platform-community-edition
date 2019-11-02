@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import * as moment from 'moment';
 import { TestSessionsDataSource } from '../variation-view/testsessions.datasource';
 import { TestSessionType } from '../../../core/types';
+import { Apollo } from 'apollo-angular';
 
 @Component({
   selector: 'visual-knight-test-session-list',
@@ -20,7 +20,7 @@ export class TestSessionListComponent implements OnInit {
     'hasDiff'
   ];
 
-  constructor() {}
+  constructor(private apollo: Apollo) {}
 
   ngOnInit() {}
 
@@ -35,7 +35,9 @@ export class TestSessionListComponent implements OnInit {
   }
 
   onSelectTestSession(testSession: TestSessionType) {
-    // TODO: select new test session
+    this.apollo.getClient().writeData({
+      data: { selectedTestSession: testSession.id }
+    });
   }
 
   getUsername(testSession: TestSessionType) {

@@ -1,6 +1,9 @@
 generates:
   ./apps/visual-knight/src/app/modules/core/types.ts:
-    schema: ./apps/api/schema.graphql
+    schema:
+      - ./apps/api/schema.graphql
+      - ./apps/visual-knight/src/app/modules/core/schema.ts:
+          noRequire: true
     documents: ./apps/visual-knight/src/**/*.graphql
     hooks:
       afterOneFileWrite:

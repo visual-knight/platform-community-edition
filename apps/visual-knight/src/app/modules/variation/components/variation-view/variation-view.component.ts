@@ -7,10 +7,11 @@ import {
   VariationType,
   TestSessionType,
   TestType,
-  VariationDataFragment
+  VariationDataFragment,
+  SelectedTestSessionGQL
 } from '../../../core/types';
 import { VariationService } from '../../services/variation.service';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-variation-view',
@@ -33,7 +34,8 @@ export class VariationViewComponent
 
   constructor(
     private route: ActivatedRoute,
-    private variationService: VariationService
+    private variationService: VariationService,
+    private selectedTestSession: SelectedTestSessionGQL
   ) {}
 
   ngOnInit() {
@@ -53,9 +55,20 @@ export class VariationViewComponent
         );
 
         // TODO: get selected testsession from local state
-        this.selectedTestSession$ = this.testSessions$.pipe(
-          map(testSessions => testSessions[0])
-        );
+
+        this.selectedTestSession$ = this.selectedTestSession
+          .watch()
+          .valueChanges.pipe(
+            map(({ data }) => data && data.selectedTestSession),
+            filter(selected => !!selected),
+            switchMap(id =>
+              this.testSessions$.pipe(
+                map(testSessions =>
+                  testSessions.find(testSession => testSession.id === id)
+                )
+              )
+            )
+          );
       }
     );
     this.selectedTestSession$.subscribe(testSession => {

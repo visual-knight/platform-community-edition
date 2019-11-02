@@ -7,9 +7,12 @@ import { ApolloLink } from 'apollo-link';
 import { HttpHeaders } from '@angular/common/http';
 import { onError } from 'apollo-link-error';
 import { Router } from '@angular/router';
+import { typeDefs } from './schema';
+// import { resolvers, typeDefs } from './schema';
 
 const uri = environment.graphql.uri;
 export function createApollo(httpLink: HttpLink, router: Router) {
+  const cache = new InMemoryCache();
   const http = httpLink.create({ uri });
 
   const authMiddleware = new ApolloLink((operation, forward) => {
@@ -37,9 +40,13 @@ export function createApollo(httpLink: HttpLink, router: Router) {
     }
   });
 
+  initLocaleState(cache);
+
   return {
+    cache,
+    typeDefs,
+    resolvers: {},
     link: authMiddleware.concat(logoutLink.concat(http)),
-    cache: new InMemoryCache(),
     defaultOptions: {
       query: { fetchPolicy: 'network-only' },
       watchQuery: {
@@ -47,6 +54,14 @@ export function createApollo(httpLink: HttpLink, router: Router) {
       }
     }
   };
+}
+
+function initLocaleState(cache: InMemoryCache) {
+  cache.writeData({
+    data: {
+      selectedTestSession: null
+    }
+  });
 }
 
 @NgModule({
