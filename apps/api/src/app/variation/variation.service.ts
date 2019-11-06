@@ -45,6 +45,7 @@ export class VariationService {
         }
       },
       include: {
+        baseline: true,
         testSessions: true
       }
     });
