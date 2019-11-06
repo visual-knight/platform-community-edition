@@ -63,11 +63,11 @@ fragment TestSessionData on TestSessionType {
   state
   stateComment
   autoBaseline
-  # stateChangedByUser {
-  #   forename
-  #   lastname
-  #   email
-  # }
+  stateChangedByUser {
+    forename
+    lastname
+    email
+  }
 }
 
 query selectedTestSession {

@@ -6,9 +6,11 @@ import {
   AllVariationsDocument,
   GetVariationGQL,
   AcceptNewBaselineGQL,
-  DeclineTestSessionGQL
+  DeclineTestSessionGQL,
+  TestSessionType
 } from '../../core/types';
 import { map, first } from 'rxjs/operators';
+import { Apollo } from 'apollo-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,8 @@ export class VariationService {
     private deleteVariationGQL: DeleteVariationGQL,
     private getVariaitonGQL: GetVariationGQL,
     private acceptNewBaseLineGQL: AcceptNewBaselineGQL,
-    private declineTestSessionGQL: DeclineTestSessionGQL
+    private declineTestSessionGQL: DeclineTestSessionGQL,
+    private apollo: Apollo
   ) {}
 
   variationList(testId: string) {
@@ -70,5 +73,11 @@ export class VariationService {
       .mutate({ comment, testSessionId })
       .pipe(first())
       .subscribe();
+  }
+
+  setSelectedTestSession(testSession: TestSessionType) {
+    this.apollo.getClient().writeData({
+      data: { selectedTestSession: testSession.id }
+    });
   }
 }

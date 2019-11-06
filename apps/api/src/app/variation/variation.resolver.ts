@@ -4,6 +4,8 @@ import { VariationType } from './models/variation';
 import { GqlAuthGuard } from '../auth/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { Int } from 'type-graphql';
+import { CurrentUser } from '../shared/decorators/current-user.decorator';
+import { User } from '@generated/photonjs';
 
 @Resolver('Variation')
 export class VariationResolver {
@@ -43,12 +45,14 @@ export class VariationResolver {
     @Args('variationId') variationId: string,
     @Args('testSessionId') testSessionId: string,
     @Args({ name: 'comment', nullable: true, type: () => String })
-    comment: string
+    comment: string,
+    @CurrentUser() user: User
   ): Promise<VariationType> {
     return this.variationService.acceptNewBaseline(
       variationId,
       testSessionId,
-      comment
+      comment,
+      user
     );
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  User,
+  UserType,
   CurrentUserGQL,
   SignupGQL,
   LoginGQL,
@@ -21,7 +21,7 @@ export class AuthService {
 
   public authErrorMessages$: Observable<GraphQLError[]>;
   public isLoading$: Observable<boolean>;
-  public user$: Observable<User>;
+  public user$: Observable<UserType>;
 
   constructor(
     private router: Router,

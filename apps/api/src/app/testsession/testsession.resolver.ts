@@ -5,6 +5,8 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guards/auth.guard';
 import { Int } from 'type-graphql';
 import { TestSessionDataArgs } from './models/testsession-where.input';
+import { CurrentUser } from '../shared/decorators/current-user.decorator';
+import { User } from '@generated/photonjs';
 
 @Resolver()
 export class TestsessionResolver {
@@ -58,8 +60,9 @@ export class TestsessionResolver {
   async declineTestSession(
     @Args('testSessionId') testSessionId: string,
     @Args({ name: 'comment', nullable: true, type: () => String })
-    comment: string
+    comment: string,
+    @CurrentUser() user: User
   ): Promise<TestSessionType> {
-    return this.testSessionService.rejectTestSession(testSessionId, comment);
+    return this.testSessionService.rejectTestSession(testSessionId, comment, user);
   }
 }

@@ -1,6 +1,7 @@
 import { Field, ObjectType, ID, Float } from 'type-graphql';
 import { TestSessionState } from '@generated/photonjs';
 import { DateTimeResolver, JSONResolver } from 'graphql-scalars';
+import { UserType } from '../../user/models/user';
 
 // export enum TestSessionState {
 //   PENDING,
@@ -45,4 +46,7 @@ export class TestSessionType {
 
   @Field(type => DateTimeResolver)
   createdAt: Date;
+
+  @Field({ nullable: true })
+  stateChangedByUser?: UserType;
 }

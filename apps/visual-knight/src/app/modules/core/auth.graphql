@@ -39,7 +39,7 @@ fragment AuthToken on AuthToken {
   accessToken
 }
 
-fragment UserData on User {
+fragment UserData on UserType {
   id
   active
   email

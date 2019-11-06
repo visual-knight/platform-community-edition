@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PhotonService } from '@visual-knight/api-interface';
-import { TestSessionState } from '@generated/photonjs';
+import { TestSessionState, User } from '@generated/photonjs';
 
 @Injectable()
 export class VariationService {
@@ -9,7 +9,13 @@ export class VariationService {
   async deleteVariation(variationId: string) {
     return this.photonService.variations.delete({
       where: { id: variationId },
-      include: { testSessions: true }
+      include: {
+        testSessions: {
+          orderBy: {
+            createdAt: 'desc'
+          }
+        }
+      }
     });
   }
   async getVariationsCount(testId: string): Promise<number> {
@@ -18,20 +24,41 @@ export class VariationService {
   async getVariations(testId: string) {
     return this.photonService.variations.findMany({
       where: { test: { id: testId } },
-      include: { baseline: true, testSessions: true }
+      include: {
+        baseline: true,
+        testSessions: {
+          include: {
+            stateChangedByUser: true
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        }
+      }
     });
   }
   async getVariation(variationId: string) {
     return this.photonService.variations.findOne({
       where: { id: variationId },
-      include: { baseline: true, testSessions: true }
+      include: {
+        baseline: true,
+        testSessions: {
+          orderBy: {
+            createdAt: 'desc'
+          },
+          include: {
+            stateChangedByUser: true
+          }
+        }
+      }
     });
   }
 
   async acceptNewBaseline(
     variationId: string,
     testSessionId: string,
-    comment: string
+    comment: string,
+    user: User
   ) {
     return this.photonService.variations.update({
       where: { id: variationId },
@@ -40,13 +67,28 @@ export class VariationService {
         testSessions: {
           update: {
             where: { id: testSessionId },
-            data: { state: TestSessionState.ACCEPTED, stateComment: comment }
+            data: {
+              state: TestSessionState.ACCEPTED,
+              stateComment: comment,
+              stateChangedByUser: {
+                connect: {
+                  id: user.id
+                }
+              }
+            }
           }
         }
       },
       include: {
         baseline: true,
-        testSessions: true
+        testSessions: {
+          include: {
+            stateChangedByUser: true
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        }
       }
     });
   }

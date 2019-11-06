@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { TestSessionType } from './models/testsession';
 import { merge } from 'lodash';
 import { TestSessionDataArgs } from './models/testsession-where.input';
 import { AwsS3Service } from '../shared/aws/aws-s3.service';
 import { PhotonService } from '@visual-knight/api-interface';
-import { TestSessionState } from '@generated/photonjs';
+import { TestSessionState, User } from '@generated/photonjs';
 
 @Injectable()
 export class TestsessionService {
@@ -41,7 +40,11 @@ export class TestsessionService {
 
   async testSession(testSessionId: string) {
     return this.photonService.testSessions.findOne({
-      where: { id: testSessionId }
+      where: { id: testSessionId },
+      include: {
+        baselineRef: true,
+        stateChangedByUser: true
+      }
     });
   }
 
@@ -49,7 +52,11 @@ export class TestsessionService {
     return this.photonService.testSessions.findMany({
       where: merge(where || {}),
       include: {
-        baselineRef: true
+        baselineRef: true,
+        stateChangedByUser: true
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     });
   }
@@ -58,12 +65,17 @@ export class TestsessionService {
     return (await this.testSessions(where)).length;
   }
 
-  async rejectTestSession(testSessionId: string, comment: string) {
+  async rejectTestSession(testSessionId: string, comment: string, user: User) {
     return this.photonService.testSessions.update({
       where: { id: testSessionId },
       data: {
         state: TestSessionState.DECLINED,
-        stateComment: comment
+        stateComment: comment,
+        stateChangedByUser: {
+          connect: {
+            id: user.id
+          }
+        }
       }
     });
   }

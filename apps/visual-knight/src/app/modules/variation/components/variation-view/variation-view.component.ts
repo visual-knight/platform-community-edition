@@ -11,7 +11,7 @@ import {
   SelectedTestSessionGQL
 } from '../../../core/types';
 import { VariationService } from '../../services/variation.service';
-import { map, filter, switchMap } from 'rxjs/operators';
+import { map, filter, switchMap, first } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-variation-view',
@@ -54,7 +54,14 @@ export class VariationViewComponent
           map(variation => variation.testSessions)
         );
 
-        // TODO: get selected testsession from local state
+        this.variation$
+          .pipe(
+            first(),
+            map(variation => variation.testSessions)
+          )
+          .subscribe(testSessions =>
+            this.variationService.setSelectedTestSession(testSessions[0])
+          );
 
         this.selectedTestSession$ = this.selectedTestSession
           .watch()

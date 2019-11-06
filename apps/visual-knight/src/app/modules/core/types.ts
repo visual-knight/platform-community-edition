@@ -18,7 +18,7 @@ export type Scalars = {
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   token: AuthToken;
-  user: User;
+  user: UserType;
 };
 
 export type AuthToken = {
@@ -36,9 +36,9 @@ export type Mutation = {
   changePassword: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   resetPassword: Scalars['Boolean'];
-  deleteUser: User;
-  updateUser: User;
-  inviteNewUser: User;
+  deleteUser: UserType;
+  updateUser: UserType;
+  inviteNewUser: UserType;
   completeInvitation: AuthPayload;
   createProject: ProjectType;
   deleteProject: ProjectType;
@@ -165,7 +165,7 @@ export type ProjectType = {
 
 export type Query = {
   __typename?: 'Query';
-  me: User;
+  me: UserType;
   project: ProjectType;
   projects: Array<ProjectType>;
   projectsCount: Scalars['Int'];
@@ -225,6 +225,7 @@ export type TestSessionComparison = {
   stateComment?: Maybe<Scalars['String']>;
   autoBaseline: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];
+  stateChangedByUser?: Maybe<UserType>;
   link: Scalars['String'];
 };
 
@@ -252,6 +253,7 @@ export type TestSessionType = {
   stateComment?: Maybe<Scalars['String']>;
   autoBaseline: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];
+  stateChangedByUser?: Maybe<UserType>;
 };
 
 export type TestType = {
@@ -268,8 +270,8 @@ export type UpdateUserInput = {
   lastname?: Maybe<Scalars['String']>;
 };
 
-export type User = {
-  __typename?: 'User';
+export type UserType = {
+  __typename?: 'UserType';
   id: Scalars['ID'];
   email: Scalars['String'];
   forename?: Maybe<Scalars['String']>;
@@ -291,7 +293,7 @@ export type VariationType = {
 export type CurrentUserQueryVariables = {};
 
 export type CurrentUserQuery = { __typename?: 'Query' } & {
-  me: { __typename?: 'User' } & UserDataFragment;
+  me: { __typename?: 'UserType' } & UserDataFragment;
 };
 
 export type SignupMutationVariables = {
@@ -302,7 +304,7 @@ export type SignupMutationVariables = {
 export type SignupMutation = { __typename?: 'Mutation' } & {
   signup: { __typename?: 'AuthPayload' } & {
     token: { __typename?: 'AuthToken' } & AuthTokenFragment;
-    user: { __typename?: 'User' } & UserDataFragment;
+    user: { __typename?: 'UserType' } & UserDataFragment;
   };
 };
 
@@ -314,7 +316,7 @@ export type LoginMutationVariables = {
 export type LoginMutation = { __typename?: 'Mutation' } & {
   login: { __typename?: 'AuthPayload' } & {
     token: { __typename?: 'AuthToken' } & AuthTokenFragment;
-    user: { __typename?: 'User' } & UserDataFragment;
+    user: { __typename?: 'UserType' } & UserDataFragment;
   };
 };
 
@@ -342,8 +344,8 @@ export type AuthTokenFragment = { __typename?: 'AuthToken' } & Pick<
   'expiresIn' | 'accessToken'
 >;
 
-export type UserDataFragment = { __typename?: 'User' } & Pick<
-  User,
+export type UserDataFragment = { __typename?: 'UserType' } & Pick<
+  UserType,
   'id' | 'active' | 'email' | 'apiKey'
 >;
 
@@ -480,7 +482,14 @@ export type TestSessionDataFragment = { __typename?: 'TestSessionType' } & Pick<
   | 'state'
   | 'stateComment'
   | 'autoBaseline'
->;
+> & {
+    stateChangedByUser: Maybe<
+      { __typename?: 'UserType' } & Pick<
+        UserType,
+        'forename' | 'lastname' | 'email'
+      >
+    >;
+  };
 
 export type SelectedTestSessionQueryVariables = {};
 
@@ -495,7 +504,7 @@ export const AuthTokenFragmentDoc = gql`
   }
 `;
 export const UserDataFragmentDoc = gql`
-  fragment UserData on User {
+  fragment UserData on UserType {
     id
     active
     email
@@ -539,6 +548,11 @@ export const TestSessionDataFragmentDoc = gql`
     state
     stateComment
     autoBaseline
+    stateChangedByUser {
+      forename
+      lastname
+      email
+    }
   }
 `;
 export const VariationDataFragmentDoc = gql`

@@ -5,7 +5,7 @@
 
 type AuthPayload {
   token: AuthToken!
-  user: User!
+  user: UserType!
 }
 
 type AuthToken {
@@ -29,9 +29,9 @@ type Mutation {
   changePassword(password: String!): Boolean!
   forgotPassword(email: String!): Boolean!
   resetPassword(token: String!, password: String!): Boolean!
-  deleteUser(id: String!): User!
-  updateUser(data: UpdateUserInput!): User!
-  inviteNewUser(email: String!): User!
+  deleteUser(id: String!): UserType!
+  updateUser(data: UpdateUserInput!): UserType!
+  inviteNewUser(email: String!): UserType!
   completeInvitation(password: String!, token: String!): AuthPayload!
   createProject(data: ProjectDataArgs!): ProjectType!
   deleteProject(projectId: String!): ProjectType!
@@ -58,7 +58,7 @@ type ProjectType {
 }
 
 type Query {
-  me: User!
+  me: UserType!
   project(projectId: String!): ProjectType!
   projects: [ProjectType!]!
   projectsCount: Int!
@@ -84,6 +84,7 @@ type TestSessionComparison {
   stateComment: String
   autoBaseline: Boolean!
   createdAt: DateTime!
+  stateChangedByUser: UserType
   link: String!
 }
 
@@ -110,6 +111,7 @@ type TestSessionType {
   stateComment: String
   autoBaseline: Boolean!
   createdAt: DateTime!
+  stateChangedByUser: UserType
 }
 
 type TestType {
@@ -125,7 +127,7 @@ input UpdateUserInput {
   lastname: String
 }
 
-type User {
+type UserType {
   id: ID!
   email: String!
   forename: String

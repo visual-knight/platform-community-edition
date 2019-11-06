@@ -4,38 +4,38 @@ import { User as PrismaUser } from '@generated/photonjs';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guards/auth.guard';
 import { CurrentUser } from '../shared/decorators/current-user.decorator';
-import { User } from './models/user';
+import { UserType } from './models/user';
 import { UpdateUserInput } from './dto/update-user.input';
 import { AuthPayload } from '../auth/models/auth-payload';
 
-@Resolver(of => User)
+@Resolver(of => UserType)
 export class UserResolver {
   constructor(private userService: UserService) {}
 
-  @Mutation(returns => User)
+  @Mutation(returns => UserType)
   @UseGuards(GqlAuthGuard)
   async deleteUser(
     @Args('id') id: string,
     @CurrentUser() user: PrismaUser
-  ): Promise<User> {
+  ): Promise<UserType> {
     return this.userService.deleteUser(user, id);
   }
 
-  @Mutation(returns => User)
+  @Mutation(returns => UserType)
   @UseGuards(GqlAuthGuard)
   async updateUser(
     @Args('data') data: UpdateUserInput,
     @CurrentUser() user: PrismaUser
-  ): Promise<User> {
+  ): Promise<UserType> {
     return this.userService.updateUser(user, data);
   }
 
-  @Mutation(returns => User)
+  @Mutation(returns => UserType)
   @UseGuards(GqlAuthGuard)
   inviteNewUser(
     @Args('email') email: string,
     @CurrentUser() user: PrismaUser
-  ): Promise<User> {
+  ): Promise<UserType> {
     return this.userService.inviteNewUser(user, email);
   }
 
@@ -48,9 +48,9 @@ export class UserResolver {
     return this.userService.completeInvitation(token, password);
   }
 
-  @Query(returns => User)
+  @Query(returns => UserType)
   @UseGuards(GqlAuthGuard)
-  async me(@CurrentUser() user: PrismaUser): Promise<User> {
+  async me(@CurrentUser() user: PrismaUser): Promise<UserType> {
     return {
       active: user.active,
       email: user.email,
