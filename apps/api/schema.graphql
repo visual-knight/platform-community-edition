@@ -38,8 +38,10 @@ type Mutation {
   updateProject(data: ProjectDataArgs!, projectId: String!): ProjectType!
   deleteTestSession(testSessionId: String!): TestSessionType!
   updateTestSession(data: TestSessionDataArgs!, testSessionId: String!): TestSessionType!
+  declineTestSession(comment: String, testSessionId: String!): TestSessionType!
   deleteTest(testId: String!): TestType!
   deleteVariation(variationId: String!): VariationType!
+  acceptNewBaseline(comment: String, testSessionId: String!, variationId: String!): VariationType!
   invokeTestSession(autoBaseline: Boolean!, capabilities: JSON!, misMatchTolerance: Float!, project: String!, testname: String!): String!
   uploadScreenshot(testSessionId: String!, base64Image: String!): TestSessionComparison
 }

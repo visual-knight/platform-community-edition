@@ -36,4 +36,19 @@ export class VariationResolver {
   ): Promise<VariationType> {
     return this.variationService.deleteVariation(variationId);
   }
+
+  @Mutation(returns => VariationType)
+  @UseGuards(GqlAuthGuard)
+  async acceptNewBaseline(
+    @Args('variationId') variationId: string,
+    @Args('testSessionId') testSessionId: string,
+    @Args({ name: 'comment', nullable: true, type: () => String })
+    comment: string
+  ): Promise<VariationType> {
+    return this.variationService.acceptNewBaseline(
+      variationId,
+      testSessionId,
+      comment
+    );
+  }
 }

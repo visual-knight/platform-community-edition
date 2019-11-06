@@ -4,6 +4,7 @@ import { merge } from 'lodash';
 import { TestSessionDataArgs } from './models/testsession-where.input';
 import { AwsS3Service } from '../shared/aws/aws-s3.service';
 import { PhotonService } from '@visual-knight/api-interface';
+import { TestSessionState } from '@generated/photonjs';
 
 @Injectable()
 export class TestsessionService {
@@ -55,5 +56,15 @@ export class TestsessionService {
 
   async testSessionCount(where: TestSessionDataArgs): Promise<number> {
     return (await this.testSessions(where)).length;
+  }
+
+  async rejectTestSession(testSessionId: string, comment: string) {
+    return this.photonService.testSessions.update({
+      where: { id: testSessionId },
+      data: {
+        state: TestSessionState.DECLINED,
+        stateComment: comment
+      }
+    });
   }
 }

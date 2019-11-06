@@ -4,9 +4,11 @@ import {
   DeleteVariationGQL,
   AllVariationsQuery,
   AllVariationsDocument,
-  GetVariationGQL
+  GetVariationGQL,
+  AcceptNewBaselineGQL,
+  DeclineTestSessionGQL
 } from '../../core/types';
-import { map } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,9 @@ export class VariationService {
   constructor(
     private allVariationsGQL: AllVariationsGQL,
     private deleteVariationGQL: DeleteVariationGQL,
-    private getVariaitonGQL: GetVariationGQL
+    private getVariaitonGQL: GetVariationGQL,
+    private acceptNewBaseLineGQL: AcceptNewBaselineGQL,
+    private declineTestSessionGQL: DeclineTestSessionGQL
   ) {}
 
   variationList(testId: string) {
@@ -48,5 +52,23 @@ export class VariationService {
         }
       }
     );
+  }
+
+  acceptNewBaseline(
+    comment: string,
+    testSessionId: string,
+    variationId: string
+  ) {
+    this.acceptNewBaseLineGQL
+      .mutate({ comment, testSessionId, variationId })
+      .pipe(first())
+      .subscribe();
+  }
+
+  declineTestSession(comment: string, testSessionId: string) {
+    this.declineTestSessionGQL
+      .mutate({ comment, testSessionId })
+      .pipe(first())
+      .subscribe();
   }
 }

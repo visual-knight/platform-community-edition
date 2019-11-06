@@ -45,11 +45,12 @@ export type Mutation = {
   updateProject: ProjectType;
   deleteTestSession: TestSessionType;
   updateTestSession: TestSessionType;
+  declineTestSession: TestSessionType;
   deleteTest: TestType;
   deleteVariation: VariationType;
+  acceptNewBaseline: VariationType;
   invokeTestSession: Scalars['String'];
   uploadScreenshot?: Maybe<TestSessionComparison>;
-  selectTestSession: Scalars['ID'];
 };
 
 export type MutationLoginArgs = {
@@ -118,11 +119,22 @@ export type MutationUpdateTestSessionArgs = {
   testSessionId: Scalars['String'];
 };
 
+export type MutationDeclineTestSessionArgs = {
+  comment?: Maybe<Scalars['String']>;
+  testSessionId: Scalars['String'];
+};
+
 export type MutationDeleteTestArgs = {
   testId: Scalars['String'];
 };
 
 export type MutationDeleteVariationArgs = {
+  variationId: Scalars['String'];
+};
+
+export type MutationAcceptNewBaselineArgs = {
+  comment?: Maybe<Scalars['String']>;
+  testSessionId: Scalars['String'];
   variationId: Scalars['String'];
 };
 
@@ -137,10 +149,6 @@ export type MutationInvokeTestSessionArgs = {
 export type MutationUploadScreenshotArgs = {
   testSessionId: Scalars['String'];
   base64Image: Scalars['String'];
-};
-
-export type MutationSelectTestSessionArgs = {
-  testSessionId: Scalars['ID'];
 };
 
 export type ProjectDataArgs = {
@@ -425,6 +433,27 @@ export type DeleteVariationMutation = { __typename?: 'Mutation' } & {
   deleteVariation: { __typename?: 'VariationType' } & Pick<VariationType, 'id'>;
 };
 
+export type AcceptNewBaselineMutationVariables = {
+  testSessionId: Scalars['String'];
+  variationId: Scalars['String'];
+  comment?: Maybe<Scalars['String']>;
+};
+
+export type AcceptNewBaselineMutation = { __typename?: 'Mutation' } & {
+  acceptNewBaseline: { __typename?: 'VariationType' } & VariationDataFragment;
+};
+
+export type DeclineTestSessionMutationVariables = {
+  testSessionId: Scalars['String'];
+  comment?: Maybe<Scalars['String']>;
+};
+
+export type DeclineTestSessionMutation = { __typename?: 'Mutation' } & {
+  declineTestSession: {
+    __typename?: 'TestSessionType';
+  } & TestSessionDataFragment;
+};
+
 export type VariationDataFragment = { __typename?: 'VariationType' } & Pick<
   VariationType,
   'id' | 'deviceName' | 'additionalData' | 'browserName'
@@ -436,20 +465,22 @@ export type VariationDataFragment = { __typename?: 'VariationType' } & Pick<
       >
     >;
     testSessions: Array<
-      { __typename?: 'TestSessionType' } & Pick<
-        TestSessionType,
-        | 'id'
-        | 'diffImageKey'
-        | 'imageKey'
-        | 'misMatchPercentage'
-        | 'misMatchTolerance'
-        | 'createdAt'
-        | 'state'
-        | 'stateComment'
-        | 'autoBaseline'
-      >
+      { __typename?: 'TestSessionType' } & TestSessionDataFragment
     >;
   };
+
+export type TestSessionDataFragment = { __typename?: 'TestSessionType' } & Pick<
+  TestSessionType,
+  | 'id'
+  | 'diffImageKey'
+  | 'imageKey'
+  | 'misMatchPercentage'
+  | 'misMatchTolerance'
+  | 'createdAt'
+  | 'state'
+  | 'stateComment'
+  | 'autoBaseline'
+>;
 
 export type SelectedTestSessionQueryVariables = {};
 
@@ -497,6 +528,19 @@ export const TestDataFragmentDoc = gql`
     }
   }
 `;
+export const TestSessionDataFragmentDoc = gql`
+  fragment TestSessionData on TestSessionType {
+    id
+    diffImageKey
+    imageKey
+    misMatchPercentage
+    misMatchTolerance
+    createdAt
+    state
+    stateComment
+    autoBaseline
+  }
+`;
 export const VariationDataFragmentDoc = gql`
   fragment VariationData on VariationType {
     id
@@ -508,17 +552,10 @@ export const VariationDataFragmentDoc = gql`
     }
     browserName
     testSessions {
-      id
-      diffImageKey
-      imageKey
-      misMatchPercentage
-      misMatchTolerance
-      createdAt
-      state
-      stateComment
-      autoBaseline
+      ...TestSessionData
     }
   }
+  ${TestSessionDataFragmentDoc}
 `;
 export const CurrentUserDocument = gql`
   query currentUser {
@@ -756,6 +793,50 @@ export class DeleteVariationGQL extends Apollo.Mutation<
   DeleteVariationMutationVariables
 > {
   document = DeleteVariationDocument;
+}
+export const AcceptNewBaselineDocument = gql`
+  mutation acceptNewBaseline(
+    $testSessionId: String!
+    $variationId: String!
+    $comment: String
+  ) {
+    acceptNewBaseline(
+      variationId: $variationId
+      testSessionId: $testSessionId
+      comment: $comment
+    ) {
+      ...VariationData
+    }
+  }
+  ${VariationDataFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AcceptNewBaselineGQL extends Apollo.Mutation<
+  AcceptNewBaselineMutation,
+  AcceptNewBaselineMutationVariables
+> {
+  document = AcceptNewBaselineDocument;
+}
+export const DeclineTestSessionDocument = gql`
+  mutation declineTestSession($testSessionId: String!, $comment: String) {
+    declineTestSession(testSessionId: $testSessionId, comment: $comment) {
+      ...TestSessionData
+    }
+  }
+  ${TestSessionDataFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DeclineTestSessionGQL extends Apollo.Mutation<
+  DeclineTestSessionMutation,
+  DeclineTestSessionMutationVariables
+> {
+  document = DeclineTestSessionDocument;
 }
 export const SelectedTestSessionDocument = gql`
   query selectedTestSession {

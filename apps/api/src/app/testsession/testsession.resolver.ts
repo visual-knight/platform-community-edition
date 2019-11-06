@@ -52,4 +52,14 @@ export class TestsessionResolver {
   ): Promise<TestSessionType> {
     return this.testSessionService.updateTestSession(testSessionId, data);
   }
+
+  @Mutation(returns => TestSessionType)
+  @UseGuards(GqlAuthGuard)
+  async declineTestSession(
+    @Args('testSessionId') testSessionId: string,
+    @Args({ name: 'comment', nullable: true, type: () => String })
+    comment: string
+  ): Promise<TestSessionType> {
+    return this.testSessionService.rejectTestSession(testSessionId, comment);
+  }
 }

@@ -111,11 +111,15 @@ export class VariationViewComponent
     variation: VariationType,
     comment: string
   ) {
-    // TODO: accept new baseline
+    this.variationService.acceptNewBaseline(
+      comment,
+      testSession.id,
+      variation.id
+    );
   }
 
   declineTestSession(testSession: TestSessionType, comment: string) {
-    // TODO: decline test session
+    this.variationService.declineTestSession(comment, testSession.id);
   }
 
   ngOnDestroy() {

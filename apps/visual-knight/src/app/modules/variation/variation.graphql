@@ -16,6 +16,26 @@ mutation deleteVariation($id: String!) {
   }
 }
 
+mutation acceptNewBaseline(
+  $testSessionId: String!
+  $variationId: String!
+  $comment: String
+) {
+  acceptNewBaseline(
+    variationId: $variationId
+    testSessionId: $testSessionId
+    comment: $comment
+  ) {
+    ...VariationData
+  }
+}
+
+mutation declineTestSession($testSessionId: String!, $comment: String) {
+  declineTestSession(testSessionId: $testSessionId, comment: $comment) {
+    ...TestSessionData
+  }
+}
+
 fragment VariationData on VariationType {
   id
   deviceName
@@ -26,24 +46,28 @@ fragment VariationData on VariationType {
   }
   browserName
   testSessions {
-    id
-    diffImageKey
-    # baselineRef {
-    #   id
-    # }
-    imageKey
-    misMatchPercentage
-    misMatchTolerance
-    createdAt
-    state
-    stateComment
-    autoBaseline
-    # stateChangedByUser {
-    #   forename
-    #   lastname
-    #   email
-    # }
+    ...TestSessionData
   }
+}
+
+fragment TestSessionData on TestSessionType {
+  id
+  diffImageKey
+  # baselineRef {
+  #   id
+  # }
+  imageKey
+  misMatchPercentage
+  misMatchTolerance
+  createdAt
+  state
+  stateComment
+  autoBaseline
+  # stateChangedByUser {
+  #   forename
+  #   lastname
+  #   email
+  # }
 }
 
 query selectedTestSession {

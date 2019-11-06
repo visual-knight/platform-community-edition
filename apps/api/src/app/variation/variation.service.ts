@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PhotonService } from '@visual-knight/api-interface';
+import { TestSessionState } from '@generated/photonjs';
 
 @Injectable()
 export class VariationService {
@@ -24,6 +25,28 @@ export class VariationService {
     return this.photonService.variations.findOne({
       where: { id: variationId },
       include: { baseline: true, testSessions: true }
+    });
+  }
+
+  async acceptNewBaseline(
+    variationId: string,
+    testSessionId: string,
+    comment: string
+  ) {
+    return this.photonService.variations.update({
+      where: { id: variationId },
+      data: {
+        baseline: { connect: { id: testSessionId } },
+        testSessions: {
+          update: {
+            where: { id: testSessionId },
+            data: { state: TestSessionState.ACCEPTED, stateComment: comment }
+          }
+        }
+      },
+      include: {
+        testSessions: true
+      }
     });
   }
 }

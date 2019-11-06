@@ -45,8 +45,8 @@ export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
   }
 
   isUnresolved() {
-    // TODO: state??
-    // return this.testSession.state === TestSessionState.UNRESOLVED;
+    // TODO: get state instead of string
+    return this.testSession.state === 'UNRESOLVED';
   }
 
   onSliderChanged(value: MatSlideToggleChange) {
