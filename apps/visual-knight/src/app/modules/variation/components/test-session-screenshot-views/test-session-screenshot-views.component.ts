@@ -8,9 +8,8 @@ import {
   EventEmitter
 } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material';
-// TODO: replace moment with fancy lib -> date-fns
-import * as moment from 'moment';
 import { TestSessionType, TestType, VariationType } from '../../../core/types';
+import { differenceInHours, parseISO, formatDistanceToNow } from 'date-fns';
 
 @Component({
   selector: 'visual-knight-test-session-screenshot-views',
@@ -36,8 +35,15 @@ export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
       this.isDiffView =
         testSession.diffImageKey !== null &&
         testSession.misMatchPercentage > testSession.misMatchTolerance;
-      if (moment().diff(testSession.createdAt, 'hours') <= 35) {
-        this.datetimeString = moment(testSession.createdAt).fromNow();
+      if (
+        differenceInHours(parseISO(testSession.createdAt), new Date()) <= 35
+      ) {
+        this.datetimeString = formatDistanceToNow(
+          parseISO(testSession.createdAt),
+          {
+            addSuffix: true
+          }
+        );
       } else {
         this.datetimeString = null;
       }

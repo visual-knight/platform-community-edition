@@ -45,7 +45,6 @@ export class TestSessionListComponent implements OnInit {
 }
 
 export function getTestSessionUsername(testSession: TestSessionType): string {
-  console.log(testSession.stateChangedByUser);
   if (!testSession.stateChangedByUser && testSession.state === 'ACCEPTED') {
     return testSession.autoBaseline ? 'By System (autoBaseline)' : 'By System';
   }
