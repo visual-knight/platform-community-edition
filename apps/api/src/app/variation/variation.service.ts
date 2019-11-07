@@ -7,6 +7,13 @@ export class VariationService {
   constructor(private photonService: PhotonService) {}
 
   async deleteVariation(variationId: string) {
+    await this.photonService.testSessions.deleteMany({
+      where: {
+        variation: {
+          id: variationId
+        }
+      }
+    });
     return this.photonService.variations.delete({
       where: { id: variationId },
       include: {
