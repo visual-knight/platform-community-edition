@@ -18,7 +18,7 @@ import { differenceInHours, parseISO, formatDistanceToNow } from 'date-fns';
 })
 export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
   @Input() testSession: TestSessionType;
-  @Input() test: TestType;
+  @Input() testName: String;
   @Input() variation: VariationType;
   @Output() accept: EventEmitter<boolean> = new EventEmitter();
 

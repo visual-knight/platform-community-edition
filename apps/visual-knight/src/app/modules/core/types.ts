@@ -508,6 +508,14 @@ export type SelectedTestSessionQuery = { __typename?: 'Query' } & Pick<
   Query,
   'selectedTestSession'
 >;
+
+export type GetTestNameQueryVariables = {
+  testId: Scalars['String'];
+};
+
+export type GetTestNameQuery = { __typename?: 'Query' } & {
+  test: { __typename?: 'TestType' } & Pick<TestType, 'name'>;
+};
 export const AuthTokenFragmentDoc = gql`
   fragment AuthToken on AuthToken {
     expiresIn
@@ -894,4 +902,21 @@ export class SelectedTestSessionGQL extends Apollo.Query<
   SelectedTestSessionQueryVariables
 > {
   document = SelectedTestSessionDocument;
+}
+export const GetTestNameDocument = gql`
+  query getTestName($testId: String!) {
+    test(testId: $testId) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetTestNameGQL extends Apollo.Query<
+  GetTestNameQuery,
+  GetTestNameQueryVariables
+> {
+  document = GetTestNameDocument;
 }

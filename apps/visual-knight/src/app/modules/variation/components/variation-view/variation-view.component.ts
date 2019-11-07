@@ -8,7 +8,8 @@ import {
   TestSessionType,
   TestType,
   VariationDataFragment,
-  SelectedTestSessionGQL
+  SelectedTestSessionGQL,
+  GetTestNameGQL
 } from '../../../core/types';
 import { VariationService } from '../../services/variation.service';
 import { map, filter, switchMap, first } from 'rxjs/operators';
@@ -20,10 +21,10 @@ import { map, filter, switchMap, first } from 'rxjs/operators';
 })
 export class VariationViewComponent
   implements OnInit, AfterViewInit, OnDestroy {
-  variation$: Observable<VariationDataFragment>; // TODO: get current variation
-  selectedTestSession$: Observable<TestSessionType>; // TODO: get selected testsession
-  testSessions$: Observable<TestSessionType[]>; // TODO: get test sessions
-  test$: Observable<TestType>; // TODO: Why do I need it?
+  variation$: Observable<VariationDataFragment>;
+  selectedTestSession$: Observable<TestSessionType>;
+  testSessions$: Observable<TestSessionType[]>;
+  testName$: Observable<String>;
   public isDiffView = false;
   public testId: string;
   public variationId: string;
@@ -35,7 +36,8 @@ export class VariationViewComponent
   constructor(
     private route: ActivatedRoute,
     private variationService: VariationService,
-    private selectedTestSessionGQL: SelectedTestSessionGQL
+    private selectedTestSessionGQL: SelectedTestSessionGQL,
+    private testGQL: GetTestNameGQL
   ) {}
 
   ngOnInit() {
@@ -53,6 +55,15 @@ export class VariationViewComponent
         this.testSessions$ = this.variation$.pipe(
           map(variation => variation.testSessions)
         );
+
+        this.testName$ = this.testGQL
+          .watch({ testId: this.testId })
+          .valueChanges.pipe(
+            filter(({ loading }) => !loading),
+            map(({ data }) => {
+              return data.test.name;
+            })
+          );
 
         combineLatest(this.variation$, this.route.queryParams)
           .pipe(first())

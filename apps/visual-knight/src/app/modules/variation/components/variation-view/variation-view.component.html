@@ -4,7 +4,7 @@
       <visual-knight-test-session-screenshot-views
         [testSession]="selectedTestSession"
         [variation]="variation"
-        [test]="test$ | async"
+        [testName]="testName$ | async"
         (accept)="onStateChange($event, selectedTestSession, variation)"
       ></visual-knight-test-session-screenshot-views>
     </div>

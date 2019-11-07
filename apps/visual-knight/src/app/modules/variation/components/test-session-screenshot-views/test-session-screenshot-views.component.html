@@ -30,7 +30,7 @@
   <span>Diff</span> <span fxFlex></span>
   <div fxLayout="column" class="variation-details">
     <div fxFlex="1" fxLayout="row">
-      <span class="mr-1">{{ test?.name }}</span>
+      <span class="mr-1">{{ testName }}</span>
       <span
         *ngIf="datetimeString; else shortDate"
         [matTooltip]="testSession.createdAt | date: 'short'"
