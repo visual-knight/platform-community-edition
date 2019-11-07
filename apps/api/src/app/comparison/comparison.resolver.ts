@@ -44,7 +44,6 @@ export class ComparisonResolver {
       .uploadScreenshot(base64Image, testSessionId)
       .pipe(
         switchMap(() => {
-          console.log('switchmap');
           return this.comparisonService.testSessionWatch(testSessionId);
         })
       );

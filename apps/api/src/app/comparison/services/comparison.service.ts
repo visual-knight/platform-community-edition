@@ -39,7 +39,8 @@ export class ComparisonService {
       include: {
         variation: {
           include: {
-            baseline: true
+            baseline: true,
+            test: true
           }
         }
       }
@@ -56,13 +57,14 @@ export class ComparisonService {
               testSession.autoBaseline === true)) &&
           testSession.isSameDimensions !== false
         ) {
-          console.log('No misMatchPercentage yet');
           throw new Error('No misMatchPercentage yet');
         }
 
         return {
           ...testSession,
-          link: `${environment.appDomain}/variation/${testSession.variation.id}`
+          link: `${environment.appDomain}variation/${
+            testSession.variation.test.id
+          }/${testSession.variation.id}`
         };
       }),
       retryWhen(errors =>
