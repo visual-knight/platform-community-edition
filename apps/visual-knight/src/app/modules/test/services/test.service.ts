@@ -3,9 +3,10 @@ import {
   AllTestsGQL,
   DeleteTestGQL,
   AllTestsQuery,
-  AllTestsDocument
+  AllTestsDocument,
+  TestType
 } from '../../core/types';
-import { map } from 'rxjs/operators';
+import { Apollo } from 'apollo-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ import { map } from 'rxjs/operators';
 export class TestService {
   constructor(
     private allTestsGQL: AllTestsGQL,
-    private deleteTestGQL: DeleteTestGQL
+    private deleteTestGQL: DeleteTestGQL,
+    private apollo: Apollo
   ) {}
 
   testList() {
@@ -40,5 +42,11 @@ export class TestService {
         }
       }
     );
+  }
+
+  setSelectedTest(test: TestType) {
+    this.apollo.getClient().writeData({
+      data: { selectedTest: test.id }
+    });
   }
 }

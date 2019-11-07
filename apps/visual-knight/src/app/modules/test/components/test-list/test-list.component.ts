@@ -2,9 +2,13 @@ import { Observable } from 'rxjs';
 import { Component, Input, OnInit } from '@angular/core';
 import { rowsAnimation } from '../../../shared/animations';
 import { TestsDataSource } from '../../test.datasource';
-import { TestType, TestSessionType } from '../../../core/types';
+import {
+  TestType,
+  TestSessionType,
+  SelectedTestGQL
+} from '../../../core/types';
 import { TestService } from '../../services/test.service';
-import { first } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-test-list',
@@ -15,19 +19,21 @@ import { first } from 'rxjs/operators';
 export class TestListComponent implements OnInit {
   @Input() dataSource: TestsDataSource;
   displayedColumns = ['name', 'variations', 'viewVariations'];
-  selectedTestId: Observable<string>;
+  selectedTestId: Observable<
+    string
+  > = this.selectedTestGQL
+    .watch()
+    .valueChanges.pipe(map(({ data }) => data.selectedTest));
 
-  constructor(private testService: TestService) {}
+  constructor(
+    private testService: TestService,
+    private selectedTestGQL: SelectedTestGQL
+  ) {}
 
   ngOnInit() {}
 
-  onClickRow(row: TestType) {
-    // TODO: implement selected test id into client side graphql
-    // this.store.dispatch(new SelectTestIdAction(row.id));
-  }
-
-  lastTestSessionIsSuccessfull(testSession: TestSessionType): boolean {
-    return testSession.misMatchPercentage < testSession.misMatchTolerance;
+  onClickRow(test: TestType) {
+    this.testService.setSelectedTest(test);
   }
 
   onDeleteTest(test: TestType) {

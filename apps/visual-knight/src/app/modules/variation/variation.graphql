@@ -45,6 +45,7 @@ fragment VariationData on VariationType {
     id
   }
   browserName
+  isLastSuccessful @client
   testSessions {
     ...TestSessionData
   }
@@ -56,6 +57,7 @@ fragment TestSessionData on TestSessionType {
   # baselineRef {
   #   id
   # }
+  isSuccessful @client
   imageKey
   misMatchPercentage
   misMatchTolerance

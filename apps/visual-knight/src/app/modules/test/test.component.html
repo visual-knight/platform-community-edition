@@ -5,14 +5,7 @@
     <div class="mat-elevation-z8 mt-1">
       <visual-knight-test-list
         [dataSource]="testDataSource"
-        *ngIf="(filteredTestList$ | async); else loadingTemplate"
       ></visual-knight-test-list>
     </div>
   </div>
 </div>
-
-<ng-template #loadingTemplate>
-  <div class="loading-container">
-    <mat-spinner></mat-spinner>
-  </div>
-</ng-template>

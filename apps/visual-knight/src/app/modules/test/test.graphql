@@ -27,3 +27,7 @@ fragment TestData on TestType {
     }
   }
 }
+
+query selectedTest {
+  selectedTest @client
+}

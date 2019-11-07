@@ -179,6 +179,7 @@ export type Query = {
   variations: Array<VariationType>;
   variationsCount: Scalars['Int'];
   selectedTestSession: Scalars['ID'];
+  selectedTest: Scalars['ID'];
 };
 
 export type QueryProjectArgs = {
@@ -254,6 +255,7 @@ export type TestSessionType = {
   autoBaseline: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];
   stateChangedByUser?: Maybe<UserType>;
+  isSuccessful: Scalars['Boolean'];
 };
 
 export type TestType = {
@@ -289,6 +291,7 @@ export type VariationType = {
   additionalData?: Maybe<Scalars['JSON']>;
   baseline?: Maybe<TestSessionType>;
   testSessions: Array<TestSessionType>;
+  isLastSuccessful: Scalars['Boolean'];
 };
 export type CurrentUserQueryVariables = {};
 
@@ -411,6 +414,13 @@ export type TestDataFragment = { __typename?: 'TestType' } & Pick<
     >;
   };
 
+export type SelectedTestQueryVariables = {};
+
+export type SelectedTestQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'selectedTest'
+>;
+
 export type GetVariationQueryVariables = {
   variationId: Scalars['String'];
 };
@@ -458,7 +468,7 @@ export type DeclineTestSessionMutation = { __typename?: 'Mutation' } & {
 
 export type VariationDataFragment = { __typename?: 'VariationType' } & Pick<
   VariationType,
-  'id' | 'deviceName' | 'additionalData' | 'browserName'
+  'id' | 'deviceName' | 'additionalData' | 'browserName' | 'isLastSuccessful'
 > & {
     baseline: Maybe<
       { __typename?: 'TestSessionType' } & Pick<
@@ -475,6 +485,7 @@ export type TestSessionDataFragment = { __typename?: 'TestSessionType' } & Pick<
   TestSessionType,
   | 'id'
   | 'diffImageKey'
+  | 'isSuccessful'
   | 'imageKey'
   | 'misMatchPercentage'
   | 'misMatchTolerance'
@@ -541,6 +552,7 @@ export const TestSessionDataFragmentDoc = gql`
   fragment TestSessionData on TestSessionType {
     id
     diffImageKey
+    isSuccessful @client
     imageKey
     misMatchPercentage
     misMatchTolerance
@@ -565,6 +577,7 @@ export const VariationDataFragmentDoc = gql`
       id
     }
     browserName
+    isLastSuccessful @client
     testSessions {
       ...TestSessionData
     }
@@ -754,6 +767,21 @@ export class DeleteTestGQL extends Apollo.Mutation<
   DeleteTestMutationVariables
 > {
   document = DeleteTestDocument;
+}
+export const SelectedTestDocument = gql`
+  query selectedTest {
+    selectedTest @client
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SelectedTestGQL extends Apollo.Query<
+  SelectedTestQuery,
+  SelectedTestQueryVariables
+> {
+  document = SelectedTestDocument;
 }
 export const GetVariationDocument = gql`
   query getVariation($variationId: String!) {

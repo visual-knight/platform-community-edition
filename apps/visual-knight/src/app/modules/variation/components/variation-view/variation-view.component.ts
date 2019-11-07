@@ -96,10 +96,6 @@ export class VariationViewComponent
     });
   }
 
-  isSuccessfull(testSession: TestSessionType) {
-    return testSession.misMatchPercentage < testSession.misMatchTolerance;
-  }
-
   onStateChange(
     accept: boolean,
     testSession: TestSessionType,

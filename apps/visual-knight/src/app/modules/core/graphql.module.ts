@@ -7,8 +7,7 @@ import { ApolloLink } from 'apollo-link';
 import { HttpHeaders } from '@angular/common/http';
 import { onError } from 'apollo-link-error';
 import { Router } from '@angular/router';
-import { typeDefs } from './schema';
-// import { resolvers, typeDefs } from './schema';
+import { resolvers, typeDefs } from './schema';
 
 const uri = environment.graphql.uri;
 export function createApollo(httpLink: HttpLink, router: Router) {
@@ -45,7 +44,7 @@ export function createApollo(httpLink: HttpLink, router: Router) {
   return {
     cache,
     typeDefs,
-    resolvers: {},
+    resolvers,
     link: authMiddleware.concat(logoutLink.concat(http)),
     defaultOptions: {
       query: { fetchPolicy: 'network-only' },

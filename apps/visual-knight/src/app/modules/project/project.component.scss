@@ -1,0 +1,55 @@
+mat-toolbar {
+  margin: 0 .333333rem
+}
+
+.name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+mat-card {
+
+  mat-card-content {
+    color: white;
+    padding: 50px 0;
+  }
+
+  &:hover {
+    .overlay {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s;
+
+    .overlay-content {
+      padding: 20px 24px 24px;
+      height: 100%;
+
+      .overlay-actions {
+        .mat-icon-button {
+          background: white; // color: $color__text-dark;
+          box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+          0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+        }
+      }
+    }
+  }
+
+  mat-card-footer {
+    padding: 20px 24px;
+    background-color: #FFF;
+  }
+}
