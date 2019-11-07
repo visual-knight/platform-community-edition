@@ -1,8 +1,8 @@
 .header-topnav {
-  margin:0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
   background-color: #ffffff;
-	// box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+  // box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
   position: relative;
   z-index: 999;
   .container {
@@ -29,7 +29,7 @@
     height: 48px;
     display: flex;
     align-items: center;
-    padding-right: .67rem;
+    padding-right: 0.67rem;
   }
 }
 
@@ -41,7 +41,7 @@
   }
 }
 
-[dir=rtl] {
+[dir='rtl'] {
   .header-topnav {
     .topnav {
       flex-direction: row-reverse;

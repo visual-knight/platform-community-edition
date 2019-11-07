@@ -14,14 +14,14 @@
     transition: all $sidebarTrnTime ease-in;
   }
   .icon-menu .icon-menu-item {
-      display: inline-block;
+    display: inline-block;
   }
   .icon-menu .icon-menu-item button {
-      min-width: auto;
-      margin: 4px;
+    min-width: auto;
+    margin: 4px;
   }
   .icon-menu > .mat-divider {
-      margin: 1rem 0;
+    margin: 1rem 0;
   }
   .nav-item-sep {
     padding: 0;
@@ -44,7 +44,7 @@
         overflow: hidden;
         // transition: all $sidebarTrnTime $transitionTiming;
         opacity: 1;
-        &.lvl2 a, 
+        &.lvl2 a,
         &.lvl3 a {
           height: 44px;
         }
@@ -82,24 +82,22 @@
         line-height: 1;
         height: 16px;
         width: 16px;
-        transition: transform .3s cubic-bezier(.35,0,.25,1);
+        transition: transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);
       }
     }
   }
 }
 
-
 .sidebar-full .sidenav-hold {
-  
   li {
     ul {
       position: relative;
       max-height: 0;
       overflow: hidden;
-      transition: max-height .4s cubic-bezier(.35,0,.25,1);
-      &::after, 
+      transition: max-height 0.4s cubic-bezier(0.35, 0, 0.25, 1);
+      &::after,
       &::before {
-        content: "";
+        content: '';
         left: 0;
         position: absolute;
         width: 100%;
@@ -107,27 +105,27 @@
         z-index: 3;
       }
       &::after {
-        background: linear-gradient(-180deg,rgba(0, 0 ,0 , .06), transparent);
+        background: linear-gradient(-180deg, rgba(0, 0, 0, 0.06), transparent);
         bottom: 0;
       }
       &::before {
-        background: linear-gradient(180deg,rgba(0, 0, 0, .1),transparent);
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), transparent);
         top: 0;
       }
     }
-    
+
     &.open,
     &.open li.open {
-      background: rgba(0,0,0,.02);
+      background: rgba(0, 0, 0, 0.02);
     }
-    &.open > div > ul, 
+    &.open > div > ul,
     &.open > ul {
       max-height: 1000px;
-      background: rgba(0,0,0,.005);
+      background: rgba(0, 0, 0, 0.005);
     }
     &.open > div > a .menu-caret,
     &.open > a .menu-caret {
-      transform: rotate(90deg)
+      transform: rotate(90deg);
     }
   }
   a {
@@ -160,13 +158,13 @@
     .menuitem-badge {
       display: none;
     }
-    &:hover > div > ul.submenu, 
+    &:hover > div > ul.submenu,
     &:hover > ul.submenu {
       max-height: 1000px;
       visibility: visible;
       opacity: 1;
       transform: translateY(0);
-      transition: all 0.4s cubic-bezier(.35,0,.25,1);
+      transition: all 0.4s cubic-bezier(0.35, 0, 0.25, 1);
     }
     ul.submenu {
       overflow: visible;
@@ -178,9 +176,10 @@
       visibility: hidden;
       opacity: 0;
       transform: translateY(10px);
-      box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+      box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
+        0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
       // a {
-        
+
       // }
       &.lvl2 > li > a,
       &.lvl3 > li > a {
@@ -240,7 +239,7 @@
   }
 }
 
-[dir=rtl] {
+[dir='rtl'] {
   &.sidebar-full {
     .sidenav-hold {
       a {

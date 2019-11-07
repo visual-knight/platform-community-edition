@@ -24,12 +24,12 @@
     width: auto;
     height: 20px;
   }
-} 
+}
 
 .app-user {
   text-align: center;
   width: 100%;
-  padding: 1rem 0 .4rem;
+  padding: 1rem 0 0.4rem;
   .app-user-photo {
     width: 72px;
     margin: 0 auto 8px;
@@ -51,13 +51,13 @@
   }
   .app-user-name {
     display: block;
-    font-size: .875rem;
+    font-size: 0.875rem;
     font-weight: 300;
-    color: rgba(0, 0, 0, .96);
+    color: rgba(0, 0, 0, 0.96);
     margin-left: -2px;
   }
 }
-[dir=rtl] {
+[dir='rtl'] {
   .branding {
     top: 0;
     left: auto !important;
@@ -66,5 +66,5 @@
       margin-right: 0;
       margin-left: 8px;
     }
-  } 
+  }
 }

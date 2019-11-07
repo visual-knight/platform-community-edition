@@ -27,13 +27,13 @@
   overflow: hidden;
 }
 .timeline::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 40px;
   bottom: 0;
   left: 24px;
   width: 1px;
-  background-color: rgba(0, 0, 0, .12);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 .timeline .timeline-item {
   width: 100%;
@@ -73,7 +73,7 @@
   margin-bottom: 8px;
 }
 
-[dir=rtl] {
+[dir='rtl'] {
   .profile-sidebar .profile-nav .mat-list-item .mat-icon {
     margin-right: 0;
     margin-left: 8px;
