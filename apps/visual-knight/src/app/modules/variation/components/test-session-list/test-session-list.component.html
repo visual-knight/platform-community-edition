@@ -55,6 +55,7 @@
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row
     *matRowDef="let testSession; columns: displayedColumns"
+    [class.selected]="(selectedTestSessionId$ | async) === testSession.id"
     (click)="onSelectTestSession(testSession)"
   ></mat-row>
 </mat-table>

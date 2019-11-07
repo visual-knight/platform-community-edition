@@ -64,7 +64,7 @@ export class ComparisonService {
           ...testSession,
           link: `${environment.appDomain}variation/${
             testSession.variation.test.id
-          }/${testSession.variation.id}`
+          }/${testSession.variation.id}?testSessionId=${testSession.id}`
         };
       }),
       retryWhen(errors =>

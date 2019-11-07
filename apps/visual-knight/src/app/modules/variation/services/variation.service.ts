@@ -75,9 +75,9 @@ export class VariationService {
       .subscribe();
   }
 
-  setSelectedTestSession(testSession: TestSessionType) {
+  setSelectedTestSession(testSessionId: string) {
     this.apollo.getClient().writeData({
-      data: { selectedTestSession: testSession.id }
+      data: { selectedTestSession: testSessionId }
     });
   }
 }

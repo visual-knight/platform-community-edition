@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { TestSessionsDataSource } from '../variation-view/testsessions.datasource';
-import { TestSessionType } from '../../../core/types';
+import { TestSessionType, SelectedTestSessionGQL } from '../../../core/types';
 import { formatDistanceToNow, differenceInHours, parseISO } from 'date-fns';
 import { VariationService } from '../../services/variation.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'visual-knight-test-session-list',
@@ -21,7 +22,14 @@ export class TestSessionListComponent implements OnInit {
     'hasDiff'
   ];
 
-  constructor(private variationService: VariationService) {}
+  selectedTestSessionId$ = this.selectedTestSessionGQL
+    .watch()
+    .valueChanges.pipe(map(({ data }) => data.selectedTestSession));
+
+  constructor(
+    private variationService: VariationService,
+    private selectedTestSessionGQL: SelectedTestSessionGQL
+  ) {}
 
   ngOnInit() {}
 
@@ -36,7 +44,7 @@ export class TestSessionListComponent implements OnInit {
   }
 
   onSelectTestSession(testSession: TestSessionType) {
-    this.variationService.setSelectedTestSession(testSession);
+    this.variationService.setSelectedTestSession(testSession.id);
   }
 
   getUsername(testSession: TestSessionType) {

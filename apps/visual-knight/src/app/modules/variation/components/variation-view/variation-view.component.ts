@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -35,7 +35,7 @@ export class VariationViewComponent
   constructor(
     private route: ActivatedRoute,
     private variationService: VariationService,
-    private selectedTestSession: SelectedTestSessionGQL
+    private selectedTestSessionGQL: SelectedTestSessionGQL
   ) {}
 
   ngOnInit() {
@@ -54,16 +54,17 @@ export class VariationViewComponent
           map(variation => variation.testSessions)
         );
 
-        this.variation$
-          .pipe(
-            first(),
-            map(variation => variation.testSessions)
-          )
-          .subscribe(testSessions =>
-            this.variationService.setSelectedTestSession(testSessions[0])
-          );
+        combineLatest(this.variation$, this.route.queryParams)
+          .pipe(first())
+          .subscribe(([variation, queryParams]) => {
+            if (queryParams.testSessionId) {
+            }
+            this.variationService.setSelectedTestSession(
+              queryParams.testSessionId || variation.testSessions[0].id
+            );
+          });
 
-        this.selectedTestSession$ = this.selectedTestSession
+        this.selectedTestSession$ = this.selectedTestSessionGQL
           .watch()
           .valueChanges.pipe(
             map(({ data }) => data && data.selectedTestSession),
