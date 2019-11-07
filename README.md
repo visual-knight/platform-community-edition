@@ -20,7 +20,7 @@ We use Postgres as database but you can use others too.
 Prisma supports following databases at the moment:
 
 - PostgreSQL
-- SQLite
+- SQLite: unstable (photon releases required)
 - Mysql
 - MongoDB: coming soon (waiting for prisma2 photon support)
 

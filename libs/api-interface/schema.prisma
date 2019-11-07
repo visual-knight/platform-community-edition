@@ -1,4 +1,5 @@
 // Postgres
+// https://github.com/prisma/prisma2/blob/master/docs/core/connectors/postgresql.md
 datasource db {
   provider = "postgresql"
   url      = env("VK_POSTGRES_URL")
@@ -11,9 +12,10 @@ datasource db {
 // }
 
 // Mysql
+// https://github.com/prisma/prisma2/blob/master/docs/core/connectors/mysql.md
 // datasource db {
 //   provider = "mysql"
-//   url      = env("VK_POSTGRES_URL")
+//   url      = env("VK_MYSQL_URL")
 // }
 
 generator photon {
