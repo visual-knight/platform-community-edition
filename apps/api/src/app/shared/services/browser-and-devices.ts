@@ -8,7 +8,8 @@ export enum Browser {
 
 export enum OS {
   WINDOWS = 'Windows',
-  MACOS = 'Mac OS'
+  MACOS = 'Mac OS',
+  PUPPETEER = 'Puppeteer'
 }
 
 export enum Platform {
@@ -49,6 +50,9 @@ export function getDevice(name: string): OS | Platform | UNKNOWN {
   }
   if (/win|xp/.test(name.toLowerCase())) {
     return OS.WINDOWS;
+  }
+  if (/puppeteer/.test(name.toLowerCase())) {
+    return OS.PUPPETEER;
   }
 
   return 'Unknown';
