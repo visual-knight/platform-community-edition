@@ -16,12 +16,10 @@
   </ng-container>
 
   <ng-container matColumnDef="misMatchTolerance">
-    <mat-header-cell *matHeaderCellDef
-      >Mismatch / Tolerance in %</mat-header-cell
-    >
+    <mat-header-cell *matHeaderCellDef>Tolerance / Mismatch</mat-header-cell>
     <mat-cell *matCellDef="let testSession">
-      {{ testSession.misMatchPercentage }} /
-      {{ testSession.misMatchTolerance * 100 }}
+      {{ testSession.misMatchTolerance * 100 | number }} % /
+      {{ testSession.misMatchPercentage * 100 | number }} %
     </mat-cell>
   </ng-container>
 
