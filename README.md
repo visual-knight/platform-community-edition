@@ -19,9 +19,10 @@ We use for our data handling [Prisma 2](https://www.prisma.io/). It is an excell
 We use Postgres as database but you can use others too.
 Prisma supports following databases at the moment:
 
-- Mysql
-- MongoDB
 - PostgreSQL
+- SQLite
+- Mysql
+- MongoDB: coming soon (waiting for prisma2 photon support)
 
 ## The web app
 
@@ -31,3 +32,22 @@ The web app is the graphical user interface in Visual Knight. Here you can manag
 
 This backend returns all the information for the web app based on [Graphql](https://graphql.org/).
 This API also provides the possibility to create new tests and return there status. It is used for communication with the testing tools like CodeceptJS. The backend framework is written with [NestJS](https://nestjs.com/)
+
+## Setup
+
+Clone the repository
+
+`npm install`
+
+You need to decied which platform you want to use. At the moment it is easy. We just support on premise but more and more providers are coming soon. So you need to deploy the api and ui to your system or you can start them with following commands:
+
+### So first we have to create the database
+
+1. go into libs/api-interface
+2. you can find a file with the name schema.prisma
+3. Setup your databse (Choose between Postgres, Mysql and SQLite)
+
+### Start the servers
+
+- Starting the api server: `npx ng run api:serve`
+- Starting the ui server: `npx ng run visual-knight:serve`

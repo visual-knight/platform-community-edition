@@ -1,7 +1,20 @@
+// Postgres
 datasource db {
   provider = "postgresql"
   url      = env("VK_POSTGRES_URL")
 }
+
+// SQLite
+// datasource db {
+//   provider = "sqlite"
+//   url      = "file:../../visual-knight.db"
+// }
+
+// Mysql
+// datasource db {
+//   provider = "mysql"
+//   url      = env("VK_POSTGRES_URL")
+// }
 
 generator photon {
   provider     = "photonjs"
