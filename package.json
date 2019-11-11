@@ -31,7 +31,8 @@
     "deploy": "npm run zip && npx serverless deploy --verbose",
     "generate": "npm run generate:photon && npm run generate:vk-types",
     "generate:photon": "cd libs/api-interface && prisma2 generate",
-    "generate:vk-types": "graphql-codegen"
+    "generate:vk-types": "graphql-codegen",
+    "prismadev": "cd libs/api-interface && npx prisma2 dev"
   },
   "private": true,
   "dependencies": {
@@ -81,7 +82,7 @@
     "perfect-scrollbar": "^1.4.0",
     "pixelmatch": "^5.1.0",
     "pngjs": "^3.4.0",
-    "prisma2": "^2.0.0-preview015",
+    "prisma2": "^2.0.0-preview016.1",
     "reflect-metadata": "^0.1.12",
     "rxjs": "~6.4.0",
     "uuid-apikey": "^1.4.3",

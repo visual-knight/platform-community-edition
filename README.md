@@ -45,7 +45,13 @@ You need to decied which platform you want to use. At the moment it is easy. We 
 
 1. go into libs/api-interface
 2. you can find a file with the name schema.prisma
-3. Setup your databse (Choose between Postgres, Mysql and SQLite)
+3. Setup your databse (Choose between Postgres, Mysql and SQLite) *NOTE: Set the environment variable!*
+4. Create initial database statements for the application `npx prisma2 lift save --name init`
+5. Lift up the database with the structure `npx prisma2 lift up`
+6. Generate the photon library `npx prisma2 generate`
+7. Create the first user `EMAIL=ADD_YOUR_EMAIL_ADDRESS PASSWORD=yourPassw0rd! node postinstall.js`
+
+Everything is done and we can start the UI and API Server ;)
 
 ### Start the servers
 

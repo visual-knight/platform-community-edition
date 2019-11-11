@@ -6,7 +6,7 @@ export class PhotonService extends Photon
   implements OnModuleInit, OnModuleDestroy {
   constructor() {
     super({
-      debug: true
+      log: ['INFO', 'QUERY']
     });
   }
 
