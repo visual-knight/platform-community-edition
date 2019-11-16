@@ -1,4 +1,4 @@
-const { Photon } = require('@generated/photonjs');
+const { Photon, Role } = require('@generated/photonjs');
 const uuidAPIKey = require('uuid-apikey');
 const { genSaltSync, hash } = require('bcryptjs');
 
@@ -21,7 +21,8 @@ async function createAdminUser(email, password) {
     data: {
       email,
       password: hashedPassword,
-      apiKey: uuidAPIKey.create({ noDashes: true }).apiKey
+      apiKey: uuidAPIKey.create({ noDashes: true }).apiKey,
+      role: Role.ADMIN
     }
   });
 
@@ -29,9 +30,7 @@ async function createAdminUser(email, password) {
   console.log('## CREATING ADMIN USER ##');
   console.log('#########################');
   console.log('');
-  console.log(
-    `The user with the email "${email}" and password "${password}" was created`
-  );
+  console.log(`The user with the email "${email}" and password "${password}" was created`);
   console.log(`The Api key is: ${adminUser.apiKey}`);
 }
 
