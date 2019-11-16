@@ -15,6 +15,9 @@ export const environment = {
   // graphql
   schemaPath: process.env.VK_GRAPHQL_SCHEMA_PATH,
 
+  // database uri
+  db: process.env.VK_DATABASE,
+
   // email
   email: {
     user: process.env.VK_EMAIL_USER,
