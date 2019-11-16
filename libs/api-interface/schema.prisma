@@ -1,22 +1,10 @@
-// Postgres
-// https://github.com/prisma/prisma2/blob/master/docs/core/connectors/postgresql.md
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("VK_DATABASE")
-// }
-
-// SQLite
+// SQLite / Mysql / Postgres
 datasource db {
+  // https://github.com/prisma/prisma2/blob/master/docs/core/connectors
+  // mysql | sqlite | postgresql
   provider = "sqlite"
   url      = env("VK_DATABASE")
 }
-
-// Mysql
-// https://github.com/prisma/prisma2/blob/master/docs/core/connectors/mysql.md
-// datasource db {
-//   provider = "mysql"
-//   url      = env("VK_DATABASE")
-// }
 
 generator photon {
   provider     = "photonjs"
