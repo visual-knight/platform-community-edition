@@ -1,26 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import {
-  PhotonService,
-  CloudProviderService
-} from '@visual-knight/api-interface';
-import {
-  DesiredCapabilities,
-  getBrowserAndDevice
-} from '../../shared/services/browser-and-devices';
+import { PhotonService, CloudProviderService } from '@visual-knight/api-interface';
+import { DesiredCapabilities, getBrowserAndDevice } from '../../shared/services/browser-and-devices';
 import { Test, TestSession, TestSessionState } from '@generated/photonjs';
-import {
-  Observable,
-  defer,
-  zip,
-  range,
-  timer,
-  combineLatest,
-  Subject,
-  of,
-  from
-} from 'rxjs';
+import { Observable, defer, zip, range, timer, combineLatest, Subject, of, from } from 'rxjs';
 import { TestSessionComparison } from '../models/testsession-comparison';
-import { map, retryWhen, tap, switchMap, mergeMap } from 'rxjs/operators';
+import { map, retryWhen, switchMap, mergeMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { CreateDiffResult } from '../models/diffresult.model';
 import { PNG } from 'pngjs';
@@ -28,10 +12,7 @@ import Pixelmatch from 'pixelmatch';
 
 @Injectable()
 export class ComparisonService {
-  constructor(
-    private photonService: PhotonService,
-    private cloudProviderService: CloudProviderService
-  ) {}
+  constructor(private photonService: PhotonService, private cloudProviderService: CloudProviderService) {}
 
   async testSession(testSessionId: string) {
     return this.photonService.testSessions.findOne({
@@ -51,10 +32,8 @@ export class ComparisonService {
     return defer(() => this.testSession(testSessionId)).pipe(
       map(testSession => {
         if (
-          ((testSession.misMatchPercentage === null &&
-            testSession.variation.baseline !== null) ||
-            (testSession.misMatchPercentage === null &&
-              testSession.autoBaseline === true)) &&
+          ((testSession.misMatchPercentage === null && testSession.variation.baseline !== null) ||
+            (testSession.misMatchPercentage === null && testSession.autoBaseline === true)) &&
           testSession.isSameDimensions !== false
         ) {
           throw new Error('No misMatchPercentage yet');
@@ -62,14 +41,12 @@ export class ComparisonService {
 
         return {
           ...testSession,
-          link: `${environment.appDomain}variation/${
-            testSession.variation.test.id
-          }/${testSession.variation.id}?testSessionId=${testSession.id}`
+          link: `${environment.appDomain}variation/${testSession.variation.test.id}/${
+            testSession.variation.id
+          }?testSessionId=${testSession.id}`
         };
       }),
-      retryWhen(errors =>
-        zip(range(1, 100), errors).pipe(mergeMap(i => timer(400)))
-      )
+      retryWhen(errors => zip(range(1, 100), errors).pipe(mergeMap(i => timer(400))))
     );
   }
 
@@ -147,10 +124,7 @@ export class ComparisonService {
       const [variation] = await this.photonService.variations({
         where: {
           test: { id: test.id },
-          AND: [
-            { deviceName: { equals: deviceName } },
-            { browserName: { equals: browserName } }
-          ]
+          AND: [{ deviceName: { equals: deviceName } }, { browserName: { equals: browserName } }]
         }
       });
 
@@ -215,15 +189,9 @@ export class ComparisonService {
     return testSession.id;
   }
 
-  uploadScreenshot(
-    base64Image: string,
-    testSessionId: string
-  ): Observable<TestSession> {
+  uploadScreenshot(base64Image: string, testSessionId: string): Observable<TestSession> {
     return this.cloudProviderService
-      .saveScreenshotImage(
-        Buffer.from(base64Image, 'base64'),
-        `${testSessionId}.screenshot.png`
-      )
+      .saveScreenshotImage(Buffer.from(base64Image, 'base64'), `${testSessionId}.screenshot.png`)
       .pipe(
         switchMap(() =>
           from(
@@ -251,8 +219,7 @@ export class ComparisonService {
       switchMap(([baselineImage, srcImage]) => {
         const baseline = PNG.sync.read(baselineImage);
         const test = PNG.sync.read(srcImage);
-        const isSameDimensions =
-          baseline.width === test.width && baseline.height === test.height;
+        const isSameDimensions = baseline.width === test.width && baseline.height === test.height;
 
         if (!isSameDimensions) {
           return of({
@@ -265,17 +232,10 @@ export class ComparisonService {
           width: baseline.width,
           height: baseline.height
         });
-        const pixelMisMatchCount = Pixelmatch(
-          baseline.data,
-          test.data,
-          diff.data,
-          baseline.width,
-          baseline.height,
-          {
-            threshold: environment.diffOptions.threshold,
-            includeAA: environment.diffOptions.includeAA
-          }
-        );
+        const pixelMisMatchCount = Pixelmatch(baseline.data, test.data, diff.data, baseline.width, baseline.height, {
+          threshold: environment.diffOptions.threshold,
+          includeAA: environment.diffOptions.includeAA
+        });
 
         const subject: Subject<Buffer> = new Subject();
         diff.pack();
@@ -290,95 +250,60 @@ export class ComparisonService {
 
         return subject.asObservable().pipe(
           switchMap(buffer => {
-            return this.cloudProviderService
-              .saveScreenshotImage(buffer, diffImageKey)
-              .pipe(
-                switchMap(() =>
-                  from(
-                    this.photonService.testSessions
-                      .update({
-                        where: { id: testSessionId },
-                        data: { imageKey: diffImageKey }
-                      })
-                      .then()
-                  )
-                ),
-                map(() => ({
-                  misMatchPercentage:
-                    (pixelMisMatchCount * 100) /
-                    (baseline.width * baseline.height) /
-                    100,
-                  isSameDimensions,
-                  diffImageKey
-                }))
-              );
+            return this.cloudProviderService.saveScreenshotImage(buffer, diffImageKey).pipe(
+              switchMap(() =>
+                from(
+                  this.photonService.testSessions
+                    .update({
+                      where: { id: testSessionId },
+                      data: { imageKey: diffImageKey }
+                    })
+                    .then()
+                )
+              ),
+              map(() => ({
+                misMatchPercentage: (pixelMisMatchCount * 100) / (baseline.width * baseline.height) / 100,
+                isSameDimensions,
+                diffImageKey
+              }))
+            );
           })
         );
       })
     );
   }
 
-  private processTestSessionImage(
-    testSessionId: string
-  ): Observable<TestSession> {
+  private processTestSessionImage(testSessionId: string): Observable<TestSession> {
     return this.loadTestSessionData(testSessionId).pipe(
-      switchMap(
-        ({
-          misMatchTolerance,
-          baselineRef,
-          autoBaseline,
-          variationId,
-          testSession
-        }) => {
-          if (baselineRef) {
-            console.log(`Create diff`);
-            return this.createDiff(
-              testSession.imageKey,
-              baselineRef.imageKey,
-              testSessionId
-            ).pipe(
-              switchMap(
-                ({ misMatchPercentage, diffImageKey, isSameDimensions }) => {
-                  console.log('Updated imaged data');
-                  return this.updateImageData(
-                    testSessionId,
-                    testSession.imageKey,
-                    misMatchTolerance < misMatchPercentage || !isSameDimensions
-                      ? 'UNRESOLVED'
-                      : 'ACCEPTED',
-                    diffImageKey,
-                    baselineRef.id,
-                    misMatchPercentage,
-                    isSameDimensions
-                  );
-                }
-              )
-            );
-          } else if (autoBaseline) {
-            console.log('Update auto baseline');
-            return this.updateAutoBaseline(
-              testSession.imageKey,
-              testSessionId,
-              variationId
-            );
-          } else {
-            console.log('No baseline image exists');
-            return this.updateImageData(
-              testSessionId,
-              testSession.imageKey,
-              'UNRESOLVED'
-            );
-          }
+      switchMap(({ misMatchTolerance, baselineRef, autoBaseline, variationId, testSession }) => {
+        if (baselineRef) {
+          console.log(`Create diff`);
+          return this.createDiff(testSession.imageKey, baselineRef.imageKey, testSessionId).pipe(
+            switchMap(({ misMatchPercentage, diffImageKey, isSameDimensions }) => {
+              console.log('Updated imaged data');
+              return this.updateImageData(
+                testSessionId,
+                testSession.imageKey,
+                misMatchTolerance < misMatchPercentage || !isSameDimensions ? 'UNRESOLVED' : 'ACCEPTED',
+                diffImageKey,
+                baselineRef.id,
+                misMatchPercentage,
+                isSameDimensions
+              );
+            })
+          );
+        } else if (autoBaseline) {
+          console.log('Update auto baseline');
+          return this.updateAutoBaseline(testSession.imageKey, testSessionId, variationId);
+        } else {
+          console.log('No baseline image exists');
+          return this.updateImageData(testSessionId, testSession.imageKey, 'UNRESOLVED');
         }
-      )
+      })
     );
   }
 
-  updateAutoBaseline(
-    imageKey: string,
-    testSessionId: string,
-    variationId: string
-  ): Observable<any> {
+  updateAutoBaseline(imageKey: string, testSessionId: string, variationId: string): Observable<any> {
     return from(
       this.photonService.variations
         .update({
@@ -442,9 +367,7 @@ export class ComparisonService {
         misMatchPercentage,
         isSameDimensions,
         state,
-        baselineForDiffRef: diffBaselineRef
-          ? { connect: { id: diffBaselineRef } }
-          : null
+        baselineForDiffRef: diffBaselineRef ? { connect: { id: diffBaselineRef } } : null
       }
     });
 

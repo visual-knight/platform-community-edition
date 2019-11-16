@@ -1,6 +1,6 @@
 import { Field, ObjectType, ID, Float } from 'type-graphql';
 import { TestSessionState } from '@generated/photonjs';
-import { DateTimeResolver, JSONResolver } from 'graphql-scalars';
+import { DateTimeResolver } from 'graphql-scalars';
 import { UserType } from '../../user/models/user';
 
 // export enum TestSessionState {
