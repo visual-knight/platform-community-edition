@@ -1,7 +1,9 @@
 export const environment = {
   production: true,
+  apiEndpoint: 'http://localhost:3333',
   graphql: {
-    uri: 'http://localhost:3333/graphql'
+    uri: '/graphql'
   },
-  screenshotsPath: 'http://localhost:3333/screenshots/'
+  recaptchaKey: 'YOUR_GOOGLE_RECAPTCHA_KEY',
+  screenshotsPath: '/screenshots/'
 };

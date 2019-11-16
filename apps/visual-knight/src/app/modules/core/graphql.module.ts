@@ -9,7 +9,7 @@ import { onError } from 'apollo-link-error';
 import { Router } from '@angular/router';
 import { resolvers, typeDefs } from './schema';
 
-const uri = environment.graphql.uri;
+const uri = environment.apiEndpoint + environment.graphql.uri;
 export function createApollo(httpLink: HttpLink, router: Router) {
   const cache = new InMemoryCache();
   const http = httpLink.create({ uri });
@@ -28,10 +28,7 @@ export function createApollo(httpLink: HttpLink, router: Router) {
   const logoutLink = onError(({ graphQLErrors, response }) => {
     if (graphQLErrors) {
       for (const err of graphQLErrors) {
-        if (
-          err.extensions.code === 'INTERNAL_SERVER_ERROR' &&
-          err.extensions.exception.status === 401
-        ) {
+        if (err.extensions.code === 'INTERNAL_SERVER_ERROR' && err.extensions.exception.status === 401) {
           localStorage.removeItem('visual-knight-token');
           router.navigateByUrl('/user');
         }

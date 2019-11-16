@@ -11,6 +11,7 @@ import { VariationModule } from './variation/variation.module';
 import { environment } from '../environments/environment';
 import { join } from 'path';
 import { ComparisonModule } from './comparison/comparison.module';
+import { CloudProviderOnpremModule } from '@visual-knight/cloud-provider-onprem';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { ComparisonModule } from './comparison/comparison.module';
     TestsessionModule,
     TestModule,
     VariationModule,
-    ComparisonModule
+    ComparisonModule,
+    CloudProviderOnpremModule
   ]
 })
 export class AppModule {}

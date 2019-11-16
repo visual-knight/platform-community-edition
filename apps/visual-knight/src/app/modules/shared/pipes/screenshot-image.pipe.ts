@@ -6,6 +6,6 @@ import { environment } from '../../../../environments/environment';
 })
 export class ScreenshotImagePipe implements PipeTransform {
   transform(value: any): any {
-    return environment.screenshotsPath + value;
+    return environment.apiEndpoint + environment.screenshotsPath + value;
   }
 }
