@@ -14,37 +14,25 @@ export class UserResolver {
 
   @Mutation(returns => UserType)
   @UseGuards(GqlAuthGuard)
-  async deleteUser(
-    @Args('id') id: string,
-    @CurrentUser() user: PrismaUser
-  ): Promise<UserType> {
+  async deleteUser(@Args('id') id: string, @CurrentUser() user: PrismaUser): Promise<UserType> {
     return this.userService.deleteUser(user, id);
   }
 
   @Mutation(returns => UserType)
   @UseGuards(GqlAuthGuard)
-  async updateUser(
-    @Args('data') data: UpdateUserInput,
-    @CurrentUser() user: PrismaUser
-  ): Promise<UserType> {
+  async updateUser(@Args('data') data: UpdateUserInput, @CurrentUser() user: PrismaUser): Promise<UserType> {
     return this.userService.updateUser(user, data);
   }
 
   @Mutation(returns => UserType)
   @UseGuards(GqlAuthGuard)
-  inviteNewUser(
-    @Args('email') email: string,
-    @CurrentUser() user: PrismaUser
-  ): Promise<UserType> {
+  inviteNewUser(@Args('email') email: string, @CurrentUser() user: PrismaUser): Promise<UserType> {
     return this.userService.inviteNewUser(user, email);
   }
 
   @Mutation(returns => AuthPayload)
   @UseGuards(GqlAuthGuard)
-  completeInvitation(
-    @Args('token') token: string,
-    @Args('password') password: string
-  ): Promise<AuthPayload> {
+  completeInvitation(@Args('token') token: string, @Args('password') password: string): Promise<AuthPayload> {
     return this.userService.completeInvitation(token, password);
   }
 
@@ -59,5 +47,11 @@ export class UserResolver {
       id: user.id,
       apiKey: user.apiKey
     };
+  }
+
+  @Query(returns => [UserType])
+  @UseGuards(GqlAuthGuard)
+  async users(): Promise<UserType[]> {
+    return this.userService.userList();
   }
 }

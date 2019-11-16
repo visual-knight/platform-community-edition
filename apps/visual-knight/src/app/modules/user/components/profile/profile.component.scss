@@ -1,0 +1,94 @@
+.profile {
+  .verification {
+    margin-bottom: 24px;
+  }
+
+  .splash {
+    background: white;
+    padding: 32px 8px;
+
+    border: 1px solid #e0e0e0;
+    //@include mat-elevation(1);
+
+    .left {
+      padding: 16px 32px;
+
+      .picture {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-right: 38px;
+
+        // @include mat-elevation(4);
+      }
+
+      .name {
+        font-size: 28px;
+      }
+
+      .description,
+      .contact {
+        margin-top: 6px;
+        font-size: 14px;
+        // color: $color__text-dark;
+
+        .icon {
+          font-size: 18px;
+          line-height: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      .actions {
+        margin-top: 6px;
+
+        .primary-button {
+          padding: 2px 32px;
+        }
+      }
+    }
+
+    .right {
+      padding: 16px 32px;
+      border-left: 1px solid #e0e0e0;
+
+      // @include lt-sm {
+      //   border-left: none;
+      // }
+
+      .info {
+        font-size: 14px;
+
+        .names {
+          .name {
+            font-weight: 500;
+            padding: 20px 0;
+          }
+        }
+
+        .values {
+          margin-left: 24px;
+          // color: mat-color($color-primary);
+        }
+
+        .name,
+        .value {
+          padding: 8px 0;
+        }
+      }
+
+      .social {
+        height: 40px;
+        font-size: 20px;
+        // color: mat-color($color-primary);
+        cursor: pointer;
+      }
+    }
+  }
+
+  .profile-tabs {
+    margin-top: 24px;
+    background: white;
+  }
+}

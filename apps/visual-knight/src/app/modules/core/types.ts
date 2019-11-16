@@ -166,6 +166,7 @@ export type ProjectType = {
 export type Query = {
   __typename?: 'Query';
   me: UserType;
+  users: Array<UserType>;
   project: ProjectType;
   projects: Array<ProjectType>;
   projectsCount: Scalars['Int'];
@@ -420,6 +421,17 @@ export type SelectedTestQuery = { __typename?: 'Query' } & Pick<
   Query,
   'selectedTest'
 >;
+
+export type UserlistQueryVariables = {};
+
+export type UserlistQuery = { __typename?: 'Query' } & {
+  users: Array<
+    { __typename?: 'UserType' } & Pick<
+      UserType,
+      'id' | 'email' | 'forename' | 'lastname' | 'active' | 'apiKey'
+    >
+  >;
+};
 
 export type GetVariationQueryVariables = {
   variationId: Scalars['String'];
@@ -790,6 +802,28 @@ export class SelectedTestGQL extends Apollo.Query<
   SelectedTestQueryVariables
 > {
   document = SelectedTestDocument;
+}
+export const UserlistDocument = gql`
+  query userlist {
+    users {
+      id
+      email
+      forename
+      lastname
+      active
+      apiKey
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserlistGQL extends Apollo.Query<
+  UserlistQuery,
+  UserlistQueryVariables
+> {
+  document = UserlistDocument;
 }
 export const GetVariationDocument = gql`
   query getVariation($variationId: String!) {

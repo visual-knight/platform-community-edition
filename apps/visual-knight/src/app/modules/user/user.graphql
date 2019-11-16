@@ -1,0 +1,10 @@
+query userlist {
+  users {
+    id
+    email
+    forename
+    lastname
+    active
+    apiKey
+  }
+}

@@ -1,0 +1,64 @@
+<div class="container" fxLayout="row wrap">
+  <mat-card
+    *ngIf="!(userNotVerified$ | async)"
+    fxFlex="100"
+    [@animate]="{ value: '*', params: { delay: '100ms', y: '-50px' } }"
+  >
+    <mat-card-content>
+      <!-- <visual-knight-verification-box class="verification"></vk-verification-box> -->
+    </mat-card-content>
+  </mat-card>
+
+  <div fxFlex="100" fxFlex.gt-sm="300px" [@animate]="{ value: '*', params: { delay: '100ms', x: '-50px' } }">
+    <mat-card class="profile-sidebar mb-1 pb-0" *ngIf="(user$ | async) as user">
+      <div class="propic text-center">
+        <img [src]="userProfilePicture$ | async" />
+      </div>
+      <div class="profile-title text-center mb-1">
+        <div class="main-title">{{ user.forename }} {{ user.lastname }}</div>
+        <div class="subtitle mb-05">
+          <!-- <mat-icon class="icon">mail</mat-icon> -->
+          <span>{{ user.email }}</span>
+        </div>
+      </div>
+      <div class="profile-actions text-center mb-1" *ngIf="(user$ | async) as user">
+        <button
+          *ngIf="user.apiKey"
+          class="m-05"
+          mat-raised-button
+          ngxClipboard
+          (cbOnSuccess)="copiedValue(user.apiKey)"
+          [cbContent]="user.apiKey"
+          [matTooltip]="user.apiKey"
+          color="primary"
+        >
+          Api Key
+        </button>
+      </div>
+    </mat-card>
+  </div>
+
+  <div
+    fxFlex="100"
+    fxFlex.gt-sm="calc(100% - 300px)"
+    [@animate]="{ value: '*', params: { delay: '100ms', x: '50px' } }"
+  >
+    <mat-card>
+      <mat-card-content>
+        <mat-tab-group class="profile-tabs clean-tabs" [selectedIndex]="activeTab">
+          <mat-tab label="ACCOUNT">
+            <!-- <visual-knight-account-management [user$]="user$"></visual-knight-account-management> -->
+          </mat-tab>
+          <mat-tab label="USER MANAGEMENT" [disabled]="!(isOwner$ | async)">
+            <!-- <visual-knight-user-management
+              [users$]="userList$"
+              (remove)="onDeleteUser($event)"
+              (resendInvitation)="onResendInvitation($event)"
+              (add)="onAddUser($event)"
+            ></visual-knight-user-management> -->
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

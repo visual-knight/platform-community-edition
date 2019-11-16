@@ -20,6 +20,19 @@ export class UserService {
     private photonService: PhotonService
   ) {}
 
+  async userList() {
+    return this.photonService.users({
+      select: {
+        email: true,
+        forename: true,
+        lastname: true,
+        active: true,
+        apiKey: true,
+        id: true
+      }
+    });
+  }
+
   async createUser(email: string, password: string): Promise<User> {
     const salt = genSaltSync(environment.saltRounds);
     const hashedPassword = await hash(password, salt);
@@ -42,10 +55,7 @@ export class UserService {
     return this.photonService.users.delete({ where: { id: userIdToDelete } });
   }
 
-  async updateUser(
-    user: User,
-    { email, forename, lastname }: UpdateUserInput
-  ): Promise<User> {
+  async updateUser(user: User, { email, forename, lastname }: UpdateUserInput): Promise<User> {
     return this.photonService.users.update({
       where: { id: user.id },
       data: {
@@ -83,10 +93,7 @@ export class UserService {
     return newUser;
   }
 
-  async completeInvitation(
-    token: string,
-    password: string
-  ): Promise<AuthPayload> {
+  async completeInvitation(token: string, password: string): Promise<AuthPayload> {
     const { email, exp } = this.jwtService.verify(token);
     const user = await this.photonService.users.findOne({ where: { email } });
     if (user.active) {

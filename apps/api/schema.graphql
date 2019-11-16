@@ -59,6 +59,7 @@ type ProjectType {
 
 type Query {
   me: UserType!
+  users: [UserType!]!
   project(projectId: String!): ProjectType!
   projects: [ProjectType!]!
   projectsCount: Int!
