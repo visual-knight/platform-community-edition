@@ -9,6 +9,9 @@ export class CloudProviderService {
   saveScreenshotImage(image: Buffer, filename: string): Observable<boolean> {
     throw new Error('Method not implemented.');
   }
+  deleteScreenshotImage(filename: string): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
   getScreenshotFilepath(filename: string): Promise<string> {
     throw new Error('Method not implemented.');
   }

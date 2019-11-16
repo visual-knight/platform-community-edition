@@ -1,13 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { PhotonService } from '@visual-knight/api-interface';
+import { PhotonService, CloudProviderService } from '@visual-knight/api-interface';
 
 @Injectable()
 export class TestService {
-  constructor(private photonService: PhotonService) {}
+  constructor(private photonService: PhotonService, private cloudService: CloudProviderService) {}
 
   async deleteTest(testId: string) {
+    const testSessionImages = (await this.photonService.testSessions.findMany({
+      where: { variation: { test: { id: testId } } },
+      select: {
+        imageKey: true,
+        diffImageKey: true
+      }
+    }))
+      .flatMap(images => [images.imageKey, images.diffImageKey])
+      .filter(val => !!val);
+
+    try {
+      await Promise.all(testSessionImages.map(image => this.cloudService.deleteScreenshotImage(image)));
+    } catch (err) {
+      console.log(err);
+      console.log('Unable to delete screenshots. Please do it manually! ', testSessionImages);
+    }
+
     /* TODO: Remove if cascading deletion is implemented in prisma2
        https://github.com/prisma/prisma2/issues/267 */
+
     await this.photonService.testSessions.deleteMany({
       where: { variation: { test: { id: testId } } }
     });

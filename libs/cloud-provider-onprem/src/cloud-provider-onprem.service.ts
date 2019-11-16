@@ -1,14 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CloudProviderService } from '@visual-knight/api-interface';
-import { writeFile, readFile } from 'fs';
+import { writeFile, readFile, unlink } from 'fs';
 import { resolve } from 'path';
 import { Observable, Subject, of } from 'rxjs';
 
 @Injectable()
 export class CloudProviderOnpremService implements CloudProviderService {
-  constructor(
-    @Inject('IMAGE_DESTINATION_PATH') private imageDestinationPath: string
-  ) {}
+  constructor(@Inject('IMAGE_DESTINATION_PATH') private imageDestinationPath: string) {}
 
   saveScreenshotImage(image: Buffer, filename: string): Observable<boolean> {
     const subject: Subject<boolean> = new Subject();
@@ -32,5 +30,16 @@ export class CloudProviderOnpremService implements CloudProviderService {
 
   async getScreenshotFilepath(filename: string): Promise<string> {
     return resolve(this.imageDestinationPath, filename);
+  }
+
+  async deleteScreenshotImage(filename: string): Promise<boolean> {
+    return new Promise((resolvePromise, reject) => {
+      unlink(resolve(this.imageDestinationPath, filename), err => {
+        if (err) {
+          reject(err);
+        }
+        resolvePromise(true);
+      });
+    });
   }
 }

@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { merge } from 'lodash';
 import { TestSessionDataArgs } from './models/testsession-where.input';
-import { AwsS3Service } from '../shared/aws/aws-s3.service';
-import { PhotonService } from '@visual-knight/api-interface';
+import { PhotonService, CloudProviderService } from '@visual-knight/api-interface';
 import { TestSessionState, User } from '@generated/photonjs';
 
 @Injectable()
 export class TestsessionService {
-  constructor(
-    private photonService: PhotonService,
-    private s3Service: AwsS3Service
-  ) {}
+  constructor(private photonService: PhotonService, private cloudService: CloudProviderService) {}
 
   async updateTestSession(testSessionId: string, data: TestSessionDataArgs) {
     return this.photonService.testSessions.update({
@@ -27,13 +23,12 @@ export class TestsessionService {
       }
     });
 
-    const images = [deleted.imageKey, deleted.diffImageKey].filter(
-      val => !!val
-    );
+    const images = [deleted.imageKey, deleted.diffImageKey].filter(val => !!val);
     try {
-      await this.s3Service.deleteS3Images(images);
+      await Promise.all(images.map(image => this.cloudService.deleteScreenshotImage(image)));
     } catch (err) {
       console.log(err);
+      console.log('Unable to delete screenshots. Please do it manually! ', images);
     }
     return deleted;
   }

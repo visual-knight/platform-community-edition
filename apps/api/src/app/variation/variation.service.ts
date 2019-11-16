@@ -1,12 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { PhotonService } from '@visual-knight/api-interface';
+import { PhotonService, CloudProviderService } from '@visual-knight/api-interface';
 import { TestSessionState, User } from '@generated/photonjs';
 
 @Injectable()
 export class VariationService {
-  constructor(private photonService: PhotonService) {}
+  constructor(private photonService: PhotonService, private cloudService: CloudProviderService) {}
 
   async deleteVariation(variationId: string) {
+    const testSessionImages = (await this.photonService.testSessions.findMany({
+      where: {
+        variation: {
+          id: variationId
+        }
+      },
+      select: {
+        imageKey: true,
+        diffImageKey: true
+      }
+    }))
+      .flatMap(images => [images.imageKey, images.diffImageKey])
+      .filter(val => !!val);
     await this.photonService.testSessions.deleteMany({
       where: {
         variation: {
@@ -14,6 +27,14 @@ export class VariationService {
         }
       }
     });
+
+    try {
+      await Promise.all(testSessionImages.map(image => this.cloudService.deleteScreenshotImage(image)));
+    } catch (err) {
+      console.log(err);
+      console.log('Unable to delete screenshots. Please do it manually! ', testSessionImages);
+    }
+
     return this.photonService.variations.delete({
       where: { id: variationId },
       include: {
@@ -61,12 +82,7 @@ export class VariationService {
     });
   }
 
-  async acceptNewBaseline(
-    variationId: string,
-    testSessionId: string,
-    comment: string,
-    user: User
-  ) {
+  async acceptNewBaseline(variationId: string, testSessionId: string, comment: string, user: User) {
     return this.photonService.variations.update({
       where: { id: variationId },
       data: {
