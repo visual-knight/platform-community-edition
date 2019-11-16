@@ -44,4 +44,4 @@ Thumbs.db
 screenshotUploads
 
 .env
-.env*
+.env.*
