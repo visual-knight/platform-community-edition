@@ -1,0 +1,89 @@
+<div class="user-management" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="32px">
+  <div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="32px">
+      <h5>User: {{ (users$ | async).length }}</h5>
+      <button *ngIf="!addUserActive && !(maxUserReached | async)" mat-mini-fab (click)="addUserActive = !addUserActive">
+        <mat-icon aria-label="Add User">add</mat-icon>
+      </button>
+    </div>
+
+    <div fxLayout="row" class="m-1">
+      <form [formGroup]="newUserForm" (ngSubmit)="onSubmitNewUser()">
+        <mat-form-field>
+          <input matInput placeholder="Email" formControlName="email" name="email" />
+          <mat-error
+            *ngIf="newUserForm.get('email').hasError('email') && !newUserForm.get('email').hasError('required')"
+          >
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="newUserForm.get('email').hasError('required')">
+            Email is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <div fxFlex class="invite-button-container">
+          <button mat-raised-button color="primary" type="submit">Invite new User</button>
+        </div>
+      </form>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{ user.forename }} {{ user.lastname }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          {{ user.email }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="role">
+        <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          {{ user.role }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="state">
+        <mat-header-cell *matHeaderCellDef>State</mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          <span class="invited" *ngIf="!user.active">invited</span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          <div class="actions" fxLayout="row">
+            <button
+              type="button"
+              mat-icon-button
+              *ngIf="user.role !== 'OWNER' || !user.active"
+              [matMenuTriggerFor]="cardMenuRef"
+            >
+              <mat-icon class="icon">more_vert</mat-icon>
+            </button>
+          </div>
+
+          <mat-menu #cardMenuRef="matMenu">
+            <button mat-menu-item *ngIf="user.role !== 'OWNER'" (click)="onDeleteUser(user)">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Remove User</span>
+            </button>
+            <button *ngIf="!user.active" mat-menu-item (click)="onResendInvitation(user)">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Resend Invitation</span>
+            </button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let user; columns: displayedColumns"></mat-row>
+    </mat-table>
+  </div>
+</div>

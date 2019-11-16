@@ -1,0 +1,119 @@
+<div
+  class="profile-overview"
+  fxLayout="column"
+  fxLayout.gt-sm="row"
+  fxLayoutAlign.gt-sm="start start"
+  fxLayoutGap="32px"
+>
+  <div class="main" fxFlex.gt-sm>
+    <div class="section">
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmitUpdateProfile()">
+        <div class="heading">Profile data</div>
+        <div class="content">
+          <div fxLayout.gt-sm="row" fxLayout.lt-sm="column" fxLayoutGap.gt-xs="16px">
+            <mat-form-field fxFlex>
+              <input matInput type="text" formControlName="forename" name="forename" placeholder="First name" />
+              <mat-error *ngIf="profileForm.get('forename').hasError('required')">
+                First name is
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex>
+              <input matInput type="text" formControlName="lastname" name="lastname" placeholder="Last name" />
+              <mat-error *ngIf="profileForm.get('lastname').hasError('required')">
+                Last name is
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout.gt-sm="row" fxLayout.lt-sm="column" fxLayoutGap.gt-xs="16px">
+            <mat-form-field fxFlex>
+              <input matInput placeholder="E-Mail" name="email" type="email" required formControlName="email" />
+              <mat-error *ngIf="profileForm.get('email').hasError('email')">
+                Please enter a valid email address
+              </mat-error>
+              <mat-error *ngIf="profileForm.get('email').hasError('required')">
+                Email is
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout.gt-sm="row-reverse">
+            <button mat-raised-button type="submit" color="primary" [disabled]="profileForm.invalid">
+              Update Profile
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <form [formGroup]="passwordForm" (ngSubmit)="onSubmitNewPassword()">
+        <div class="heading">New Password</div>
+        <div class="content">
+          <div fxLayout.gt-sm="row" fxLayout.lt-sm="column" fxLayoutGap.gt-xs="16px">
+            <mat-form-field fxFlex>
+              <input
+                matInput
+                placeholder="Password"
+                type="password"
+                name="password"
+                required
+                formControlName="password"
+              />
+              <i
+                class="material-icons"
+                id="toolTipSize"
+                [matTooltipPosition]="'above'"
+                matSuffix
+                matTooltip="Your password must contain minimum: 8 characters, a mixture of both uppercase and lowercase letters, a mixture of letters and numbers"
+                >error</i
+              >
+              <mat-error
+                *ngIf="passwordForm.get('password').touched && passwordForm.get('password').hasError('required')"
+              >
+                password is a required field!
+              </mat-error>
+              <mat-error class="error-message" *ngIf="passwordForm.get('password').hasError('validatePassword')">
+                Your password is not strong enough!
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex>
+              <input
+                matInput
+                placeholder="Password (Confirm)"
+                type="password"
+                name="password-confirm"
+                required
+                formControlName="passwordRepeat"
+              />
+              <mat-error
+                *ngIf="
+                  passwordForm.get('passwordRepeat').touched &&
+                  passwordForm.get('passwordRepeat').hasError('matchPassword')
+                "
+              >
+                Your password don't match!
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  passwordForm.get('passwordRepeat').touched && passwordForm.get('passwordRepeat').hasError('required')
+                "
+              >
+                password repeat is a required field!
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout.gt-sm="row-reverse">
+            <button mat-raised-button color="primary" type="submit">Set new password</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

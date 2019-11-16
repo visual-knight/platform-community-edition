@@ -47,15 +47,15 @@
       <mat-card-content>
         <mat-tab-group class="profile-tabs clean-tabs" [selectedIndex]="activeTab">
           <mat-tab label="ACCOUNT">
-            <!-- <visual-knight-account-management [user$]="user$"></visual-knight-account-management> -->
+            <visual-knight-account-management [user$]="user$"></visual-knight-account-management>
           </mat-tab>
-          <mat-tab label="USER MANAGEMENT" [disabled]="!(isOwner$ | async)">
-            <!-- <visual-knight-user-management
+          <mat-tab label="USER MANAGEMENT" [disabled]="!(isAdmin$ | async)">
+            <visual-knight-user-management
               [users$]="userList$"
               (remove)="onDeleteUser($event)"
               (resendInvitation)="onResendInvitation($event)"
               (add)="onAddUser($event)"
-            ></visual-knight-user-management> -->
+            ></visual-knight-user-management>
           </mat-tab>
         </mat-tab-group>
       </mat-card-content>

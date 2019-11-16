@@ -41,7 +41,10 @@ fragment AuthToken on AuthToken {
 
 fragment UserData on UserType {
   id
-  active
   email
+  forename
+  lastname
+  active
   apiKey
+  role
 }

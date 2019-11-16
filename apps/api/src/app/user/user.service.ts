@@ -23,12 +23,13 @@ export class UserService {
   async userList() {
     return this.photonService.users({
       select: {
+        id: true,
         email: true,
         forename: true,
         lastname: true,
         active: true,
         apiKey: true,
-        id: true
+        role: true
       }
     });
   }

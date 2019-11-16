@@ -25,6 +25,7 @@ export class ProfileComponent implements OnInit {
     }),
     map(user => getGravatarImageHash(user.email, 200))
   );
+  isAdmin$: Observable<boolean> = this.user$.pipe(map(user => user.role === 'ADMIN'));
 
   public activeTab = 0;
 

@@ -20,5 +20,7 @@ export class UserType {
   @Field()
   active: boolean;
 
-  // role?
+  // role? ENUM
+  @Field()
+  role: string;
 }

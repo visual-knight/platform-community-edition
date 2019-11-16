@@ -7,10 +7,17 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UserService {
-  resendVerificationEmail() {
-    throw new Error("Method not implemented.");
-  }
   constructor(private userlistGQL: UserlistGQL) {}
+
+  setNewPassword(value: string) {
+    throw new Error('Method not implemented.');
+  }
+  updateProfile(value: { email: string; forename: string; lastname: string }) {
+    throw new Error('Method not implemented.');
+  }
+  resendVerificationEmail() {
+    throw new Error('Method not implemented.');
+  }
 
   resendInvitation(user: UserType) {
     throw new Error('Method not implemented.');

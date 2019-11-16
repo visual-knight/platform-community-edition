@@ -1,0 +1,106 @@
+.profile-overview {
+  background: #f4f4f4;
+
+  .main {
+    background: white;
+    padding: 0 32px 32px;
+
+    // @include cardBorder;
+
+    .section {
+      padding-top: 32px;
+      padding-bottom: 16px;
+    }
+  }
+
+  .aside {
+    background: white;
+    padding: 32px 32px 0;
+    // @include cardBorder;
+
+    .heading {
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .activity {
+      .event {
+        position: relative;
+
+        & + .event {
+          padding-top: 24px;
+        }
+
+        &:first-child {
+          .dot {
+            top: 0;
+          }
+        }
+
+        &:last-of-type {
+          padding-bottom: 24px;
+        }
+
+        .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: #666;
+          position: absolute;
+          top: 24px;
+          left: -4px;
+          z-index: 10;
+
+          // &.primary {
+          //   background: mat-color($color-primary);
+          // }
+
+          // &.accent {
+          //   background: mat-color($color-accent);
+          // }
+
+          // &.warn {
+          //   background: mat-color($color-warn);
+          // }
+        }
+
+        .line {
+          width: 1px;
+          height: 100%;
+          background: #e0e0e0;
+          z-index: 5;
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+
+        .info {
+          margin-left: 24px;
+
+          .when {
+            font-size: 12px;
+            // color: $color__text-light;
+            font-style: italic;
+          }
+
+          .name {
+            margin-top: 4px;
+            font-weight: 500;
+            font-size: 15px;
+          }
+
+          .description {
+            margin-top: 4px;
+            font-size: 12px;
+            // color: $color__text-dark;
+          }
+        }
+      }
+    }
+
+    .footer {
+      border-top: 1px solid #e0e0e0;
+      padding: 16px 0;
+    }
+  }
+}

@@ -1,10 +1,15 @@
 query userlist {
   users {
-    id
-    email
-    forename
-    lastname
-    active
-    apiKey
+    ...UserData
   }
+}
+
+fragment UserData on UserType {
+  id
+  email
+  forename
+  lastname
+  active
+  apiKey
+  role
 }

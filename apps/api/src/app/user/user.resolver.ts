@@ -45,7 +45,8 @@ export class UserResolver {
       forename: user.forename,
       lastname: user.lastname,
       id: user.id,
-      apiKey: user.apiKey
+      apiKey: user.apiKey,
+      role: user.role
     };
   }
 

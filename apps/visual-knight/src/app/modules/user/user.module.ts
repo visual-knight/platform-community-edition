@@ -14,6 +14,8 @@ import { UserService } from './services/user.service';
 import { ClipboardModule } from 'ngx-clipboard';
 import { MatTabsModule } from '@angular/material';
 import { VerificationBoxComponent } from './components/verification-box/verification-box.component';
+import { AccountManagementComponent } from './components/account-management/account-management.component';
+import { UserManagementComponent } from './components/user-management/user-management.component';
 
 const routes: Routes = [
   {
@@ -45,7 +47,9 @@ const routes: Routes = [
     ForgotPasswordComponent,
     ResetPasswordComponent,
     ProfileComponent,
-    VerificationBoxComponent
+    VerificationBoxComponent,
+    AccountManagementComponent,
+    UserManagementComponent
   ],
   providers: [
     {

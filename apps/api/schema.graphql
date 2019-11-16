@@ -135,6 +135,7 @@ type UserType {
   lastname: String
   apiKey: String!
   active: Boolean!
+  role: String!
 }
 
 type VariationType {

@@ -281,6 +281,7 @@ export type UserType = {
   lastname?: Maybe<Scalars['String']>;
   apiKey: Scalars['String'];
   active: Scalars['Boolean'];
+  role: Scalars['String'];
 };
 
 export type VariationType = {
@@ -350,7 +351,7 @@ export type AuthTokenFragment = { __typename?: 'AuthToken' } & Pick<
 
 export type UserDataFragment = { __typename?: 'UserType' } & Pick<
   UserType,
-  'id' | 'active' | 'email' | 'apiKey'
+  'id' | 'email' | 'forename' | 'lastname' | 'active' | 'apiKey' | 'role'
 >;
 
 export type AllProjectsQueryVariables = {};
@@ -425,13 +426,13 @@ export type SelectedTestQuery = { __typename?: 'Query' } & Pick<
 export type UserlistQueryVariables = {};
 
 export type UserlistQuery = { __typename?: 'Query' } & {
-  users: Array<
-    { __typename?: 'UserType' } & Pick<
-      UserType,
-      'id' | 'email' | 'forename' | 'lastname' | 'active' | 'apiKey'
-    >
-  >;
+  users: Array<{ __typename?: 'UserType' } & UserDataFragment>;
 };
+
+export type UserDataFragment = { __typename?: 'UserType' } & Pick<
+  UserType,
+  'id' | 'email' | 'forename' | 'lastname' | 'active' | 'apiKey' | 'role'
+>;
 
 export type GetVariationQueryVariables = {
   variationId: Scalars['String'];
@@ -537,9 +538,12 @@ export const AuthTokenFragmentDoc = gql`
 export const UserDataFragmentDoc = gql`
   fragment UserData on UserType {
     id
-    active
     email
+    forename
+    lastname
+    active
     apiKey
+    role
   }
 `;
 export const ProjectDataFragmentDoc = gql`
@@ -806,14 +810,10 @@ export class SelectedTestGQL extends Apollo.Query<
 export const UserlistDocument = gql`
   query userlist {
     users {
-      id
-      email
-      forename
-      lastname
-      active
-      apiKey
+      ...UserData
     }
   }
+  ${UserDataFragmentDoc}
 `;
 
 @Injectable({
