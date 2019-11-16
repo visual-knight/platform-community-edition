@@ -1,18 +1,27 @@
+// Postgres
+// https://github.com/prisma/prisma2/blob/master/docs/core/connectors/postgresql.md
+// datasource db {
+//   provider = "postgresql"
+     url = "***"
+// }
+
+// SQLite
 datasource db {
-  provider = "postgresql"
-  url      = env("VK_POSTGRES_URL")
+  provider = "sqlite"
+  url = "***"
 }
+
+// Mysql
+// https://github.com/prisma/prisma2/blob/master/docs/core/connectors/mysql.md
+// datasource db {
+//   provider = "mysql"
+     url = "***"
+// }
 
 generator photon {
-  provider  = "photonjs"
-  platforms = ["native", "linux-glibc-libssl1.0.2"]
-  output    = "../../node_modules/@generated/photonjs"
-}
-
-generator photon_layer {
-  provider  = "photonjs"
-  platforms = ["linux-glibc-libssl1.0.2"]
-  output    = "../../layers/photon/nodejs/node_modules/@generated/photonjs"
+  provider     = "photonjs"
+  binaryTarget = ["native", "linux-glibc-libssl1.0.2"]
+  output       = "../../node_modules/@generated/photonjs"
 }
 
 model User {

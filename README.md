@@ -1,6 +1,6 @@
-![Visual Knight](visual-knight.png)
-
 # Community edition of the Visual Knight Platform
+
+![Visual Knight](visual-knight.png)
 
 The ecosystem contains 3 essential parts in Visual Knight.
 
@@ -41,21 +41,26 @@ Clone the repository
 
 You need to decied which platform you want to use. At the moment it is easy. We just support on premise but more and more providers are coming soon. So you need to deploy the api and ui to your system or you can start them with following commands:
 
-### So first we have to create the database
+### Prepare environments for the server
+
+Copy the .envtemplate and name it like you want (recommendation: your stage) e.g.: .env
+Fill your environment with your data!
+
+### We have to create the database
 
 1. go into libs/api-interface
 2. you can find a file with the name schema.prisma
-3. Setup your databse (Choose between Postgres, Mysql and SQLite) _NOTE: Set the environment variable!_
-4. Create initial database statements for the application `npx prisma2 lift save --name init`
-5. Lift up the database with the structure `npx prisma2 lift up`
-6. Generate the photon library `npx prisma2 generate`
-7. Create the first user `EMAIL=ADD_YOUR_EMAIL_ADDRESS PASSWORD=yourPassw0rd! node postinstall.js`
+3. Setup your databse (Choose between Postgres, Mysql and SQLite) _NOTE: environments setup must be done!_
+4. Create initial database statements for the application `npx dotenv-cli -e ../../.env npx prisma2 lift save --name init` _NOTE: You have to commit the migration files to be able to update later easy the database changes_
+5. Lift up the database with the structure `npx dotenv-cli -e ../../.env npx prisma2 lift up`
+6. Generate the photon library `npx dotenv-cli -e ../../.env npx prisma2 generate`
+7. Create the first user `EMAIL=ADD_YOUR_EMAIL_ADDRESS PASSWORD=yourPassw0rd! npx dotenv-cli -e ../../.env node postinstall.js`
 
 Everything is done and we can start the UI and API Server ;)
 
 ### Start the servers
 
-- Starting the api server: `npx ng run api:serve`
+- Starting the api server: `npx dotenv-cli -e ../../.env npx ng run api:serve`
 - Starting the ui server: `npx ng run visual-knight:serve`
 
 ### Create a build

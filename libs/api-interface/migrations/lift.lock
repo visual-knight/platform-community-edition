@@ -3,9 +3,4 @@
 # lift lockfile v1
 # Read more about conflict resolution here: TODO
 
-20190726231506-init
-20190727105933-add-diff-relation
-20190804202705-change-ids
-20190804225624-remove-user-project-dependency
-20191027222409-on-delete-relationship
-20191107232826-prepare-cascading-relations
+20191116231401-init
