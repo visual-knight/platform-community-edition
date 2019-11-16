@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IMenuItem, IChildItem } from './user-navigation.model';
 import { AuthService } from '../../core/auth-service.service';
 import { ILayoutConf, LayoutService } from '../layout.service';
-import { map } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { getGravatarImageHash } from '../../shared/utils/gravatar';
 
 @Component({
@@ -14,13 +14,13 @@ export class HeaderComponent implements OnInit {
   menuItems: IMenuItem[];
 
   profilePicture$ = this.authService.user$.pipe(
+    startWith({
+      email: 'assets/images/avatars/noavatar.png'
+    }),
     map(user => getGravatarImageHash(user.email, 40))
   );
 
-  constructor(
-    private authService: AuthService,
-    private layout: LayoutService
-  ) {}
+  constructor(private authService: AuthService, private layout: LayoutService) {}
 
   ngOnInit() {
     this.layoutConf = this.layout.layoutConf;
@@ -32,10 +32,7 @@ export class HeaderComponent implements OnInit {
     if (userNavigationMenuItems.length <= limit) {
       return (this.menuItems = mainItems);
     }
-    const subItems = userNavigationMenuItems.slice(
-      limit,
-      userNavigationMenuItems.length - 1
-    ) as IChildItem[];
+    const subItems = userNavigationMenuItems.slice(limit, userNavigationMenuItems.length - 1) as IChildItem[];
     mainItems.push({
       name: 'More',
       type: 'dropDown',
@@ -63,14 +60,6 @@ export class HeaderComponent implements OnInit {
 
   private getDefaultUserNavigation(): IMenuItem[] {
     return [
-      // {
-      //   name: 'DASHBOARD',
-      //   type: 'link',
-      //   tooltip: 'Dashboard',
-      //   icon: 'dashboard',
-      //   state: 'dashboard'
-      //   // badges: [{ color: 'accent', value: '100+' }]
-      // },
       {
         name: 'PROJECTS',
         type: 'link',
