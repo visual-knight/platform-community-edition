@@ -14,19 +14,6 @@ export const environment = {
   // graphql
   schemaPath: '/tmp/schema.graphql',
 
-  // aws
-  aws: {
-    region: process.env.AWS_REGION,
-    accessKeyId: process.env.AWS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
-    s3BucketName: process.env.bucketName
-  },
-
-  // s3 user
-  s3: {
-    signedUrlExpireTime: 3600 // in milliseconds
-  },
-
   // email
   email: {
     user: 'noreply@visual-knight.io',
