@@ -2,7 +2,6 @@ import { resolve } from 'path';
 
 export const environment = {
   production: true,
-  stage: 'production',
 
   // auth environments
   refreshTokenLife: '1d',
