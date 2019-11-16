@@ -13,6 +13,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { UserService } from './services/user.service';
 import { ClipboardModule } from 'ngx-clipboard';
 import { MatTabsModule } from '@angular/material';
+import { VerificationBoxComponent } from './components/verification-box/verification-box.component';
 
 const routes: Routes = [
   {
@@ -38,7 +39,14 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, ForgotPasswordComponent, ResetPasswordComponent, ProfileComponent],
+  declarations: [
+    LoginComponent,
+    SignupComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
+    ProfileComponent,
+    VerificationBoxComponent
+  ],
   providers: [
     {
       provide: RECAPTCHA_SETTINGS,

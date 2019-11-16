@@ -7,6 +7,9 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UserService {
+  resendVerificationEmail() {
+    throw new Error("Method not implemented.");
+  }
   constructor(private userlistGQL: UserlistGQL) {}
 
   resendInvitation(user: UserType) {

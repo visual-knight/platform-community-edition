@@ -1,0 +1,12 @@
+<div fxFlex>
+  <div fxLayout="column"
+       fxLayout.gt-sm="row"
+       fxLayoutAlign="start center"
+       fxLayoutAlign.gt-sm="space-between">
+    <p>You need to verify your account to use Visual Knight.</p>
+    <button mat-raised-button
+            color="primary"
+            (click)="resendVerification()"
+            type="button">Send new verification</button>
+  </div>
+</div>
