@@ -36,6 +36,12 @@ export class UserResolver {
     return this.userService.inviteNewUser(user, email);
   }
 
+  @Mutation(returns => Boolean)
+  @UseGuards(GqlAuthGuard)
+  resendInvitationMail(@Args('userId') userId: string, @CurrentUser() user: PrismaUser): Promise<boolean> {
+    return this.userService.resendInvitationEmail(user, userId);
+  }
+
   @Mutation(returns => AuthPayload)
   @UseGuards(GqlAuthGuard)
   completeInvitation(@Args('token') token: string, @Args('password') password: string): Promise<AuthPayload> {

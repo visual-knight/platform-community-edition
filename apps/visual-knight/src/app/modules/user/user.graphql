@@ -18,6 +18,10 @@ mutation resendVerificationEmail {
   resendVerifyEmail
 }
 
+mutation resendInvitationMail($userId: String!) {
+  resendInvitationMail(userId: $userId)
+}
+
 mutation addUser($email: String!) {
   inviteNewUser(email: $email) {
     ...UserData

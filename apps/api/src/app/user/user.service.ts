@@ -94,6 +94,23 @@ export class UserService {
     return newUser;
   }
 
+  async resendInvitationEmail(user: User, invitationUserId: string) {
+    if (user.role !== 'ADMIN') {
+      throw new Error('You are not allowed to invite new user!');
+    }
+
+    const invitationUser = await this.photonService.users.findOne({ where: { id: invitationUserId } });
+
+    this.emailService.sendInvitationMail({
+      email: invitationUser.email,
+      to: invitationUser.email,
+      activationLink: null,
+      invitedBy: user.email
+    });
+
+    return true;
+  }
+
   async completeInvitation(token: string, password: string): Promise<AuthPayload> {
     const { email, exp } = this.jwtService.verify(token);
     const user = await this.photonService.users.findOne({ where: { email } });

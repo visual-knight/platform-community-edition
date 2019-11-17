@@ -32,6 +32,7 @@ type Mutation {
   deleteUser(id: String!): UserType!
   updateUser(data: UpdateUserInput!): UserType!
   inviteNewUser(email: String!): UserType!
+  resendInvitationMail(userId: String!): Boolean!
   completeInvitation(password: String!, token: String!): AuthPayload!
   createProject(data: ProjectDataArgs!): ProjectType!
   deleteProject(projectId: String!): ProjectType!

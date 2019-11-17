@@ -8,7 +8,8 @@ import {
   AddUserGQL,
   DeleteUserGQL,
   UserlistQuery,
-  UserlistDocument
+  UserlistDocument,
+  ResendInvitationMailGQL
 } from '../../core/types';
 import { first } from 'rxjs/operators';
 
@@ -21,6 +22,7 @@ export class UserService {
     private updateProfileGQL: UpdateProfileGQL,
     private setNewPasswordGQL: SetNewPasswordGQL,
     private resendVerificationEmailGQL: ResendVerificationEmailGQL,
+    private resendInvitationMailGQL: ResendInvitationMailGQL,
     private addUserGQL: AddUserGQL,
     private deleteUserGQL: DeleteUserGQL
   ) {}
@@ -94,6 +96,9 @@ export class UserService {
   }
 
   resendInvitation(user: UserType) {
-    throw new Error('Method not implemented.');
+    return this.resendInvitationMailGQL
+      .mutate({ userId: user.id })
+      .pipe(first())
+      .subscribe();
   }
 }

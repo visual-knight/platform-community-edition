@@ -39,6 +39,7 @@ export type Mutation = {
   deleteUser: UserType;
   updateUser: UserType;
   inviteNewUser: UserType;
+  resendInvitationMail: Scalars['Boolean'];
   completeInvitation: AuthPayload;
   createProject: ProjectType;
   deleteProject: ProjectType;
@@ -90,6 +91,10 @@ export type MutationUpdateUserArgs = {
 
 export type MutationInviteNewUserArgs = {
   email: Scalars['String'];
+};
+
+export type MutationResendInvitationMailArgs = {
+  userId: Scalars['String'];
 };
 
 export type MutationCompleteInvitationArgs = {
@@ -453,6 +458,15 @@ export type ResendVerificationEmailMutationVariables = {};
 export type ResendVerificationEmailMutation = {
   __typename?: 'Mutation';
 } & Pick<Mutation, 'resendVerifyEmail'>;
+
+export type ResendInvitationMailMutationVariables = {
+  userId: Scalars['String'];
+};
+
+export type ResendInvitationMailMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'resendInvitationMail'
+>;
 
 export type AddUserMutationVariables = {
   email: Scalars['String'];
@@ -919,6 +933,21 @@ export class ResendVerificationEmailGQL extends Apollo.Mutation<
   ResendVerificationEmailMutationVariables
 > {
   document = ResendVerificationEmailDocument;
+}
+export const ResendInvitationMailDocument = gql`
+  mutation resendInvitationMail($userId: String!) {
+    resendInvitationMail(userId: $userId)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ResendInvitationMailGQL extends Apollo.Mutation<
+  ResendInvitationMailMutation,
+  ResendInvitationMailMutationVariables
+> {
+  document = ResendInvitationMailDocument;
 }
 export const AddUserDocument = gql`
   mutation addUser($email: String!) {
