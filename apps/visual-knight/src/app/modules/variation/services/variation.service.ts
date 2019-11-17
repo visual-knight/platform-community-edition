@@ -6,10 +6,9 @@ import {
   AllVariationsDocument,
   GetVariationGQL,
   AcceptNewBaselineGQL,
-  DeclineTestSessionGQL,
-  TestSessionType
+  DeclineTestSessionGQL
 } from '../../core/types';
-import { map, first } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { Apollo } from 'apollo-angular';
 
 @Injectable({
@@ -48,20 +47,14 @@ export class VariationService {
           const data: AllVariationsQuery = store.readQuery({
             query: AllVariationsDocument
           });
-          data.variations = data.variations.filter(
-            variation => variation.id !== id
-          );
+          data.variations = data.variations.filter(variation => variation.id !== id);
           store.writeQuery({ query: AllVariationsDocument, data });
         }
       }
     );
   }
 
-  acceptNewBaseline(
-    comment: string,
-    testSessionId: string,
-    variationId: string
-  ) {
+  acceptNewBaseline(comment: string, testSessionId: string, variationId: string) {
     this.acceptNewBaseLineGQL
       .mutate({ comment, testSessionId, variationId })
       .pipe(first())

@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { User as PrismaUser } from '@generated/photonjs';
+import { User as PrismaUser, Role } from '@generated/photonjs';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guards/auth.guard';
 import { CurrentUser } from '../shared/decorators/current-user.decorator';
@@ -15,6 +15,9 @@ export class UserResolver {
   @Mutation(returns => UserType)
   @UseGuards(GqlAuthGuard)
   async deleteUser(@Args('id') id: string, @CurrentUser() user: PrismaUser): Promise<UserType> {
+    if (user.role !== Role.ADMIN) {
+      throw new Error('Only admins are allowed to delete users');
+    }
     return this.userService.deleteUser(user, id);
   }
 
@@ -27,6 +30,9 @@ export class UserResolver {
   @Mutation(returns => UserType)
   @UseGuards(GqlAuthGuard)
   inviteNewUser(@Args('email') email: string, @CurrentUser() user: PrismaUser): Promise<UserType> {
+    if (user.role !== Role.ADMIN) {
+      throw new Error('Only admins are allowed to invite new users');
+    }
     return this.userService.inviteNewUser(user, email);
   }
 
