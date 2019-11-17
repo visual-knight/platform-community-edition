@@ -28,7 +28,7 @@ export class UserService {
   deleteUser(user: UserType) {
     throw new Error('Method not implemented.');
   }
-  getUserList(): Observable<UserType[]> {
-    return this.userlistGQL.watch().valueChanges.pipe(map(({ data }) => data.users));
+  getUserList() {
+    return this.userlistGQL.watch().valueChanges;
   }
 }

@@ -17,8 +17,8 @@ import { getGravatarImageHash } from '../../../shared/utils/gravatar';
 })
 export class ProfileComponent implements OnInit {
   user$: Observable<UserType> = this.authService.user$;
-  userNotVerified$: Observable<boolean> = this.user$.pipe(map(user => !user.active));
-  userList$: Observable<UserType[]> = this.userService.getUserList();
+  userNotVerified$: Observable<boolean> = this.user$.pipe(map(user => user.active === false));
+  userList$: Observable<UserType[]> = this.userService.getUserList().pipe(map(({ data }) => (data ? data.users : [])));
   userProfilePicture$: Observable<string> = this.user$.pipe(
     startWith({
       email: 'assets/images/avatars/noavatar.png'

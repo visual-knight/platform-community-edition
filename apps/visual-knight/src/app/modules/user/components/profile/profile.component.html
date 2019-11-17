@@ -1,6 +1,6 @@
 <div class="container" fxLayout="row wrap">
   <mat-card
-    *ngIf="!(userNotVerified$ | async)"
+    *ngIf="(userNotVerified$ | async)"
     fxFlex="100"
     [@animate]="{ value: '*', params: { delay: '100ms', y: '-50px' } }"
   >
