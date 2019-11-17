@@ -43,7 +43,6 @@ export class UserResolver {
   }
 
   @Mutation(returns => AuthPayload)
-  @UseGuards(GqlAuthGuard)
   completeInvitation(@Args('token') token: string, @Args('password') password: string): Promise<AuthPayload> {
     return this.userService.completeInvitation(token, password);
   }

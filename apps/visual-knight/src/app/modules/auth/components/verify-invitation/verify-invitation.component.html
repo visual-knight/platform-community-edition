@@ -1,0 +1,78 @@
+<div [ngSwitch]="state" fxLayout="row" fxLayoutAlign="center center" style="height: 100%;">
+  <div class="verify" fxLayoutAlign="center center">
+    <div class="center" *ngSwitchCase="INVITATION_STATE.ALREADY_DONE">You already completed the invitation process</div>
+    <div class="center" *ngSwitchCase="INVITATION_STATE.EXPIRED">
+      Link has expired! Please ask your admin to invite you again
+    </div>
+    <div *ngSwitchDefault>
+      <h3>You are invited to Visual Knight!</h3>
+      <p>Please set a password to activate your account!</p>
+
+      <form (submit)="onSubmit()" [formGroup]="invitationPasswordForm">
+        <div class="invitation-content" fxLayout="column" fxLayoutAlign="start stretch">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Password"
+              type="password"
+              name="password"
+              required
+              formControlName="password"
+            />
+            <i
+              class="material-icons"
+              id="toolTipSize"
+              [matTooltipPosition]="'above'"
+              matSuffix
+              matTooltip="Your password must contain minimum: 8 characters, a mixture of both uppercase and lowercase letters, a mixture of letters and numbers"
+              >error</i
+            >
+            <mat-error
+              *ngIf="
+                invitationPasswordForm.get('password').touched &&
+                invitationPasswordForm.get('password').hasError('required')
+              "
+            >
+              password is a required field!
+            </mat-error>
+            <mat-error
+              class="error-message"
+              *ngIf="invitationPasswordForm.get('password').hasError('validatePassword')"
+            >
+              Your password is not strong enough!
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Password (Confirm)"
+              type="password"
+              name="password-confirm"
+              required
+              formControlName="passwordRepeat"
+            />
+            <mat-error
+              *ngIf="
+                invitationPasswordForm.get('passwordRepeat').touched &&
+                invitationPasswordForm.get('passwordRepeat').hasError('matchPassword')
+              "
+            >
+              Your password don't match!
+            </mat-error>
+            <mat-error
+              *ngIf="
+                invitationPasswordForm.get('passwordRepeat').touched &&
+                invitationPasswordForm.get('passwordRepeat').hasError('required')
+              "
+            >
+              password repeat is a required field!
+            </mat-error>
+          </mat-form-field>
+          <button color="primary" mat-raised-button type="submit" [disabled]="invitationPasswordForm.invalid">
+            Set password and activate
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

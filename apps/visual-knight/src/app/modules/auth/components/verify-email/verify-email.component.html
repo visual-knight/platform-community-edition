@@ -1,0 +1,13 @@
+<div [ngSwitch]="state"
+     fxLayout="row"
+     fxLayoutAlign="center center"
+     style="height: 100%;">
+  <div class="verify"
+       fxLayoutAlign="center center">
+    <div *ngSwitchCase="ACTIVATION_ERRORS.ALREADY_DONE">Your email is already verified</div>
+    <div *ngSwitchCase="ACTIVATION_ERRORS.EXPIRED">Link has expired! Please go to the profile and send a new verification link</div>
+    <div *ngSwitchDefault>
+      Your email is verified now!
+    </div>
+  </div>
+</div>

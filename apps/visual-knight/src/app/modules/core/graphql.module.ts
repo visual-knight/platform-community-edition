@@ -30,7 +30,8 @@ export function createApollo(httpLink: HttpLink, router: Router) {
       for (const err of graphQLErrors) {
         if (err.extensions.code === 'INTERNAL_SERVER_ERROR' && err.extensions.exception.status === 401) {
           localStorage.removeItem('visual-knight-token');
-          router.navigateByUrl('/user');
+          // TODO: find better solution
+          // router.navigateByUrl('/user');
         }
       }
     }

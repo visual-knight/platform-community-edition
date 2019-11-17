@@ -33,13 +33,3 @@ mutation deleteUser($id: String!) {
     ...UserData
   }
 }
-
-fragment UserData on UserType {
-  id
-  email
-  forename
-  lastname
-  active
-  apiKey
-  role
-}

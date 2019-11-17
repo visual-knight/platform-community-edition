@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  background: #fff url('/assets/img/demo/backgrounds/pattern-1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.center {
+  text-align: center;
+}
+
+.verify {
+  background: white;
+  width: 380px;
+
+  padding: 24px 42px 42px;
+
+  .error {
+    margin: 0 0 16px;
+    color: #F00;
+  }
+}
+
+.extra-options {
+  margin: 16px 0 32px;
+
+  .remember-me {
+    color: #777;
+  }
+  
+}

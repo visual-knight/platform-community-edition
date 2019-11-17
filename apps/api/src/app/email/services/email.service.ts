@@ -27,7 +27,7 @@ export class EmailService {
     );
     const registrationData: RegistrationMailData = {
       ...data,
-      activationLink: `${environment.appDomain}sessions/verify?token=${token}`
+      activationLink: `${environment.appDomain}auth/verify?token=${token}`
     };
 
     const sendMailOptions = {
@@ -58,7 +58,7 @@ export class EmailService {
 
     data.resetPasswordLink = `${
       environment.appDomain
-    }users/reset-password?token=${token}`;
+    }user/reset-password?token=${token}`;
 
     const sendMailOptions = {
       from: `Password Reset <${environment.email.user}>`,
@@ -87,7 +87,7 @@ export class EmailService {
     );
     data.activationLink = `${
       environment.appDomain
-    }sessions/invitation?token=${token}`;
+    }auth/invitation?token=${token}`;
 
     const sendMailOptions = {
       from: `Invitation <${environment.email.user}>`,

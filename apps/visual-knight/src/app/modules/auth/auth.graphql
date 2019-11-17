@@ -1,0 +1,14 @@
+mutation verifyEmail($token: String!) {
+  verifyEmail(token: $token)
+}
+
+mutation completeInvitation($password: String!, $token: String!) {
+  completeInvitation(password: $password, token: $token) {
+    token {
+      accessToken
+    }
+    user {
+      ...UserData
+    }
+  }
+}

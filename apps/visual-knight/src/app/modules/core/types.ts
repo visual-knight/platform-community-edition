@@ -300,6 +300,27 @@ export type VariationType = {
   testSessions: Array<TestSessionType>;
   isLastSuccessful: Scalars['Boolean'];
 };
+export type VerifyEmailMutationVariables = {
+  token: Scalars['String'];
+};
+
+export type VerifyEmailMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'verifyEmail'
+>;
+
+export type CompleteInvitationMutationVariables = {
+  password: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type CompleteInvitationMutation = { __typename?: 'Mutation' } & {
+  completeInvitation: { __typename?: 'AuthPayload' } & {
+    token: { __typename?: 'AuthToken' } & Pick<AuthToken, 'accessToken'>;
+    user: { __typename?: 'UserType' } & UserDataFragment;
+  };
+};
+
 export type CurrentUserQueryVariables = {};
 
 export type CurrentUserQuery = { __typename?: 'Query' } & {
@@ -484,11 +505,6 @@ export type DeleteUserMutation = { __typename?: 'Mutation' } & {
   deleteUser: { __typename?: 'UserType' } & UserDataFragment;
 };
 
-export type UserDataFragment = { __typename?: 'UserType' } & Pick<
-  UserType,
-  'id' | 'email' | 'forename' | 'lastname' | 'active' | 'apiKey' | 'role'
->;
-
 export type GetVariationQueryVariables = {
   variationId: Scalars['String'];
 };
@@ -663,6 +679,44 @@ export const VariationDataFragmentDoc = gql`
   }
   ${TestSessionDataFragmentDoc}
 `;
+export const VerifyEmailDocument = gql`
+  mutation verifyEmail($token: String!) {
+    verifyEmail(token: $token)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class VerifyEmailGQL extends Apollo.Mutation<
+  VerifyEmailMutation,
+  VerifyEmailMutationVariables
+> {
+  document = VerifyEmailDocument;
+}
+export const CompleteInvitationDocument = gql`
+  mutation completeInvitation($password: String!, $token: String!) {
+    completeInvitation(password: $password, token: $token) {
+      token {
+        accessToken
+      }
+      user {
+        ...UserData
+      }
+    }
+  }
+  ${UserDataFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CompleteInvitationGQL extends Apollo.Mutation<
+  CompleteInvitationMutation,
+  CompleteInvitationMutationVariables
+> {
+  document = CompleteInvitationDocument;
+}
 export const CurrentUserDocument = gql`
   query currentUser {
     me {

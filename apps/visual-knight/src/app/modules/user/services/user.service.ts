@@ -9,9 +9,13 @@ import {
   DeleteUserGQL,
   UserlistQuery,
   UserlistDocument,
-  ResendInvitationMailGQL
+  ResendInvitationMailGQL,
+  VerifyEmailGQL,
+  CompleteInvitationGQL
 } from '../../core/types';
-import { first } from 'rxjs/operators';
+import { first, map, catchError, tap } from 'rxjs/operators';
+import { ACTIVATION_STATE } from '../../core/auth-service.service';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
