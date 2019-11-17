@@ -62,7 +62,7 @@
             <button
               type="button"
               mat-icon-button
-              *ngIf="user.role !== 'OWNER' || !user.active"
+              *ngIf="user.role !== 'ADMIN' || !user.active"
               [matMenuTriggerFor]="cardMenuRef"
             >
               <mat-icon class="icon">more_vert</mat-icon>
@@ -70,7 +70,7 @@
           </div>
 
           <mat-menu #cardMenuRef="matMenu">
-            <button mat-menu-item *ngIf="user.role !== 'OWNER'" (click)="onDeleteUser(user)">
+            <button mat-menu-item *ngIf="user.role !== 'ADMIN'" (click)="onDeleteUser(user)">
               <mat-icon>exit_to_app</mat-icon>
               <span>Remove User</span>
             </button>

@@ -429,6 +429,47 @@ export type UserlistQuery = { __typename?: 'Query' } & {
   users: Array<{ __typename?: 'UserType' } & UserDataFragment>;
 };
 
+export type UpdateProfileMutationVariables = {
+  email: Scalars['String'];
+  forename?: Maybe<Scalars['String']>;
+  lastname?: Maybe<Scalars['String']>;
+};
+
+export type UpdateProfileMutation = { __typename?: 'Mutation' } & {
+  updateUser: { __typename?: 'UserType' } & UserDataFragment;
+};
+
+export type SetNewPasswordMutationVariables = {
+  password: Scalars['String'];
+};
+
+export type SetNewPasswordMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'changePassword'
+>;
+
+export type ResendVerificationEmailMutationVariables = {};
+
+export type ResendVerificationEmailMutation = {
+  __typename?: 'Mutation';
+} & Pick<Mutation, 'resendVerifyEmail'>;
+
+export type AddUserMutationVariables = {
+  email: Scalars['String'];
+};
+
+export type AddUserMutation = { __typename?: 'Mutation' } & {
+  inviteNewUser: { __typename?: 'UserType' } & UserDataFragment;
+};
+
+export type DeleteUserMutationVariables = {
+  id: Scalars['String'];
+};
+
+export type DeleteUserMutation = { __typename?: 'Mutation' } & {
+  deleteUser: { __typename?: 'UserType' } & UserDataFragment;
+};
+
 export type UserDataFragment = { __typename?: 'UserType' } & Pick<
   UserType,
   'id' | 'email' | 'forename' | 'lastname' | 'active' | 'apiKey' | 'role'
@@ -824,6 +865,96 @@ export class UserlistGQL extends Apollo.Query<
   UserlistQueryVariables
 > {
   document = UserlistDocument;
+}
+export const UpdateProfileDocument = gql`
+  mutation updateProfile(
+    $email: String!
+    $forename: String
+    $lastname: String
+  ) {
+    updateUser(
+      data: { forename: $forename, lastname: $lastname, email: $email }
+    ) {
+      ...UserData
+    }
+  }
+  ${UserDataFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UpdateProfileGQL extends Apollo.Mutation<
+  UpdateProfileMutation,
+  UpdateProfileMutationVariables
+> {
+  document = UpdateProfileDocument;
+}
+export const SetNewPasswordDocument = gql`
+  mutation setNewPassword($password: String!) {
+    changePassword(password: $password)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetNewPasswordGQL extends Apollo.Mutation<
+  SetNewPasswordMutation,
+  SetNewPasswordMutationVariables
+> {
+  document = SetNewPasswordDocument;
+}
+export const ResendVerificationEmailDocument = gql`
+  mutation resendVerificationEmail {
+    resendVerifyEmail
+  }
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ResendVerificationEmailGQL extends Apollo.Mutation<
+  ResendVerificationEmailMutation,
+  ResendVerificationEmailMutationVariables
+> {
+  document = ResendVerificationEmailDocument;
+}
+export const AddUserDocument = gql`
+  mutation addUser($email: String!) {
+    inviteNewUser(email: $email) {
+      ...UserData
+    }
+  }
+  ${UserDataFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AddUserGQL extends Apollo.Mutation<
+  AddUserMutation,
+  AddUserMutationVariables
+> {
+  document = AddUserDocument;
+}
+export const DeleteUserDocument = gql`
+  mutation deleteUser($id: String!) {
+    deleteUser(id: $id) {
+      ...UserData
+    }
+  }
+  ${UserDataFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DeleteUserGQL extends Apollo.Mutation<
+  DeleteUserMutation,
+  DeleteUserMutationVariables
+> {
+  document = DeleteUserDocument;
 }
 export const GetVariationDocument = gql`
   query getVariation($variationId: String!) {

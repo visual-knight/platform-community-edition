@@ -4,6 +4,32 @@ query userlist {
   }
 }
 
+mutation updateProfile($email: String!, $forename: String, $lastname: String) {
+  updateUser(data: { forename: $forename, lastname: $lastname, email: $email }) {
+    ...UserData
+  }
+}
+
+mutation setNewPassword($password: String!) {
+  changePassword(password: $password)
+}
+
+mutation resendVerificationEmail {
+  resendVerifyEmail
+}
+
+mutation addUser($email: String!) {
+  inviteNewUser(email: $email) {
+    ...UserData
+  }
+}
+
+mutation deleteUser($id: String!) {
+  deleteUser(id: $id) {
+    ...UserData
+  }
+}
+
 fragment UserData on UserType {
   id
   email

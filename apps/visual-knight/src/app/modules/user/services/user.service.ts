@@ -1,34 +1,99 @@
 import { Injectable } from '@angular/core';
-import { UserType, UserlistGQL } from '../../core/types';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {
+  UserType,
+  UserlistGQL,
+  UpdateProfileGQL,
+  SetNewPasswordGQL,
+  ResendVerificationEmailGQL,
+  AddUserGQL,
+  DeleteUserGQL,
+  UserlistQuery,
+  UserlistDocument
+} from '../../core/types';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private userlistGQL: UserlistGQL) {}
+  constructor(
+    private userlistGQL: UserlistGQL,
+    private updateProfileGQL: UpdateProfileGQL,
+    private setNewPasswordGQL: SetNewPasswordGQL,
+    private resendVerificationEmailGQL: ResendVerificationEmailGQL,
+    private addUserGQL: AddUserGQL,
+    private deleteUserGQL: DeleteUserGQL
+  ) {}
 
-  setNewPassword(value: string) {
-    throw new Error('Method not implemented.');
+  setNewPassword(password: string) {
+    return this.setNewPasswordGQL
+      .mutate({ password })
+      .pipe(first())
+      .subscribe();
   }
-  updateProfile(value: { email: string; forename: string; lastname: string }) {
-    throw new Error('Method not implemented.');
+
+  updateProfile(profileData: { email: string; forename: string; lastname: string }) {
+    return this.updateProfileGQL
+      .mutate(profileData)
+      .pipe(first())
+      .subscribe();
   }
+
+  getUserList() {
+    return this.userlistGQL.watch().valueChanges;
+  }
+
   resendVerificationEmail() {
-    throw new Error('Method not implemented.');
+    return this.resendVerificationEmailGQL
+      .mutate()
+      .pipe(first())
+      .subscribe();
+  }
+
+  addUser(email: string) {
+    return this.addUserGQL
+      .mutate(
+        { email },
+        {
+          update: (store, { data: { inviteNewUser } }) => {
+            const data: UserlistQuery = store.readQuery({
+              query: UserlistDocument
+            });
+            data.users.push(inviteNewUser);
+            store.writeQuery({ query: UserlistDocument, data });
+          }
+        }
+      )
+      .pipe(first())
+      .subscribe();
+  }
+
+  deleteUser(user: UserType) {
+    return this.deleteUserGQL
+      .mutate(
+        { id: user.id },
+        {
+          update: (
+            store,
+            {
+              data: {
+                deleteUser: { id }
+              }
+            }
+          ) => {
+            const data: UserlistQuery = store.readQuery({
+              query: UserlistDocument
+            });
+            data.users = data.users.filter(u => u.id !== id);
+            store.writeQuery({ query: UserlistDocument, data });
+          }
+        }
+      )
+      .pipe(first())
+      .subscribe();
   }
 
   resendInvitation(user: UserType) {
     throw new Error('Method not implemented.');
-  }
-  addUser(email: string) {
-    throw new Error('Method not implemented.');
-  }
-  deleteUser(user: UserType) {
-    throw new Error('Method not implemented.');
-  }
-  getUserList() {
-    return this.userlistGQL.watch().valueChanges;
   }
 }
