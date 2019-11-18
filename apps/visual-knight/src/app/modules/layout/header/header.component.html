@@ -71,7 +71,12 @@
       <!-- End Navigation -->
 
       <!-- Top left user menu -->
-      <button mat-icon-button [matMenuTriggerFor]="accountMenu" class="topbar-button-right mr-1 img-button">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="accountMenu"
+        class="topbar-button-right mr-1 img-button"
+        *ngIf="(isAuthenticated$ | async)"
+      >
         <img [src]="profilePicture$ | async" alt="" />
       </button>
       <mat-menu #accountMenu="matMenu">

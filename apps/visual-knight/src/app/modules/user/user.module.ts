@@ -16,6 +16,7 @@ import { MatTabsModule } from '@angular/material';
 import { VerificationBoxComponent } from './components/verification-box/verification-box.component';
 import { AccountManagementComponent } from './components/account-management/account-management.component';
 import { UserManagementComponent } from './components/user-management/user-management.component';
+import { AuthGuard } from '../core/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -24,6 +25,8 @@ const routes: Routes = [
   },
   {
     path: 'profile',
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard],
     component: ProfileComponent
   },
   {

@@ -47,8 +47,7 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         () => {
-          const referUrl =
-            this.route.snapshot.queryParams['referUrl'] || '/project';
+          const referUrl = this.route.snapshot.queryParams['referUrl'] || '/project';
           this.router.navigateByUrl(referUrl);
         },
         error => {

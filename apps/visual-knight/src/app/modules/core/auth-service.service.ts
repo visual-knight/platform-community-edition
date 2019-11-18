@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { UserType, CurrentUserGQL, SignupGQL, LoginGQL, ForgotPasswordGQL, ResetPasswordGQL } from './types';
-import { map, tap, filter } from 'rxjs/operators';
+import { map, tap, filter, catchError, switchMap } from 'rxjs/operators';
 import { GraphQLError } from 'graphql';
 import { Router } from '@angular/router';
+import { Apollo } from 'apollo-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -14,27 +15,39 @@ export class AuthService {
   public authErrorMessages$: Observable<GraphQLError[]>;
   public isLoading$: Observable<boolean>;
   public user$: Observable<UserType>;
+  public isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject(
+    localStorage.getItem('visual-knight-token') !== null
+  );
 
   constructor(
     private router: Router,
+    private apollo: Apollo,
     private currentUserGQL: CurrentUserGQL,
     private signupGQL: SignupGQL,
     private loginGQL: LoginGQL,
     private forgotPasswordGQL: ForgotPasswordGQL,
     private resetPasswordGQL: ResetPasswordGQL
   ) {
-    const currentUser$ = this.currentUserGQL.watch().valueChanges;
-
-    this.user$ = currentUser$.pipe(
-      filter(({ data }) => !!data),
-      map(({ data }) => data.me)
+    const currentUser$ = this.currentUserGQL.watch().valueChanges.pipe(
+      catchError(() => {
+        return of({ data: null, loading: false });
+      })
     );
-    this.isLoading$ = currentUser$.pipe(map(result => result.loading));
-    this.authErrorMessages$ = currentUser$.pipe(map(result => result.errors)) as any; // use any because of a prettier bug
-  }
 
-  get authenticated(): boolean {
-    return localStorage.getItem('visual-knight-token') !== null;
+    this.user$ = this.isAuthenticated$.pipe(
+      filter(isAuthenticated => isAuthenticated),
+      switchMap(() =>
+        currentUser$.pipe(
+          filter(({ data }) => !!data),
+          map(({ data }) => data.me)
+        )
+      )
+    );
+
+    this.isLoading$ = this.isAuthenticated$.pipe(
+      filter(isAuthenticated => isAuthenticated),
+      switchMap(() => currentUser$.pipe(map(result => result.loading)))
+    );
   }
 
   public signup({ email, password }) {
@@ -42,6 +55,7 @@ export class AuthService {
       map(result => result.data.signup),
       tap(signupData => {
         localStorage.setItem('visual-knight-token', signupData.token.accessToken);
+        this.isAuthenticated$.next(true);
       })
     );
   }
@@ -50,6 +64,7 @@ export class AuthService {
       map(result => result.data.login),
       tap(loginData => {
         localStorage.setItem('visual-knight-token', loginData.token.accessToken);
+        this.isAuthenticated$.next(true);
       })
     );
   }
@@ -63,7 +78,9 @@ export class AuthService {
   }
 
   public logout() {
-    // this.apollo.getClient().resetStore();
+    localStorage.removeItem('visual-knight-token');
+    this.isAuthenticated$.next(false);
+    this.apollo.getClient().resetStore();
     this.router.navigateByUrl('/user');
   }
 }

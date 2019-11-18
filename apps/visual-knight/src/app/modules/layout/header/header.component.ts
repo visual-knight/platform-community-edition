@@ -2,8 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IMenuItem, IChildItem } from './user-navigation.model';
 import { AuthService } from '../../core/auth-service.service';
 import { ILayoutConf, LayoutService } from '../layout.service';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, tap } from 'rxjs/operators';
 import { getGravatarImageHash } from '../../shared/utils/gravatar';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'visual-knight-header',
@@ -19,6 +20,8 @@ export class HeaderComponent implements OnInit {
     }),
     map(user => getGravatarImageHash(user.email, 40))
   );
+
+  isAuthenticated$: Observable<boolean> = this.authService.isAuthenticated$;
 
   constructor(private authService: AuthService, private layout: LayoutService) {}
 
