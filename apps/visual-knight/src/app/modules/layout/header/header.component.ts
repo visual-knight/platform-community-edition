@@ -77,13 +77,14 @@ export class HeaderComponent implements OnInit {
         icon: 'chat',
         state: 'test'
       },
-      {
-        name: 'DOCUMENTATION',
-        type: 'ext_link',
-        tooltip: 'Documentation',
-        icon: 'book',
-        state: 'https://doc.visual-knight.io'
-      }
+      // TODO: change documentation based on the new v2
+      // {
+      //   name: 'DOCUMENTATION',
+      //   type: 'ext_link',
+      //   tooltip: 'Documentation',
+      //   icon: 'book',
+      //   state: 'https://doc.visual-knight.io'
+      // }
     ];
   }
 }
