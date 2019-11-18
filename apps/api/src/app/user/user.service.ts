@@ -73,7 +73,7 @@ export class UserService {
     }
 
     const salt = genSaltSync(environment.saltRounds);
-    const password = await hash('ACTIVATE', salt);
+    const password = await hash('ACTIVATE' + this.generateApiKey().uuid, salt);
     const apiKey = this.generateApiKey();
 
     const newUser = await this.photonService.users.create({

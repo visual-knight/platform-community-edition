@@ -7,6 +7,7 @@ import { User } from '@generated/photonjs';
 import { EmailService } from '../email/services/email.service';
 import { genSaltSync, hash } from 'bcryptjs';
 import { ACTIVATION_ERRORS } from './interfaces/auth-errors';
+import { compare } from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -42,6 +43,27 @@ export class AuthService {
     return this.photonService.users.findOne({
       where: { email: payload.email }
     });
+  }
+
+  async login(email: string, password: string) {
+    const user = await this.photonService.users.findOne({ where: { email } });
+    if (!user) {
+      throw new Error(`No such user found for email: ${email}`);
+    }
+
+    const valid = await compare(password, user.password);
+    if (!valid) {
+      throw new Error('Invalid password');
+    }
+
+    const token = await this.createToken(user.email);
+
+    delete user.password;
+
+    return {
+      token,
+      user
+    };
   }
 
   async verifyEmail(token: string): Promise<void> {

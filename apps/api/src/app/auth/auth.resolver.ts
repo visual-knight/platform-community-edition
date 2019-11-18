@@ -1,6 +1,5 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { compare } from 'bcryptjs';
 import { UserService } from '../user/user.service';
 import { EmailService } from '../email/services/email.service';
 import { Logger, UseGuards } from '@nestjs/common';
@@ -8,56 +7,28 @@ import { AuthPayload } from './models/auth-payload';
 import { GqlAuthGuard } from './guards/auth.guard';
 import { CurrentUser } from '../shared/decorators/current-user.decorator';
 import { User } from '@generated/photonjs';
-import { PhotonService } from '@visual-knight/api-interface';
 
 @Resolver('Auth')
 export class AuthResolver {
   constructor(
     private readonly authService: AuthService,
-    private readonly photonService: PhotonService,
     private readonly userService: UserService,
     private readonly emailService: EmailService,
     private readonly logger: Logger
   ) {}
 
   @Mutation(returns => AuthPayload)
-  async login(
-    @Args('email') email: string,
-    @Args('password') password: string
-  ): Promise<AuthPayload> {
-    const user = await this.photonService.users.findOne({ where: { email } });
-    if (!user) {
-      throw new Error(`No such user found for email: ${email}`);
-    }
-
-    const valid = await compare(password, user.password);
-    if (!valid) {
-      throw new Error('Invalid password');
-    }
-
-    const token = await this.authService.createToken(user.email);
-
-    delete user.password;
-
-    return {
-      token,
-      user
-    };
+  async login(@Args('email') email: string, @Args('password') password: string): Promise<AuthPayload> {
+    return this.authService.login(email, password);
   }
 
   @Mutation(returns => AuthPayload)
-  async signup(
-    @Args('email') email: string,
-    @Args('password') password: string
-  ): Promise<AuthPayload> {
+  async signup(@Args('email') email: string, @Args('password') password: string): Promise<AuthPayload> {
     let user: User;
     try {
       user = await this.userService.createUser(email, password);
     } catch (error) {
-      if (
-        error.message ===
-        'A unique constraint would be violated on User. Details: Field name = email'
-      ) {
+      if (error.message === 'A unique constraint would be violated on User. Details: Field name = email') {
         throw new Error('Email is already registered');
       } else {
         this.logger.error(error);
@@ -95,10 +66,7 @@ export class AuthResolver {
 
   @Mutation(returns => Boolean)
   @UseGuards(GqlAuthGuard)
-  async changePassword(
-    @Args('password') password: string,
-    @CurrentUser() user: User
-  ) {
+  async changePassword(@Args('password') password: string, @CurrentUser() user: User) {
     await this.authService.changePassword(user, password);
 
     return true;
@@ -112,10 +80,7 @@ export class AuthResolver {
   }
 
   @Mutation(returns => Boolean)
-  async resetPassword(
-    @Args('password') password: string,
-    @Args('token') token: string
-  ) {
+  async resetPassword(@Args('password') password: string, @Args('token') token: string) {
     await this.authService.resetPassword(password, token);
 
     return true;
