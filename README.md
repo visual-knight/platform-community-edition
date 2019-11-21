@@ -60,7 +60,7 @@ _NOTE: working database is required for mysql or postgres_
 
 Everything is done and we can start the UI and API Server ;)
 
-### Start the servers
+### Start the ui and api server (2 servers in parallel)
 
 - Starting the api server: `npx dotenv-cli -e ../../.env npx ng run api:serve`
 - Starting the ui server: `npx ng run visual-knight:serve`
