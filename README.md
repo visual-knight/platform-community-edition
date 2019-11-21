@@ -46,12 +46,14 @@ You need to decied which platform you want to use. At the moment it is easy. We 
 Copy the .envtemplate and name it like you want (recommendation: your stage) e.g.: .env
 Fill your environment with your data!
 
-### We have to create the database
+### We have to prepare the database
+
+_NOTE: working database is required for mysql or postgres_
 
 1. go into libs/api-interface
 2. you can find a file with the name schema.prisma
 3. Setup your databse (Choose between Postgresql, Mysql and SQLite) _NOTE: environments setup must be done!_
-4. Create initial database migration statements for the application `npx dotenv-cli -e ../../.env npx prisma2 lift save --name init` _NOTE: You have to commit the migration files to be able to update later easy the database changes_
+4. Create initial database migration statements for the application `npx dotenv-cli -e ../../.env npx prisma2 lift save --name init` _NOTE: The name it e.g. 'initialize'. You have to commit the migration files to be able to update later easy the database changes_
 5. Lift up the database with the structure `npx dotenv-cli -e ../../.env npx prisma2 lift up`
 6. Generate the photon library `npx dotenv-cli -e ../../.env npx prisma2 generate`
 7. Create the first user `EMAIL=ADD_YOUR_EMAIL_ADDRESS PASSWORD=yourPassw0rd! npx dotenv-cli -e ../../.env node postinstall.js`
