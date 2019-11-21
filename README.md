@@ -67,7 +67,7 @@ Everything is done and we can start the UI and API Server ;)
 
 ### Create a build
 
-**NOTE: This is still in _experimental_**
+**NOTE: This is still _experimental_**
 
 - api server: `npx ng run api:build`
 - ui static files: `npx ng run visual-knight:build`
