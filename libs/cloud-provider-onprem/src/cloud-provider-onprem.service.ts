@@ -2,11 +2,13 @@ import { Injectable, Inject } from '@nestjs/common';
 import { CloudProviderService } from '@visual-knight/api-interface';
 import { writeFile, readFile, unlink } from 'fs';
 import { resolve } from 'path';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class CloudProviderOnpremService implements CloudProviderService {
-  constructor(@Inject('IMAGE_DESTINATION_PATH') private imageDestinationPath: string) {}
+  constructor(
+    @Inject('IMAGE_DESTINATION_PATH') private imageDestinationPath: string
+  ) {}
 
   saveScreenshotImage(image: Buffer, filename: string): Observable<boolean> {
     const subject: Subject<boolean> = new Subject();
