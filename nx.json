@@ -19,6 +19,11 @@
     },
     "api-interface": {
       "tags": []
+    },
+    "visual-knight-cli": {
+      "tags": [
+        "cli"
+      ]
     }
   }
 }

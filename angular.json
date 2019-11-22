@@ -209,6 +209,65 @@
           }
         }
       }
+    },
+    "visual-knight-cli": {
+      "root": "apps/visual-knight-cli",
+      "sourceRoot": "apps/visual-knight-cli/src",
+      "projectType": "application",
+      "prefix": "visual-knight-cli",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/visual-knight-cli",
+            "main": "apps/visual-knight-cli/src/main.ts",
+            "tsConfig": "apps/visual-knight-cli/tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "schema.prisma",
+                "input": "libs/api-interface",
+                "output": "./"
+              },
+              {
+                "glob": "postinstall.js",
+                "input": "libs/api-interface",
+                "output": "./"
+              }
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "visual-knight-cli:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/visual-knight-cli/tsconfig.app.json",
+              "apps/visual-knight-cli/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/visual-knight-cli/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/visual-knight-cli/jest.config.js",
+            "tsConfig": "apps/visual-knight-cli/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {
