@@ -15,7 +15,7 @@ export class ComparisonService {
   constructor(private photonService: PhotonService, private cloudProviderService: CloudProviderService) {}
 
   async testSession(testSessionId: string) {
-    return this.photonService.testSessions.findOne({
+    return this.photonService.testSession.findOne({
       where: { id: testSessionId },
       include: {
         variation: {
@@ -51,7 +51,7 @@ export class ComparisonService {
   }
 
   async getOrCreateProject(projectName: string): Promise<string> {
-    const projects = await this.photonService.projects({
+    const projects = await this.photonService.project.findMany({
       where: { OR: [{ name: projectName }, { id: projectName }] }
     });
 
@@ -59,7 +59,7 @@ export class ComparisonService {
       return projects[0].id;
     }
 
-    const createdProject = await this.photonService.projects.create({
+    const createdProject = await this.photonService.project.create({
       data: {
         name: projectName
       }
@@ -69,7 +69,7 @@ export class ComparisonService {
   }
 
   async loadTestData(projectId: string, testName: string) {
-    const tests = await this.photonService.tests({
+    const tests = await this.photonService.test.findMany({
       where: { name: testName, project: { id: projectId } }
     });
 
@@ -121,7 +121,7 @@ export class ComparisonService {
     let testSession: TestSession;
 
     if (test.id) {
-      const [variation] = await this.photonService.variations({
+      const [variation] = await this.photonService.variation.findMany({
         where: {
           test: { id: test.id },
           AND: [{ deviceName: { equals: deviceName } }, { browserName: { equals: browserName } }]
@@ -132,7 +132,7 @@ export class ComparisonService {
         if (variation) {
           // create test session and connect
           console.log('// create test session and connect');
-          testSession = await this.photonService.testSessions.create({
+          testSession = await this.photonService.testSession.create({
             data: {
               misMatchTolerance,
               autoBaseline,
@@ -144,7 +144,7 @@ export class ComparisonService {
         } else {
           // create test session and variation
           console.log('// create test session and variation');
-          testSession = await this.photonService.testSessions.create({
+          testSession = await this.photonService.testSession.create({
             data: {
               misMatchTolerance,
               autoBaseline,
@@ -166,7 +166,7 @@ export class ComparisonService {
     } else {
       // create test, test session and variation
       console.log('// create test, test session and variation');
-      testSession = await this.photonService.testSessions.create({
+      testSession = await this.photonService.testSession.create({
         data: {
           misMatchTolerance,
           autoBaseline,
@@ -195,7 +195,7 @@ export class ComparisonService {
       .pipe(
         switchMap(() =>
           from(
-            this.photonService.testSessions
+            this.photonService.testSession
               .update({
                 where: { id: testSessionId },
                 data: { imageKey: `${testSessionId}.screenshot.png` }
@@ -253,7 +253,7 @@ export class ComparisonService {
             return this.cloudProviderService.saveScreenshotImage(buffer, diffImageKey).pipe(
               switchMap(() =>
                 from(
-                  this.photonService.testSessions
+                  this.photonService.testSession
                     .update({
                       where: { id: testSessionId },
                       data: { imageKey: diffImageKey }
@@ -305,7 +305,7 @@ export class ComparisonService {
 
   updateAutoBaseline(imageKey: string, testSessionId: string, variationId: string): Observable<any> {
     return from(
-      this.photonService.variations
+      this.photonService.variation
         .update({
           where: { id: variationId },
           data: {
@@ -329,7 +329,7 @@ export class ComparisonService {
 
   private loadTestSessionData(testSessionId: string) {
     return from(
-      this.photonService.testSessions.findOne({
+      this.photonService.testSession.findOne({
         where: { id: testSessionId },
         include: {
           variation: {
@@ -359,7 +359,7 @@ export class ComparisonService {
     misMatchPercentage?: number,
     isSameDimensions?: boolean
   ): Observable<TestSession> {
-    const testSession = this.photonService.testSessions.update({
+    const testSession = this.photonService.testSession.update({
       where: { id: testSessionId },
       data: {
         imageKey,

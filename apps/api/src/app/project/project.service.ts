@@ -8,25 +8,25 @@ export class ProjectService {
   constructor(private photonService: PhotonService) {}
 
   createProject(data: ProjectDataArgs): Promise<Project> {
-    return this.photonService.projects.create({ data });
+    return this.photonService.project.create({ data });
   }
   updateProject(projectId: string, data: ProjectDataArgs): Promise<Project> {
-    return this.photonService.projects.update({
+    return this.photonService.project.update({
       where: { id: projectId },
       data
     });
   }
   deleteProject(projectId: string): Promise<Project> {
-    return this.photonService.projects.delete({ where: { id: projectId } });
+    return this.photonService.project.delete({ where: { id: projectId } });
   }
   async getProjectsCount(): Promise<number> {
     return (await this.getProjects()).length;
   }
   getProjects(): Promise<Project[]> {
-    return this.photonService.projects.findMany();
+    return this.photonService.project.findMany();
   }
   getProject(projectId: string): Promise<Project> {
-    return this.photonService.projects.findOne({
+    return this.photonService.project.findOne({
       where: { id: projectId }
     });
   }

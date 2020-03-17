@@ -1,23 +1,23 @@
-const { Photon, Role } = require('@generated/photonjs');
+const { Role, PrismaClient } = require('@generated/photonjs');
 const uuidAPIKey = require('uuid-apikey');
 const { genSaltSync, hash } = require('bcryptjs');
 
-const photon = new Photon();
+const prisma = new PrismaClient();
 
 async function runSetup() {
-  await photon.connect();
-  if ((await photon.users.count()) === 0) {
+  await prisma.connect();
+  if ((await prisma.user.findMany()).length === 0) {
     const email = process.env.EMAIL || 'visual-knight-community@example.com';
     const password = process.env.PASSWORD || 'yourPassw0rd!';
     await createAdminUser(email, password);
   }
-  await photon.disconnect();
+  await prisma.disconnect();
 }
 
 async function createAdminUser(email, password) {
   const salt = genSaltSync(10);
   const hashedPassword = await hash(password, salt);
-  const adminUser = await photon.users.create({
+  const adminUser = await prisma.user.create({
     data: {
       email,
       password: hashedPassword,

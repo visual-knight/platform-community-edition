@@ -7,7 +7,7 @@ export class VariationService {
   constructor(private photonService: PhotonService, private cloudService: CloudProviderService) {}
 
   async deleteVariation(variationId: string) {
-    const testSessionImages = (await this.photonService.testSessions.findMany({
+    const testSessionImages = (await this.photonService.testSession.findMany({
       where: {
         variation: {
           id: variationId
@@ -20,7 +20,7 @@ export class VariationService {
     }))
       .flatMap(images => [images.imageKey, images.diffImageKey])
       .filter(val => !!val);
-    await this.photonService.testSessions.deleteMany({
+    await this.photonService.testSession.deleteMany({
       where: {
         variation: {
           id: variationId
@@ -35,7 +35,7 @@ export class VariationService {
       console.log('Unable to delete screenshots. Please do it manually! ', testSessionImages);
     }
 
-    return this.photonService.variations.delete({
+    return this.photonService.variation.delete({
       where: { id: variationId },
       include: {
         testSessions: {
@@ -50,7 +50,7 @@ export class VariationService {
     return (await this.getVariations(testId)).length;
   }
   async getVariations(testId: string) {
-    return this.photonService.variations.findMany({
+    return this.photonService.variation.findMany({
       where: { test: { id: testId } },
       include: {
         baseline: true,
@@ -66,7 +66,7 @@ export class VariationService {
     });
   }
   async getVariation(variationId: string) {
-    return this.photonService.variations.findOne({
+    return this.photonService.variation.findOne({
       where: { id: variationId },
       include: {
         baseline: true,
@@ -83,7 +83,7 @@ export class VariationService {
   }
 
   async acceptNewBaseline(variationId: string, testSessionId: string, comment: string, user: User) {
-    return this.photonService.variations.update({
+    return this.photonService.variation.update({
       where: { id: variationId },
       data: {
         baseline: { connect: { id: testSessionId } },

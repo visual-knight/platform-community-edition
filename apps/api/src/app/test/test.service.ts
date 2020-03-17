@@ -6,7 +6,7 @@ export class TestService {
   constructor(private photonService: PhotonService, private cloudService: CloudProviderService) {}
 
   async deleteTest(testId: string) {
-    const testSessionImages = (await this.photonService.testSessions.findMany({
+    const testSessionImages = (await this.photonService.testSession.findMany({
       where: { variation: { test: { id: testId } } },
       select: {
         imageKey: true,
@@ -26,13 +26,13 @@ export class TestService {
     /* TODO: Remove if cascading deletion is implemented in prisma2
        https://github.com/prisma/prisma2/issues/267 */
 
-    await this.photonService.testSessions.deleteMany({
+    await this.photonService.testSession.deleteMany({
       where: { variation: { test: { id: testId } } }
     });
-    await this.photonService.variations.deleteMany({
+    await this.photonService.variation.deleteMany({
       where: { test: { id: testId } }
     });
-    return this.photonService.tests.delete({
+    return this.photonService.test.delete({
       where: { id: testId },
       include: {
         project: true,
@@ -44,7 +44,7 @@ export class TestService {
     return (await this.getTests()).length;
   }
   async getTests() {
-    return this.photonService.tests.findMany({
+    return this.photonService.test.findMany({
       include: {
         variations: { include: { testSessions: true } },
         project: true
@@ -52,7 +52,7 @@ export class TestService {
     });
   }
   async getTest(testId: string) {
-    return this.photonService.tests.findOne({
+    return this.photonService.test.findOne({
       where: { id: testId },
       include: {
         variations: { include: { testSessions: true } },

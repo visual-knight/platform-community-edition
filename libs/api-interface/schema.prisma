@@ -7,7 +7,7 @@ datasource db {
 }
 
 generator photon {
-  provider     = "photonjs"
+  provider     = "prisma-client-js"
   binaryTarget = ["native", "linux-glibc-libssl1.0.2"]
   output       = "../../node_modules/@generated/photonjs"
 }
