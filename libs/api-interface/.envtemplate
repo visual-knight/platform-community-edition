@@ -1,0 +1,2 @@
+# DATABASE
+VK_DATABASE="file:../../tmp/visual-knight.db"
