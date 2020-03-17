@@ -56,17 +56,17 @@ _NOTE: working database is required for mysql or postgres_
 1. go into libs/api-interface
 2. you can find a file with the name schema.prisma
 3. Setup your databse (Choose between Postgresql, Mysql and SQLite) _NOTE: environments setup must be done!_
-4. Create initial database migration statements for the application `npx prisma2 migrate save --name "init" --experimental` _NOTE: The name it e.g. 'init'. You have to commit the migration files to be able to update later easy the database changes_
+4. Create initial database migration statements for the application `npx prisma2 migrate save --name "init" --experimental` _NOTE: You have to commit the migration files to be able to update later easy the database changes_
 5. Lift up the database with the structure `npx prisma2 migrate up --experimental`
 6. Generate the photon library `npx prisma2 generate`
-7. Create the first user `node postinstall.js` (visual-knight-community@example.com/yourPassw0rd!)
+7. Create the first user `node postinstall.js` _NOTE: You'll see credentials and API key in console
 
 Everything is done and we can start the UI and API Server ;)
 
 ### Start the ui and api server (2 servers in parallel)
 
-- Starting the api server: `npx ng run api:serve`
-- Starting the ui server: `npx ng run visual-knight:serve`
+- Starting the api server: `npx ng run api:serve` _NOTE: default http://localhost:3333/graphql
+- Starting the ui server: `npx ng run visual-knight:serve` _NOTE: default http://localhost:4200
 
 ### Create a build
 
