@@ -40,13 +40,13 @@ export class AuthService {
   }
 
   async validateUser(payload: JwtPayload): Promise<User> {
-    return this.photonService.users.findOne({
+    return this.photonService.user.findOne({
       where: { email: payload.email }
     });
   }
 
   async login(email: string, password: string) {
-    const user = await this.photonService.users.findOne({ where: { email } });
+    const user = await this.photonService.user.findOne({ where: { email } });
     if (!user) {
       throw new Error(`No such user found for email: ${email}`);
     }
@@ -78,14 +78,14 @@ export class AuthService {
       throw new Error(ACTIVATION_ERRORS.EXPIRED);
     }
 
-    const user = await this.photonService.users.findOne({
+    const user = await this.photonService.user.findOne({
       where: { email }
     });
     if (user.active) {
       throw new Error(ACTIVATION_ERRORS.ALREADY_DONE);
     }
 
-    await this.photonService.users.update({
+    await this.photonService.user.update({
       where: { email },
       data: { active: true }
     });
@@ -95,7 +95,7 @@ export class AuthService {
     const salt = genSaltSync(environment.saltRounds);
     const hashedPassword = await hash(password, salt);
 
-    this.photonService.users.update({
+    this.photonService.user.update({
       data: {
         password: hashedPassword
       },
@@ -106,7 +106,7 @@ export class AuthService {
   }
 
   async forgotPassword(email: string) {
-    const user = await this.photonService.users.findOne({ where: { email } });
+    const user = await this.photonService.user.findOne({ where: { email } });
     if (!user) {
       throw new Error('email-doesnot-exists');
     }
@@ -127,7 +127,7 @@ export class AuthService {
     const salt = genSaltSync(environment.saltRounds);
     const hashedPassword = await hash(password, salt);
 
-    await this.photonService.users.update({
+    await this.photonService.user.update({
       data: {
         password: hashedPassword
       },

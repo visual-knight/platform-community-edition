@@ -16,7 +16,7 @@ export class GqlApiGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
     const request: Request = ctx.getContext().req;
     try {
-      await this.photonService.users.findOne({
+      await this.photonService.user.findOne({
         where: { apiKey: request.header('x-api-key') }
       });
       return true;

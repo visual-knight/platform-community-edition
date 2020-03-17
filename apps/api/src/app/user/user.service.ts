@@ -21,7 +21,7 @@ export class UserService {
   ) {}
 
   async userList() {
-    return this.photonService.users({
+    return this.photonService.user.findMany({
       select: {
         id: true,
         email: true,
@@ -39,7 +39,7 @@ export class UserService {
     const hashedPassword = await hash(password, salt);
     const apiKey = this.generateApiKey();
 
-    return this.photonService.users.create({
+    return this.photonService.user.create({
       data: {
         email,
         apiKey: apiKey.apiKey,
@@ -53,11 +53,11 @@ export class UserService {
       throw new Error('You are not allowed to delete a user!');
     }
 
-    return this.photonService.users.delete({ where: { id: userIdToDelete } });
+    return this.photonService.user.delete({ where: { id: userIdToDelete } });
   }
 
   async updateUser(user: User, { email, forename, lastname }: UpdateUserInput): Promise<User> {
-    return this.photonService.users.update({
+    return this.photonService.user.update({
       where: { id: user.id },
       data: {
         email,
@@ -76,7 +76,7 @@ export class UserService {
     const password = await hash('ACTIVATE' + this.generateApiKey().uuid, salt);
     const apiKey = this.generateApiKey();
 
-    const newUser = await this.photonService.users.create({
+    const newUser = await this.photonService.user.create({
       data: {
         password,
         email: invitationEmail,
@@ -99,7 +99,7 @@ export class UserService {
       throw new Error('You are not allowed to invite new user!');
     }
 
-    const invitationUser = await this.photonService.users.findOne({ where: { id: invitationUserId } });
+    const invitationUser = await this.photonService.user.findOne({ where: { id: invitationUserId } });
 
     this.emailService.sendInvitationMail({
       email: invitationUser.email,
@@ -113,7 +113,7 @@ export class UserService {
 
   async completeInvitation(token: string, password: string): Promise<AuthPayload> {
     const { email, exp } = this.jwtService.verify(token);
-    const user = await this.photonService.users.findOne({ where: { email } });
+    const user = await this.photonService.user.findOne({ where: { email } });
     if (user.active) {
       throw new Error(INVITATION_ERRORS.ALREADY_DONE);
     }
@@ -124,7 +124,7 @@ export class UserService {
     const salt = genSaltSync(environment.saltRounds);
     const hashedPassword = await hash(password, salt);
 
-    const updatedUser = await this.photonService.users.update({
+    const updatedUser = await this.photonService.user.update({
       where: { email: email },
       data: { active: true, password: hashedPassword }
     });

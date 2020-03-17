@@ -9,7 +9,7 @@ export class TestsessionService {
   constructor(private photonService: PhotonService, private cloudService: CloudProviderService) {}
 
   async updateTestSession(testSessionId: string, data: TestSessionDataArgs) {
-    return this.photonService.testSessions.update({
+    return this.photonService.testSession.update({
       data,
       where: {
         id: testSessionId
@@ -17,7 +17,7 @@ export class TestsessionService {
     });
   }
   async deleteTestSession(testSessionId: string) {
-    const deleted = await this.photonService.testSessions.delete({
+    const deleted = await this.photonService.testSession.delete({
       where: {
         id: testSessionId
       }
@@ -34,7 +34,7 @@ export class TestsessionService {
   }
 
   async testSession(testSessionId: string) {
-    return this.photonService.testSessions.findOne({
+    return this.photonService.testSession.findOne({
       where: { id: testSessionId },
       include: {
         baselineRef: true,
@@ -44,7 +44,7 @@ export class TestsessionService {
   }
 
   async testSessions(where: TestSessionDataArgs) {
-    return this.photonService.testSessions.findMany({
+    return this.photonService.testSession.findMany({
       where: merge(where || {}),
       include: {
         baselineRef: true,
@@ -61,7 +61,7 @@ export class TestsessionService {
   }
 
   async rejectTestSession(testSessionId: string, comment: string, user: User) {
-    return this.photonService.testSessions.update({
+    return this.photonService.testSession.update({
       where: { id: testSessionId },
       data: {
         state: TestSessionState.DECLINED,
