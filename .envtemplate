@@ -2,9 +2,6 @@ VK_APP_SECRET="SOME_APP_SECRET"
 VK_APP_DOMAIN="http://localhost:4200/"
 VK_GRAPHQL_SCHEMA_PATH="apps/api/schema.graphql"
 
-# DATABASE
-VK_DATABASE="file:../../tmp/visual-knight.db"
-
 # EMAIL (only for production)
 VK_EMAIL_USER=""
 VK_EMAIL_PW=""
