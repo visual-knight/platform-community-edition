@@ -43,7 +43,6 @@ describe('AuthResolver', () => {
             createUser: jest.fn()
           }
         },
-        { provide: EmailService, useValue: {} },
         {
           provide: Logger,
           useValue: {
