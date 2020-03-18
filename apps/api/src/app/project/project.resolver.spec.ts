@@ -2,8 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ProjectResolver } from './project.resolver';
 import { ProjectService } from './project.service';
 import {
-  PhotonService,
-  CloudProviderService
+  PhotonService
 } from '@visual-knight/api-interface';
 
 describe('ProjectResolver', () => {
