@@ -63,7 +63,7 @@
     "apollo-link-error": "^1.1.11",
     "apollo-server-core": "^2.8.0",
     "apollo-server-express": "^2.8.0",
-    "aws-lambda": "^0.1.2",
+    "aws-lambda": "^1.0.5",
     "aws-sdk": "^2.501.0",
     "aws-serverless-express": "^3.3.6",
     "bcryptjs": "^2.4.3",
