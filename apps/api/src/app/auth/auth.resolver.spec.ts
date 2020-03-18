@@ -1,33 +1,62 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthResolver } from './auth.resolver';
-import { AuthModule } from './auth.module';
-import { PrismaService } from '../shared/prisma/prisma.service';
+import { AuthService } from './auth.service';
+import { UserService } from '../user/user.service';
 import { EmailService } from '../email/services/email.service';
-
-import { AwsLambdaService } from '../shared/aws';
-import { ACTIVATION_ERRORS } from './interfaces/auth-errors';
+import { Logger } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { PhotonService } from '@visual-knight/api-interface';
+import { User, Role } from '@generated/photonjs';
 
 describe('AuthResolver', () => {
   let testingModule: TestingModule;
   let resolver: AuthResolver;
-  let prisma: PrismaService;
+  let authService: AuthService;
+  let userService: UserService;
   let emailService: EmailService;
-  let prismaCreateUserSpy;
-  let prismaUpdateUserSpy;
-  let prismaUserSpy;
+  let logger: Logger;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
-      imports: [AuthModule]
+      providers: [
+        AuthResolver,
+        {
+          provide: AuthService,
+          useValue: {
+            login: jest.fn(),
+            verifyEmail: jest.fn(),
+            forgotPassword: jest.fn(),
+            resetPassword: jest.fn(),
+          }
+        },
+        { provide: JwtService, useValue: {} },
+        { provide: PhotonService, useValue: {} },
+        {
+          provide: EmailService,
+          useValue: {
+            sendRegistrationMail: jest.fn()
+          }
+        },
+        {
+          provide: UserService,
+          useValue: {
+            createUser: jest.fn()
+          }
+        },
+        { provide: EmailService, useValue: {} },
+        {
+          provide: Logger,
+          useValue: {
+            error: jest.fn()
+          }
+        }
+      ]
     }).compile();
     resolver = testingModule.get<AuthResolver>(AuthResolver);
-    prisma = testingModule.get<PrismaService>(PrismaService);
+    authService = testingModule.get<AuthService>(AuthService);
+    userService = testingModule.get<UserService>(UserService);
     emailService = testingModule.get<EmailService>(EmailService);
-
-    spyOn(emailService, 'sendRegistrationMail').and.stub();
-    prismaCreateUserSpy = spyOn(prisma.client, 'createUser');
-    prismaUpdateUserSpy = spyOn(prisma.client, 'updateUser');
-    prismaUserSpy = spyOn(prisma.client, 'user');
+    logger = testingModule.get<Logger>(Logger);
   });
 
   it('should be defined', () => {
@@ -35,124 +64,109 @@ describe('AuthResolver', () => {
   });
 
   describe('login', () => {
-    it('should throw user not found error on login if the email is not found', () => {
-      prismaUserSpy.and.returnValue(null);
+    it('should call authService login method', () => {
+      resolver.login('myemail@mail.test', 'password');
 
-      return expect(
-        resolver.login('myemail@mail.test', 'password')
-      ).rejects.toThrowError(`No such user found for email: myemail@mail.test`);
-    });
-
-    it('should throw invalid password on login if the password is wrong', () => {
-      prismaUserSpy.and.returnValue({ password: '$sometesthash' });
-
-      return expect(
-        resolver.login('myemail@mail.test', 'password')
-      ).rejects.toThrowError('Invalid password');
-    });
-
-    it('should return the user with AuthPayload and without password', () => {
-      prismaUserSpy.and.returnValue({
-        email: 'myemail@mail.test',
-        password: '$2a$10$.2YPyDSwJ69Cs0qu/21ad.jYiZ34TlHRCe7Vem6c0M3OrKBh4Bcyy'
-      });
-
-      return expect(
-        resolver.login('myemail@mail.test', 'password')
-      ).resolves.toEqual({
-        token: {
-          accessToken: 'accessTokenFor_myemail@mail.test',
-          expiresIn: 3600
-        },
-        user: {
-          email: 'myemail@mail.test'
-        }
-      });
+      return expect(authService.login).toHaveBeenCalledWith(
+        'myemail@mail.test',
+        'password'
+      );
     });
   });
 
   describe('signup', () => {
-    it('should return the user and token after succes registration', () => {
-      prismaUserSpy.and.returnValue({
-        email: 'myemail@mail.test'
-      });
+    it('should create new user', async () => {
+      const mockUser: User = {
+        id: '132',
+        email: 'test@mail.com',
+        password: '12345',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        lastname: 'lastName',
+        forename: 'forename',
+        active: true,
+        role: Role.ADMIN,
+        apiKey: 'asdasdasf23'
+      };
+      const mockToken = {
+        expiresIn: 3600,
+        accessToken: 'token'
+      };
+      userService.createUser = jest.fn().mockReturnValueOnce(mockUser);
+      emailService.sendRegistrationMail = jest.fn();
+      authService.createToken = jest.fn().mockReturnValueOnce(mockToken);
 
-      prismaCreateUserSpy.and.returnValue({
-        email: 'myemail@mail.test'
-      });
-
-      return expect(
-        resolver.signup('myemail@mail.test', 'password')
-      ).resolves.toEqual({
-        token: {
-          accessToken: 'accessTokenFor_myemail@mail.test',
-          expiresIn: 3600
-        },
-        user: {
-          email: 'myemail@mail.test'
-        }
-      });
-    });
-
-    it('should throw an error if the email address is already registered', () => {
-      prismaCreateUserSpy.and.throwError(
-        'A unique constraint would be violated on User. Details: Field name = email'
+      const signupResult = await resolver.signup(
+        mockUser.email,
+        mockUser.password
       );
 
-      return expect(
-        resolver.signup('myemail@mail.test', 'password')
-      ).rejects.toThrowError('Email is already registered');
+      expect(signupResult).toStrictEqual({
+        token: mockToken,
+        user: mockUser
+      });
+      expect(emailService.sendRegistrationMail).toHaveBeenCalledWith({
+        email: mockUser.email,
+        to: mockUser.email
+      });
+      expect(authService.createToken).toHaveBeenCalledWith(mockUser.email);
     });
 
-    it('should throw an unknow error', () => {
-      prismaCreateUserSpy.and.throwError('Some unexpected error');
+    it('should throw an error if the email address is already registered', async () => {
+      userService.createUser = jest.fn().mockRejectedValue({
+        message:
+          'A unique constraint would be violated on User. Details: Field name = email'
+      });
 
-      return expect(
+      await expect(
         resolver.signup('myemail@mail.test', 'password')
-      ).rejects.toThrowError('Unknown server error');
+      ).rejects.toThrowError(new Error('Email is already registered'));
+    });
+
+    it('should throw an unknow error', async () => {
+      const errorMock = {
+        message: 'Some unexpected error'
+      };
+      logger.error = jest.fn();
+      userService.createUser = jest.fn().mockRejectedValue(errorMock);
+
+      await expect(
+        resolver.signup('myemail@mail.test', 'password')
+      ).rejects.toThrowError(new Error('Unknown server error'));
+      expect(logger.error).toHaveBeenCalledWith(errorMock);
     });
   });
 
-  describe('verify email', () => {
-    it('should return true if the verification was successful in dev mode', async () => {
-      prismaUserSpy.and.returnValue({
-        email: 'myemail@mail.test',
-        contractUser: () =>
-          Promise.resolve({
-            id: 'some_id',
-            planStripeId: 'stripe_id'
-          })
-      });
-      prismaUpdateUserSpy.and.stub();
+  describe('verifyEmail', () => {
+    it('should call authService verifyEmail method', async () => {
+      authService.verifyEmail = jest.fn();
 
-      expect(await resolver.verifyEmail('valid_token')).toBeTruthy();
+      const result = await resolver.verifyEmail('myemail@mail.test');
+
+      expect(result).toBe(true);
+      expect(authService.verifyEmail).toHaveBeenCalledWith('myemail@mail.test');
     });
+  });
 
-    it('should throw an error if token is invalid', () => {
-      return expect(resolver.verifyEmail('invalid')).rejects.toThrowError(
-        ACTIVATION_ERRORS.INVALID
-      );
+  describe('forgotPassword', () => {
+    it('should call authService forgotPassword method', async () => {
+      authService.forgotPassword = jest.fn();
+
+      const result = await resolver.forgotPassword('myemail@mail.test');
+
+      expect(result).toBe(true);
+      expect(authService.forgotPassword).toHaveBeenCalledWith('myemail@mail.test');
     });
+  });
 
-    it('should throw an error if token is expired', () => {
-      prismaUserSpy.and.returnValue({
-        email: 'myemail@mail.test'
-      });
+  describe('resetPassword', () => {
+    it('should call authService resetPassword method', async () => {
+      authService.resetPassword = jest.fn();
 
-      return expect(resolver.verifyEmail('expired')).rejects.toThrowError(
-        ACTIVATION_ERRORS.EXPIRED
-      );
-    });
+      const result = await resolver.resetPassword('myemail@mail.test', 'token');
 
-    it('should throw an error if the user is already activated', () => {
-      prismaUserSpy.and.returnValue({
-        email: 'myemail@mail.test',
-        active: true
-      });
-
-      return expect(resolver.verifyEmail('valid_token')).rejects.toThrowError(
-        ACTIVATION_ERRORS.ALREADY_DONE
-      );
+      expect(result).toBe(true);
+      expect(authService.resetPassword).toHaveBeenCalledWith('myemail@mail.test', 'token');
     });
   });
 });
