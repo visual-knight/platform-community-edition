@@ -1,6 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {
+  MatFormFieldModule,
+  MatProgressBarModule,
+  MatCardModule,
+  MatSnackBarModule,
+  MatInputModule
+} from '@angular/material';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ApolloTestingModule } from 'apollo-angular/testing';
 import { ForgotPasswordComponent } from './forgot-password.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ForgotPasswordComponent', () => {
   let component: ForgotPasswordComponent;
@@ -8,7 +18,18 @@ describe('ForgotPasswordComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ForgotPasswordComponent]
+      declarations: [ForgotPasswordComponent],
+      imports: [
+        MatFormFieldModule,
+        MatProgressBarModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        RouterTestingModule,
+        ApolloTestingModule,
+        MatSnackBarModule,
+        MatInputModule,
+        BrowserAnimationsModule
+      ]
     }).compileComponents();
   }));
 
