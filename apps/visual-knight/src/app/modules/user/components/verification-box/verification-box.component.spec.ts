@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VerificationBoxComponent } from './verification-box.component';
+import { ApolloTestingModule } from 'apollo-angular/testing';
 
 describe('VerificationBoxComponent', () => {
   let component: VerificationBoxComponent;
@@ -8,9 +9,9 @@ describe('VerificationBoxComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ VerificationBoxComponent ]
-    })
-    .compileComponents();
+      declarations: [VerificationBoxComponent],
+      imports: [ApolloTestingModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
