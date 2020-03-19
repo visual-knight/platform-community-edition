@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TestSessionListComponent } from './test-session-list.component';
+import { MatTableModule, MatTooltipModule } from '@angular/material';
+import { ApolloTestingModule } from 'apollo-angular/testing';
 
 describe('TestSessionListComponent', () => {
   let component: TestSessionListComponent;
@@ -8,9 +10,9 @@ describe('TestSessionListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TestSessionListComponent ]
-    })
-    .compileComponents();
+      declarations: [TestSessionListComponent],
+      imports: [MatTableModule, MatTooltipModule, ApolloTestingModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
