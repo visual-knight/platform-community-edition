@@ -1,9 +1,4 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-const CHROME_ICON = require('../../../../../../assets/browser-logos/chrome_64x64.png');
-const FIREFOX_ICON = require('../../../../../../assets/browser-logos/firefox_32x32.png');
-const EDGE_ICON = require('../../../../../../assets/browser-logos/edge_64x64.png');
-const OPERA_ICON = require('../../../../../../assets/browser-logos/opera_64x64.png');
-const PUPPETEER_ICON = require('../../../../../../assets/browser-logos/puppeteer.png');
 
 @Component({
   selector: 'visual-knight-browser-icon',
@@ -28,9 +23,9 @@ export class BrowserIconComponent implements OnInit {
 }
 
 enum BROWSER_ICON_IMAGES {
-  CHROME = CHROME_ICON,
-  FIREFOX = FIREFOX_ICON,
-  EDGE = EDGE_ICON,
-  OPERA = OPERA_ICON,
-  PUPPETEER = PUPPETEER_ICON
+  CHROME = '../../../../../../assets/browser-logos/chrome_64x64.png',
+  FIREFOX = '../../../../../../assets/browser-logos/firefox_32x32.png',
+  EDGE = '../../../../../../assets/browser-logos/edge_64x64.png',
+  OPERA = '../../../../../../assets/browser-logos/opera_64x64.png',
+  PUPPETEER = '../../../../../../assets/browser-logos/puppeteer.png'
 }
