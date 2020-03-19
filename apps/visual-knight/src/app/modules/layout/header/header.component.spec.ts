@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
+import { MatIconModule, MatMenuModule } from '@angular/material';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ApolloTestingModule } from 'apollo-angular/testing';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -8,9 +11,14 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeaderComponent ]
-    })
-    .compileComponents();
+      declarations: [HeaderComponent],
+      imports: [
+        MatIconModule,
+        MatMenuModule,
+        RouterTestingModule,
+        ApolloTestingModule
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
