@@ -1,5 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material';
 import { DeleteVariationModalComponent } from './delete-variation.component';
 
 describe('DeleteVariationComponent', () => {
@@ -8,9 +12,13 @@ describe('DeleteVariationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeleteVariationModalComponent ]
-    })
-    .compileComponents();
+      declarations: [DeleteVariationModalComponent],
+      providers: [
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: {} }
+      ],
+      imports: [MatDialogModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
