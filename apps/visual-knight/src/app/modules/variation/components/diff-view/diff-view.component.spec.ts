@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DiffViewComponent } from './diff-view.component';
+import { ScreenshotImagePipe } from '../../../shared/pipes/screenshot-image.pipe';
 
 describe('DiffViewComponent', () => {
   let component: DiffViewComponent;
@@ -8,9 +8,8 @@ describe('DiffViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiffViewComponent ]
-    })
-    .compileComponents();
+      declarations: [DiffViewComponent, ScreenshotImagePipe]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
