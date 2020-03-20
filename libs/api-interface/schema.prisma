@@ -78,10 +78,6 @@ model TestSession {
 
   // baseline reference
   baselineRef Variation? @relation(name: "VariationBaseline")
-
-  // reference to the diff
-  baselineForDiffRef TestSession? @relation(name: "DiffBaselineOnTestSession")
-  diffBaseline       TestSession? @relation(name: "DiffBaselineOnTestSession")
 }
 
 enum Role {
