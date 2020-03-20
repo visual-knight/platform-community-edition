@@ -286,7 +286,6 @@ export class ComparisonService {
                 testSession.imageKey,
                 misMatchTolerance < misMatchPercentage || !isSameDimensions ? 'UNRESOLVED' : 'ACCEPTED',
                 diffImageKey,
-                baselineRef.id,
                 misMatchPercentage,
                 isSameDimensions
               );
@@ -297,7 +296,7 @@ export class ComparisonService {
           return this.updateAutoBaseline(testSession.imageKey, testSessionId, variationId);
         } else {
           console.log('No baseline image exists');
-          return this.updateImageData(testSessionId, testSession.imageKey, 'UNRESOLVED');
+          return this.updateImageData(testSessionId, testSession.imageKey, TestSessionState.UNRESOLVED);
         }
       })
     );
@@ -317,7 +316,7 @@ export class ComparisonService {
                   imageKey: imageKey,
                   isSameDimensions: true,
                   misMatchPercentage: 0,
-                  state: 'ACCEPTED'
+                  state: TestSessionState.ACCEPTED
                 }
               }
             }
@@ -355,7 +354,6 @@ export class ComparisonService {
     imageKey: string,
     state: TestSessionState,
     diffImageKey?: string,
-    diffBaselineRef?: string,
     misMatchPercentage?: number,
     isSameDimensions?: boolean
   ): Observable<TestSession> {
@@ -367,7 +365,6 @@ export class ComparisonService {
         misMatchPercentage,
         isSameDimensions,
         state,
-        baselineForDiffRef: diffBaselineRef ? { connect: { id: diffBaselineRef } } : null
       }
     });
 
