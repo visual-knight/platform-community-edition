@@ -61,14 +61,19 @@
     fxLayoutAlign="center center"
     class="screenshot-view left mat-elevation-z4"
   >
-    <img [src]="variation.baseline?.imageKey | screenshotImage" />
+    <visual-knight-diff-view [image]="variation.baseline?.imageKey">
+    </visual-knight-diff-view>
   </div>
   <div
     fxFlex
     fxLayoutAlign="center center"
     class="screenshot-view right mat-elevation-z4"
   >
-    <img [src]="testSession.imageKey | screenshotImage" [hidden]="isDiffView" />
+    <visual-knight-diff-view
+      [image]="testSession.imageKey"
+      [hidden]="isDiffView"
+    >
+    </visual-knight-diff-view>
     <visual-knight-diff-view
       [image]="testSession.diffImageKey"
       [hidden]="!isDiffView"
