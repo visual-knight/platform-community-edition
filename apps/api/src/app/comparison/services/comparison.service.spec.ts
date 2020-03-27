@@ -38,7 +38,6 @@ describe('ComparisonService', () => {
       imageKey: 'testSession.imageKey',
       state: TestSessionState.UNRESOLVED,
       diffImageKey: 'diffImageKey',
-      diffBaselineRef: 'diffBaselineRef',
       misMatchPercentage: 15,
       isSameDimensions: true
     };
