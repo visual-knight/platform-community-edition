@@ -5,7 +5,9 @@ import { environment } from '../../../../environments/environment';
   name: 'screenshotImage'
 })
 export class ScreenshotImagePipe implements PipeTransform {
-  transform(value: any): any {
-    return environment.apiEndpoint + environment.screenshotsPath + value;
+  transform(value: string): string {
+    if (value)
+      return environment.apiEndpoint + environment.screenshotsPath + value;
+    else return '../../../assets/images/no-img.jpg';
   }
 }
