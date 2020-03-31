@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TestListComponent should render not empty test list 1`] = `
+<visual-knight-test-list
+  dataSource={[Function TestsDataSource]}
+  displayedColumns={[Function Array]}
+  testService={[Function TestService]}
+>
+  <mat-table
+    class="mat-table"
+    ng-reflect-data-source="[object Object]"
+    role="grid"
+  >
+    
+    <mat-header-row
+      class="mat-header-row ng-tns-c4-0 ng-star-inserted"
+      role="row"
+    >
+      
+      <mat-header-cell
+        class="mat-header-cell cdk-column-name mat-column-name ng-tns-c4-0 ng-star-inserted"
+        role="columnheader"
+      >
+        Testname
+      </mat-header-cell>
+      <mat-header-cell
+        class="mat-header-cell cdk-column-variations mat-column-variations ng-tns-c4-0 ng-star-inserted"
+        role="columnheader"
+      >
+        Results
+      </mat-header-cell>
+      <mat-header-cell
+        class="mat-header-cell cdk-column-viewVariations mat-column-viewVariations ng-tns-c4-0 ng-star-inserted"
+        role="columnheader"
+      />
+    </mat-header-row>
+    
+    <mat-row
+      class="mat-row ng-tns-c4-0 ng-trigger ng-trigger-rowsAnimation ng-star-inserted ng-animating"
+      ng-reflect-router-link="/variation,12"
+      role="row"
+      style="animation: 300ms linear 0ms 1 normal forwards gen_css_kf_0; animation-play-state: running;"
+      tabindex="0"
+    >
+      
+      <mat-cell
+        class="mat-cell cdk-column-name mat-column-name ng-tns-c4-0 ng-star-inserted"
+        role="gridcell"
+        style=""
+      >
+         name 1 
+      </mat-cell>
+      <mat-cell
+        class="mat-cell cdk-column-variations mat-column-variations ng-tns-c4-0 ng-star-inserted"
+        role="gridcell"
+        style=""
+      >
+         1 test(s) 
+      </mat-cell>
+      <mat-cell
+        class="mat-cell cdk-column-viewVariations mat-column-viewVariations ng-tns-c4-0 ng-star-inserted"
+        role="gridcell"
+        style=""
+      >
+        <div
+          class="actions"
+          fxlayout="row"
+        >
+          <button
+            aria-haspopup="true"
+            class="mat-menu-trigger"
+            mat-icon-button=""
+            ng-reflect-menu="[object Object]"
+            type="button"
+          >
+            <mat-icon
+              aria-hidden="true"
+              class="icon mat-icon notranslate material-icons mat-icon-no-color"
+              role="img"
+            >
+              more_vert
+            </mat-icon>
+          </button>
+        </div>
+        <mat-menu
+          class="ng-tns-c4-0 ng-tns-c7-1"
+        >
+          
+        </mat-menu>
+      </mat-cell>
+    </mat-row>
+    
+  </mat-table>
+</visual-knight-test-list>
+`;
