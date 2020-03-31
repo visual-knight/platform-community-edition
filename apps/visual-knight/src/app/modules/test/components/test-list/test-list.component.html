@@ -22,8 +22,9 @@
         <button
           type="button"
           mat-icon-button
-          (click)="stopPropagationClick($event)"
           [matMenuTriggerFor]="cardMenuRef"
+          id="actionMenuBtn"
+          (click)="$event.stopPropagation()"
         >
           <mat-icon class="icon">more_vert</mat-icon>
         </button>
@@ -34,7 +35,7 @@
           <mat-icon>refresh</mat-icon>
           <span>View all</span>
         </button>
-        <button mat-menu-item (click)="onDeleteTest(test)">
+        <button mat-menu-item (click)="onDeleteTest(test)" id="deleteBtn">
           <mat-icon>exit_to_app</mat-icon>
           <span>Remove Test</span>
         </button>
@@ -45,6 +46,7 @@
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row
     *matRowDef="let test; columns: displayedColumns"
+    id="test_row_{{ test.id }}"
     [routerLink]="['/variation', test.id]"
     [@rowsAnimation]="{ value: '*' }"
   ></mat-row>

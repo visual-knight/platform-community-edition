@@ -1,9 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { rowsAnimation } from '../../../shared/animations';
 import { TestsDataSource } from '../../test.datasource';
-import {
-  TestType,
-} from '../../../core/types';
+import { TestDataFragment } from '../../../core/types';
 import { TestService } from '../../services/test.service';
 import { first } from 'rxjs/operators';
 
@@ -17,24 +15,14 @@ export class TestListComponent implements OnInit {
   @Input() dataSource: TestsDataSource;
   displayedColumns = ['name', 'variations', 'viewVariations'];
 
-  constructor(
-    private testService: TestService,
-  ) {}
+  constructor(private testService: TestService) {}
 
   ngOnInit() {}
 
-  onClickRow(test: TestType) {
-    this.testService.setSelectedTest(test);
-  }
-
-  onDeleteTest(test: TestType) {
+  onDeleteTest(test: TestDataFragment) {
     this.testService
       .removeTest(test.id)
       .pipe(first())
       .subscribe();
-  }
-
-  stopPropagationClick($event: Event) {
-    $event.stopPropagation();
   }
 }
