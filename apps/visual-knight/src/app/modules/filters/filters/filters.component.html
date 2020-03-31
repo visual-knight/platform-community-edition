@@ -42,7 +42,7 @@
           multiple
         >
           <mat-option
-            *ngFor="let browser of (browserList$ | async)"
+            *ngFor="let browser of browserList$"
             [value]="browser"
             >{{ browser }}</mat-option
           >
@@ -57,7 +57,7 @@
           multiple
         >
           <mat-option
-            *ngFor="let device of (deviceList$ | async)"
+            *ngFor="let device of deviceList$"
             [value]="device"
             >{{ device }}</mat-option
           >
@@ -72,7 +72,7 @@
           multiple
         >
           <mat-option
-            *ngFor="let testSessionState of (testSessionStateList$ | async)"
+            *ngFor="let testSessionState of testSessionStateList$"
             [value]="testSessionState"
             >{{ testSessionState }}</mat-option
           >
