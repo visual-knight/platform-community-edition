@@ -1,100 +1,105 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { Browser } from '../../shared/browser.model';
 import { Device } from '../../shared/device.model';
-import { ProjectType, TestType } from '../../core/types';
-import { map, filter } from 'rxjs/operators';
+import { ProjectType } from '../../core/types';
+import { map } from 'rxjs/operators';
 import { TestService } from '../../test/services/test.service';
+
+interface IFilter {
+  testNameFilter: string;
+  browserFilter: Browser[];
+  deviceFilter: Device[];
+  projectFilter: ProjectType[];
+  testStateFilter: string[];
+}
 
 @Injectable({ providedIn: 'root' })
 export class FiltersService {
-  testNameFilter: BehaviorSubject<string> = new BehaviorSubject(null);
-  browserFilter: BehaviorSubject<Browser[]> = new BehaviorSubject([]);
-  deviceFilter: BehaviorSubject<Device[]> = new BehaviorSubject([]);
-  projectFilter: BehaviorSubject<ProjectType[]> = new BehaviorSubject([]);
-  testStateFilter: BehaviorSubject<string[]> = new BehaviorSubject([]);
-  testList$ = this.testService.testList().pipe(
-    filter(({ data }) => !!data),
-    map(({ data }) => data.tests)
+  constructor(private testService: TestService) {}
+
+  initFilterState: IFilter = {
+    testNameFilter: '',
+    browserFilter: [],
+    deviceFilter: [],
+    projectFilter: [],
+    testStateFilter: []
+  };
+
+  filterState: BehaviorSubject<IFilter> = new BehaviorSubject(
+    this.initFilterState
   );
 
-  constructor(private testService: TestService) {}
+  setFilter(state: IFilter) {
+    this.filterState.next(state);
+  }
 
   filteredTestList$() {
     return combineLatest(
-      this.testList$,
-      this.testNameFilter,
-      this.browserFilter,
-      this.deviceFilter,
-      this.projectFilter,
-      this.testStateFilter
+      this.testService.testList().pipe(map(({ data }) => data && data.tests)),
+      this.filterState
     ).pipe(
-      map(
-        ([
-          testList,
-          testNameFilter,
-          browserFilter,
-          deviceFilter,
-          projectFilter,
-          testStateFilter
-        ]) => {
-          let filteredTests = testList;
+      map(([testList, filterState]) => {
+        console.log(filterState);
 
-          if (testNameFilter) {
-            filteredTests = filteredTests.filter(
-              test =>
-                test.name
-                  .toLowerCase()
-                  .indexOf(testNameFilter.toLowerCase()) !== -1
-            );
-          }
+        let filteredTests = testList;
 
-          if (browserFilter.length > 0) {
-            filteredTests = filteredTests.filter(
-              test =>
-                !!browserFilter.find(
-                  browser =>
-                    !!test.variations.find(
-                      variation => variation.browserName === browser
-                    )
-                )
-            );
-          }
-
-          if (deviceFilter.length > 0) {
-            filteredTests = filteredTests.filter(
-              test =>
-                !!deviceFilter.find(
-                  device =>
-                    !!test.variations.find(
-                      variation => variation.deviceName === device
-                    )
-                )
-            );
-          }
-
-          if (projectFilter.length > 0) {
-            filteredTests = filteredTests.filter(
-              test =>
-                !!projectFilter.find(project => test.project.id === project.id)
-            );
-          }
-
-          if (testStateFilter.length > 0) {
-            filteredTests = filteredTests.filter(
-              test =>
-                !!testStateFilter.find(
-                  testState =>
-                    !!test.variations.find(
-                      variation => variation.testSessions[0].state === testState
-                    )
-                )
-            );
-          }
-
-          return filteredTests;
+        if (filterState.testNameFilter) {
+          filteredTests = filteredTests.filter(
+            test =>
+              test.name
+                .toLowerCase()
+                .indexOf(filterState.testNameFilter.toLowerCase()) !== -1
+          );
         }
-      )
+
+        if (filterState.browserFilter.length > 0) {
+          filteredTests = filteredTests.filter(
+            test =>
+              !!filterState.browserFilter.find(
+                browser =>
+                  !!test.variations.find(
+                    variation => variation.browserName === browser
+                  )
+              )
+          );
+        }
+
+        if (filterState.deviceFilter.length > 0) {
+          filteredTests = filteredTests.filter(
+            test =>
+              !!filterState.deviceFilter.find(
+                device =>
+                  !!test.variations.find(
+                    variation => variation.deviceName === device
+                  )
+              )
+          );
+        }
+
+        if (filterState.projectFilter.length > 0) {
+          filteredTests = filteredTests.filter(
+            test =>
+              !!filterState.projectFilter.find(
+                project => test.project.id === project.id
+              )
+          );
+        }
+
+        if (filterState.testStateFilter.length > 0) {
+          filteredTests = filteredTests.filter(
+            test =>
+              !!filterState.testStateFilter.find(
+                testState =>
+                  !!test.variations.find(
+                    variation => variation.testSessions[0].state === testState
+                  )
+              )
+          );
+        }
+
+        return filteredTests;
+      })
     );
   }
 }
