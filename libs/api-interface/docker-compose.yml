@@ -14,10 +14,10 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
   migration:
-    build: .
-    depends_on: 
+    image: visual-knight/migration:latest
+    depends_on:
       - postgres
-    environment: 
+    environment:
       VK_DATABASE: postgresql://prisma:prisma@postgres:5432/prisma
       POSTGRES_SERVER: postgres
       POSTGRES_PORT: 5432

@@ -5,7 +5,9 @@
   "scripts": {
     "ng": "ng",
     "nx": "nx",
-    "start": "ng run api:serve && ng run visual-knight:serve",
+    "start": "ng run visual-knight:serve && ng run api:serve && ng run visual-knight:serve",
+    "start:api": "ng run api:serve",
+    "start:visual-knight": "ng run visual-knight:serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "nx workspace-lint && ng lint",
@@ -30,7 +32,7 @@
     "zip": "cd dist/apps/api && zip main.js.zip main.js",
     "deploy": "npm run zip && npx serverless deploy --verbose",
     "generate": "npm run generate:photon && npm run generate:vk-types",
-    "generate:photon": "cd libs/api-interface && prisma2 generate",
+    "generate:photon": "cd libs/api-interface && npx prisma generate",
     "generate:vk-types": "graphql-codegen",
     "prismadev": "cd libs/api-interface && npx prisma2 dev"
   },
