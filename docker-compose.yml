@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  vk:
+    build: .
+    environment:
+        VK_DATABASE: postgresql://prisma:prisma@localhost:5432/prisma
+        VK_APP_SECRET: SOME_APP_SECRET
+        VK_APP_DOMAIN: http://localhost:4200/
+        VK_GRAPHQL_SCHEMA_PATH: apps/api/schema.graphql
+        VK_EMAIL_USER: ''
+        VK_EMAIL_PW: ''
+        VK_EMAIL_SMTP_PROVIDER: ''
+    ports:
+        - '3333:3333'
+        - '4200:4200'
+    expose:
+        - '3333'
+        - '4200'
+    depends_on:
+        - db
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+# Names our volume
+volumes: 
+    postgres:
