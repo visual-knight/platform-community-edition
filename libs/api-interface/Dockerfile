@@ -13,5 +13,7 @@ COPY migrations/ /migrations/
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+RUN prisma generate
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["up"]
