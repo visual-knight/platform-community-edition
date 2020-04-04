@@ -1,24 +1,44 @@
 version: '3.7'
 services:
-  vk:
-    build: .
-    environment:
-        VK_DATABASE: postgresql://prisma:prisma@localhost:5432/prisma
-        VK_APP_SECRET: SOME_APP_SECRET
-        VK_APP_DOMAIN: http://localhost:4200/
-        VK_GRAPHQL_SCHEMA_PATH: apps/api/schema.graphql
-        VK_EMAIL_USER: ''
-        VK_EMAIL_PW: ''
-        VK_EMAIL_SMTP_PROVIDER: ''
-    ports:
-        - '3333:3333'
-        - '4200:4200'
-    expose:
-        - '3333'
-        - '4200'
+  api:
+    build: 
+      context: .
+      dockerfile: api.Dockerfile
+    ports: 
+      - '3333:3333'
+    environment: 
+      VK_APP_SECRET: SOME_APP_SECRET
+      VK_APP_DOMAIN: http://visual-knight:4200/
+      VK_GRAPHQL_SCHEMA_PATH: apps/api/schema.graphql
+      VK_DATABASE: postgresql://prisma:prisma@postgres:5432/prisma
     depends_on:
-        - db
-  db:
+      - postgres
+  visual-knight:
+    build:
+      context: .
+      dockerfile: visual-knight.Dockerfile
+    ports: 
+      - '4200:4200'
+  # vk:
+  #   build: .
+  #   # image: visual-knight/app:0.0.1
+  #   environment:
+  #     VK_DATABASE: postgresql://prisma:prisma@postgres:5432/prisma
+  #     VK_APP_SECRET: SOME_APP_SECRET
+  #     VK_APP_DOMAIN: http://localhost:4200/
+  #     VK_GRAPHQL_SCHEMA_PATH: apps/api/schema.graphql
+  #     VK_EMAIL_USER: ''
+  #     VK_EMAIL_PW: ''
+  #     VK_EMAIL_SMTP_PROVIDER: ''
+  #   ports:
+  #     - '3333:3333'
+  #     - '4200:4200'
+  #   expose:
+  #     - '3333'
+  #     - '4200'
+  #   depends_on:
+  #     - postgres
+  postgres:
     image: postgres
     restart: always
     environment:
@@ -30,6 +50,14 @@ services:
       - '5432'
     volumes:
       - postgres:/var/lib/postgresql/data
-# Names our volume
-volumes: 
-    postgres:
+  migration:
+    # build: ./libs/api-interface/Dockerfile
+    image: visual-knight/migration:0.0.1
+    depends_on:
+      - postgres
+    environment:
+      VK_DATABASE: postgresql://prisma:prisma@postgres:5432/prisma
+      POSTGRES_SERVER: postgres
+      POSTGRES_PORT: 5432
+volumes:
+  postgres:
