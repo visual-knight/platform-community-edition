@@ -14,7 +14,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
   migration:
-    image: visual-knight/migration:latest
+    build: .
     depends_on:
       - postgres
     environment:
