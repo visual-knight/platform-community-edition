@@ -8,6 +8,8 @@
     "start": "ng run visual-knight:serve && ng run api:serve && ng run visual-knight:serve",
     "start:api": "ng run api:serve",
     "start:visual-knight": "ng run visual-knight:serve",
+    "build:api": "ng build api",
+    "build:visual-knight": "ng build visual-knight",
     "build": "ng build",
     "test": "ng test",
     "lint": "nx workspace-lint && ng lint",
