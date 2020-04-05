@@ -1,7 +1,5 @@
 FROM node:latest
 
-# WORKDIR /usr/src/api-interface
-
 RUN npm install -g @prisma/cli
 
 ADD "https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh" /wait-for-it.sh
@@ -15,5 +13,5 @@ RUN chmod +x /entrypoint.sh
 
 RUN prisma generate
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["bash", "/entrypoint.sh"]
 CMD ["up"]
