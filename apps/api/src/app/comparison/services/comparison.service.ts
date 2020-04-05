@@ -32,7 +32,7 @@ export class ComparisonService {
     return defer(() => this.testSession(testSessionId)).pipe(
       map(testSession => {
         if (
-          ((testSession.misMatchPercentage === null && testSession.variation.baseline !== null) ||
+          ((testSession.variation === null && (testSession.variation as any).baseline !== null) ||
             (testSession.misMatchPercentage === null && testSession.autoBaseline === true)) &&
           testSession.isSameDimensions !== false
         ) {
@@ -41,7 +41,7 @@ export class ComparisonService {
 
         return {
           ...testSession,
-          link: `${environment.appDomain}variation/${testSession.variation.test.id}/${
+          link: `${environment.appDomain}variation/${(testSession.variation as any).test.id}/${
             testSession.variation.id
           }?testSessionId=${testSession.id}`
         };
@@ -341,7 +341,7 @@ export class ComparisonService {
     ).pipe(
       map(testSession => ({
         testSession,
-        baselineRef: testSession.variation.baseline,
+        baselineRef: (testSession.variation as any).baseline,
         misMatchTolerance: testSession.misMatchTolerance,
         autoBaseline: testSession.autoBaseline,
         variationId: testSession.variation.id
