@@ -901,21 +901,7 @@ export class DeleteTestGQL extends Apollo.Mutation<
 > {
   document = DeleteTestDocument;
 }
-export const SelectedTestDocument = gql`
-  query selectedTest {
-    selectedTest @client
-  }
-`;
 
-@Injectable({
-  providedIn: 'root'
-})
-export class SelectedTestGQL extends Apollo.Query<
-  SelectedTestQuery,
-  SelectedTestQueryVariables
-> {
-  document = SelectedTestDocument;
-}
 export const UserlistDocument = gql`
   query userlist {
     users {

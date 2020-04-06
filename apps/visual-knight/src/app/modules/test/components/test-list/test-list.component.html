@@ -2,11 +2,8 @@
   <!-- Test Name Column -->
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef>Testname</mat-header-cell>
-    <mat-cell
-      *matCellDef="let test"
-      [class.align-cell-to-top]="(selectedTestId | async) === test.id"
-    >
-      <div *ngIf="test && test.id; else loader">{{ test.name }}</div>
+    <mat-cell *matCellDef="let test">
+      {{ test.name }}
     </mat-cell>
   </ng-container>
 
@@ -14,54 +11,43 @@
   <ng-container matColumnDef="variations">
     <mat-header-cell *matHeaderCellDef>Results</mat-header-cell>
     <mat-cell *matCellDef="let test">
-      <div *ngIf="test && test.id; else loader">
-        {{ test.variations.length }} test(s)
-      </div>
+      {{ test.variations.length }} test(s)
     </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="viewVariations">
     <mat-header-cell *matHeaderCellDef></mat-header-cell>
     <mat-cell *matCellDef="let test">
-      <div *ngIf="test && test.id; else loader">
-        <div class="actions" fxLayout="row">
-          <button
-            type="button"
-            mat-icon-button
-            (click)="stopPropagationClick($event)"
-            [matMenuTriggerFor]="cardMenuRef"
-          >
-            <mat-icon class="icon">more_vert</mat-icon>
-          </button>
-        </div>
-
-        <mat-menu #cardMenuRef="matMenu">
-          <button
-            mat-menu-item
-            [routerLink]="['/variation', test.id]"
-          >
-            <mat-icon>refresh</mat-icon>
-            <span>View all</span>
-          </button>
-          <button mat-menu-item (click)="onDeleteTest(test)">
-            <mat-icon>exit_to_app</mat-icon>
-            <span>Remove Test</span>
-          </button>
-        </mat-menu>
+      <div class="actions" fxLayout="row">
+        <button
+          type="button"
+          mat-icon-button
+          [matMenuTriggerFor]="cardMenuRef"
+          id="actionMenuBtn"
+          (click)="$event.stopPropagation()"
+        >
+          <mat-icon class="icon">more_vert</mat-icon>
+        </button>
       </div>
+
+      <mat-menu #cardMenuRef="matMenu">
+        <button mat-menu-item [routerLink]="['/variation', test.id]">
+          <mat-icon>refresh</mat-icon>
+          <span>View all</span>
+        </button>
+        <button mat-menu-item (click)="onDeleteTest(test)" id="deleteBtn">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Remove Test</span>
+        </button>
+      </mat-menu>
     </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row
     *matRowDef="let test; columns: displayedColumns"
+    id="test_row_{{ test.id }}"
     [routerLink]="['/variation', test.id]"
     [@rowsAnimation]="{ value: '*' }"
   ></mat-row>
 </mat-table>
-
-<ng-template #noBaseline>NO</ng-template>
-<ng-template #noTestSession>No test session exists</ng-template>
-<ng-template #loader>
-  <div class="skeleton-loader"></div>
-</ng-template>

@@ -42,7 +42,7 @@
           multiple
         >
           <mat-option
-            *ngFor="let browser of (browserList$ | async)"
+            *ngFor="let browser of browserList$"
             [value]="browser"
             >{{ browser }}</mat-option
           >
@@ -57,7 +57,7 @@
           multiple
         >
           <mat-option
-            *ngFor="let device of (deviceList$ | async)"
+            *ngFor="let device of deviceList$"
             [value]="device"
             >{{ device }}</mat-option
           >
@@ -72,7 +72,7 @@
           multiple
         >
           <mat-option
-            *ngFor="let testSessionState of (testSessionStateList$ | async)"
+            *ngFor="let testSessionState of testSessionStateList$"
             [value]="testSessionState"
             >{{ testSessionState }}</mat-option
           >
@@ -89,7 +89,9 @@
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
 
-      <button mat-flat-button (click)="clearFilters()">Clear All</button>
+      <button mat-flat-button (click)="clearFilters()" id="clearFilters">
+        Clear All
+      </button>
     </form>
   </mat-expansion-panel>
 </mat-accordion>

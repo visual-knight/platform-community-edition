@@ -1,0 +1,1297 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FiltersComponent snapshot filter are empty 1`] = `
+<visual-knight-filters
+  activeFilterCount$={[Function AnonymousSubject]}
+  browserList$={[Function Array]}
+  deviceList$={[Function Array]}
+  filterForm={[Function FormGroup]}
+  filtersService={[Function FiltersService]}
+  formBuilder={[Function FormBuilder]}
+  panelOpenState="false"
+  projectList$={[Function Observable]}
+  projectService={[Function ProjectService]}
+  testSessionStateList$={[Function Array]}
+>
+  <mat-accordion
+    class="mat-accordion"
+  >
+    <mat-expansion-panel
+      class="mat-expansion-panel ng-tns-c0-0"
+    >
+      <mat-expansion-panel-header
+        aria-controls="cdk-accordion-child-0"
+        aria-disabled="false"
+        aria-expanded="false"
+        class="mat-expansion-panel-header ng-tns-c1-1 ng-trigger ng-trigger-expansionHeight mat-expansion-toggle-indicator-after ng-star-inserted"
+        id="mat-expansion-panel-header-0"
+        role="button"
+        style="height:48px;0:height;"
+        tabindex="0"
+      >
+        <span
+          class="mat-content"
+        >
+          <mat-panel-title
+            class="mat-expansion-panel-header-title"
+          >
+             Filters 
+          </mat-panel-title>
+          <mat-panel-description
+            class="mat-expansion-panel-header-description"
+          >
+             Active Filters: 0 
+          </mat-panel-description>
+        </span>
+        
+        <span
+          class="mat-expansion-indicator ng-tns-c1-1 ng-trigger ng-trigger-indicatorRotate ng-star-inserted"
+          style="transform:rotate(0deg);0:transform;"
+        />
+      </mat-expansion-panel-header>
+      <div
+        aria-labelledby="mat-expansion-panel-header-0"
+        class="mat-expansion-panel-content ng-trigger ng-trigger-bodyExpansion ng-animating"
+        id="cdk-accordion-child-0"
+        role="region"
+        style="animation: 225ms linear 0ms 1 normal forwards gen_css_kf_0; animation-play-state: running;"
+      >
+        <div
+          class="mat-expansion-panel-body"
+        >
+          <form
+            class="ng-untouched ng-pristine ng-valid"
+            fxlayout="column"
+            fxlayout.gt-sm="row wrap"
+            fxlayoutgap="10px"
+            ng-reflect-form="[object Object]"
+            ngxsform="filter"
+            novalidate=""
+          >
+            <mat-form-field
+              class="mat-form-field ng-tns-c2-2 mat-primary mat-form-field-type-mat-select mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid"
+              flex=""
+            >
+              <div
+                class="mat-form-field-wrapper"
+              >
+                <div
+                  class="mat-form-field-flex"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-infix"
+                  >
+                    <mat-select
+                      aria-disabled="false"
+                      aria-invalid="false"
+                      aria-label="Projects"
+                      aria-multiselectable="true"
+                      aria-required="false"
+                      class="mat-select ng-tns-c3-3 ng-untouched ng-pristine ng-valid mat-select-empty ng-star-inserted"
+                      formcontrolname="projectFilter"
+                      id="mat-select-0"
+                      multiple=""
+                      ng-reflect-disable-option-centering="true"
+                      ng-reflect-multiple=""
+                      ng-reflect-name="projectFilter"
+                      ng-reflect-placeholder="Projects"
+                      placeholder="Projects"
+                      role="listbox"
+                      style=""
+                      tabindex="0"
+                    >
+                      <div
+                        aria-hidden="true"
+                        cdk-overlay-origin=""
+                        class="mat-select-trigger"
+                      >
+                        <div
+                          class="mat-select-value"
+                          ng-reflect-ng-switch="true"
+                        >
+                          
+                          <span
+                            class="mat-select-placeholder ng-tns-c3-3 ng-star-inserted"
+                          >
+                            Projects
+                          </span>
+                          
+                        </div>
+                        <div
+                          class="mat-select-arrow-wrapper"
+                        >
+                          <div
+                            class="mat-select-arrow"
+                          />
+                        </div>
+                      </div>
+                      
+                    </mat-select>
+                    <span
+                      class="mat-form-field-label-wrapper"
+                    >
+                      
+                      <label
+                        aria-owns="mat-select-0"
+                        class="mat-form-field-label ng-tns-c2-2 mat-empty mat-form-field-empty ng-star-inserted"
+                        for="mat-select-0"
+                        id="mat-form-field-label-1"
+                        ng-reflect-disabled="true"
+                        ng-reflect-ng-switch="false"
+                        style=""
+                      >
+                        
+                        
+                        <span
+                          class="ng-tns-c2-2 ng-star-inserted"
+                        >
+                          Projects
+                        </span>
+                        
+                        
+                      </label>
+                    </span>
+                  </div>
+                  
+                </div>
+                
+                <div
+                  class="mat-form-field-underline ng-tns-c2-2 ng-star-inserted"
+                  style=""
+                >
+                  <span
+                    class="mat-form-field-ripple"
+                  />
+                </div>
+                <div
+                  class="mat-form-field-subscript-wrapper"
+                  ng-reflect-ng-switch="hint"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-hint-wrapper ng-tns-c2-2 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+                    style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+                  >
+                    
+                    <div
+                      class="mat-form-field-hint-spacer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </mat-form-field>
+            <mat-form-field
+              class="mat-form-field ng-tns-c2-4 mat-primary mat-form-field-type-mat-select mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid"
+              flex=""
+            >
+              <div
+                class="mat-form-field-wrapper"
+              >
+                <div
+                  class="mat-form-field-flex"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-infix"
+                  >
+                    <mat-select
+                      aria-disabled="false"
+                      aria-invalid="false"
+                      aria-label="Browsers"
+                      aria-multiselectable="true"
+                      aria-required="false"
+                      class="mat-select ng-tns-c3-5 ng-untouched ng-pristine ng-valid mat-select-empty ng-star-inserted"
+                      formcontrolname="browserFilter"
+                      id="mat-select-1"
+                      multiple=""
+                      ng-reflect-disable-option-centering="true"
+                      ng-reflect-multiple=""
+                      ng-reflect-name="browserFilter"
+                      ng-reflect-placeholder="Browsers"
+                      placeholder="Browsers"
+                      role="listbox"
+                      style=""
+                      tabindex="0"
+                    >
+                      <div
+                        aria-hidden="true"
+                        cdk-overlay-origin=""
+                        class="mat-select-trigger"
+                      >
+                        <div
+                          class="mat-select-value"
+                          ng-reflect-ng-switch="true"
+                        >
+                          
+                          <span
+                            class="mat-select-placeholder ng-tns-c3-5 ng-star-inserted"
+                          >
+                            Browsers
+                          </span>
+                          
+                        </div>
+                        <div
+                          class="mat-select-arrow-wrapper"
+                        >
+                          <div
+                            class="mat-select-arrow"
+                          />
+                        </div>
+                      </div>
+                      
+                    </mat-select>
+                    <span
+                      class="mat-form-field-label-wrapper"
+                    >
+                      
+                      <label
+                        aria-owns="mat-select-1"
+                        class="mat-form-field-label ng-tns-c2-4 mat-empty mat-form-field-empty ng-star-inserted"
+                        for="mat-select-1"
+                        id="mat-form-field-label-3"
+                        ng-reflect-disabled="true"
+                        ng-reflect-ng-switch="false"
+                        style=""
+                      >
+                        
+                        
+                        <span
+                          class="ng-tns-c2-4 ng-star-inserted"
+                        >
+                          Browsers
+                        </span>
+                        
+                        
+                      </label>
+                    </span>
+                  </div>
+                  
+                </div>
+                
+                <div
+                  class="mat-form-field-underline ng-tns-c2-4 ng-star-inserted"
+                  style=""
+                >
+                  <span
+                    class="mat-form-field-ripple"
+                  />
+                </div>
+                <div
+                  class="mat-form-field-subscript-wrapper"
+                  ng-reflect-ng-switch="hint"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-hint-wrapper ng-tns-c2-4 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+                    style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+                  >
+                    
+                    <div
+                      class="mat-form-field-hint-spacer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </mat-form-field>
+            <mat-form-field
+              class="mat-form-field ng-tns-c2-6 mat-primary mat-form-field-type-mat-select mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid"
+              flex=""
+            >
+              <div
+                class="mat-form-field-wrapper"
+              >
+                <div
+                  class="mat-form-field-flex"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-infix"
+                  >
+                    <mat-select
+                      aria-disabled="false"
+                      aria-invalid="false"
+                      aria-label="Devices"
+                      aria-multiselectable="true"
+                      aria-required="false"
+                      class="mat-select ng-tns-c3-7 ng-untouched ng-pristine ng-valid mat-select-empty ng-star-inserted"
+                      formcontrolname="deviceFilter"
+                      id="mat-select-2"
+                      multiple=""
+                      ng-reflect-disable-option-centering="true"
+                      ng-reflect-multiple=""
+                      ng-reflect-name="deviceFilter"
+                      ng-reflect-placeholder="Devices"
+                      placeholder="Devices"
+                      role="listbox"
+                      style=""
+                      tabindex="0"
+                    >
+                      <div
+                        aria-hidden="true"
+                        cdk-overlay-origin=""
+                        class="mat-select-trigger"
+                      >
+                        <div
+                          class="mat-select-value"
+                          ng-reflect-ng-switch="true"
+                        >
+                          
+                          <span
+                            class="mat-select-placeholder ng-tns-c3-7 ng-star-inserted"
+                          >
+                            Devices
+                          </span>
+                          
+                        </div>
+                        <div
+                          class="mat-select-arrow-wrapper"
+                        >
+                          <div
+                            class="mat-select-arrow"
+                          />
+                        </div>
+                      </div>
+                      
+                    </mat-select>
+                    <span
+                      class="mat-form-field-label-wrapper"
+                    >
+                      
+                      <label
+                        aria-owns="mat-select-2"
+                        class="mat-form-field-label ng-tns-c2-6 mat-empty mat-form-field-empty ng-star-inserted"
+                        for="mat-select-2"
+                        id="mat-form-field-label-5"
+                        ng-reflect-disabled="true"
+                        ng-reflect-ng-switch="false"
+                        style=""
+                      >
+                        
+                        
+                        <span
+                          class="ng-tns-c2-6 ng-star-inserted"
+                        >
+                          Devices
+                        </span>
+                        
+                        
+                      </label>
+                    </span>
+                  </div>
+                  
+                </div>
+                
+                <div
+                  class="mat-form-field-underline ng-tns-c2-6 ng-star-inserted"
+                  style=""
+                >
+                  <span
+                    class="mat-form-field-ripple"
+                  />
+                </div>
+                <div
+                  class="mat-form-field-subscript-wrapper"
+                  ng-reflect-ng-switch="hint"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-hint-wrapper ng-tns-c2-6 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+                    style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+                  >
+                    
+                    <div
+                      class="mat-form-field-hint-spacer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </mat-form-field>
+            <mat-form-field
+              class="mat-form-field ng-tns-c2-8 mat-primary mat-form-field-type-mat-select mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid"
+              flex=""
+            >
+              <div
+                class="mat-form-field-wrapper"
+              >
+                <div
+                  class="mat-form-field-flex"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-infix"
+                  >
+                    <mat-select
+                      aria-disabled="false"
+                      aria-invalid="false"
+                      aria-label="Test Status"
+                      aria-multiselectable="true"
+                      aria-required="false"
+                      class="mat-select ng-tns-c3-9 ng-untouched ng-pristine ng-valid mat-select-empty ng-star-inserted"
+                      formcontrolname="testStateFilter"
+                      id="mat-select-3"
+                      multiple=""
+                      ng-reflect-disable-option-centering="true"
+                      ng-reflect-multiple=""
+                      ng-reflect-name="testStateFilter"
+                      ng-reflect-placeholder="Test Status"
+                      placeholder="Test Status"
+                      role="listbox"
+                      style=""
+                      tabindex="0"
+                    >
+                      <div
+                        aria-hidden="true"
+                        cdk-overlay-origin=""
+                        class="mat-select-trigger"
+                      >
+                        <div
+                          class="mat-select-value"
+                          ng-reflect-ng-switch="true"
+                        >
+                          
+                          <span
+                            class="mat-select-placeholder ng-tns-c3-9 ng-star-inserted"
+                          >
+                            Test Status
+                          </span>
+                          
+                        </div>
+                        <div
+                          class="mat-select-arrow-wrapper"
+                        >
+                          <div
+                            class="mat-select-arrow"
+                          />
+                        </div>
+                      </div>
+                      
+                    </mat-select>
+                    <span
+                      class="mat-form-field-label-wrapper"
+                    >
+                      
+                      <label
+                        aria-owns="mat-select-3"
+                        class="mat-form-field-label ng-tns-c2-8 mat-empty mat-form-field-empty ng-star-inserted"
+                        for="mat-select-3"
+                        id="mat-form-field-label-7"
+                        ng-reflect-disabled="true"
+                        ng-reflect-ng-switch="false"
+                        style=""
+                      >
+                        
+                        
+                        <span
+                          class="ng-tns-c2-8 ng-star-inserted"
+                        >
+                          Test Status
+                        </span>
+                        
+                        
+                      </label>
+                    </span>
+                  </div>
+                  
+                </div>
+                
+                <div
+                  class="mat-form-field-underline ng-tns-c2-8 ng-star-inserted"
+                  style=""
+                >
+                  <span
+                    class="mat-form-field-ripple"
+                  />
+                </div>
+                <div
+                  class="mat-form-field-subscript-wrapper"
+                  ng-reflect-ng-switch="hint"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-hint-wrapper ng-tns-c2-8 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+                    style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+                  >
+                    
+                    <div
+                      class="mat-form-field-hint-spacer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </mat-form-field>
+            <mat-form-field
+              class="mat-form-field ng-tns-c2-10 mat-primary mat-form-field-type-mat-input mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid"
+              flex=""
+            >
+              <div
+                class="mat-form-field-wrapper"
+              >
+                <div
+                  class="mat-form-field-flex"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-infix"
+                  >
+                    <input
+                      aria-invalid="false"
+                      aria-required="false"
+                      class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored ng-untouched ng-pristine ng-valid"
+                      formcontrolname="testNameFilter"
+                      id="mat-input-0"
+                      matinput=""
+                      ng-reflect-name="testNameFilter"
+                      ng-reflect-placeholder="Test name"
+                      placeholder="Test name"
+                    />
+                    <span
+                      class="mat-form-field-label-wrapper"
+                    >
+                      
+                      <label
+                        aria-owns="mat-input-0"
+                        class="mat-form-field-label ng-tns-c2-10 mat-empty mat-form-field-empty ng-star-inserted"
+                        for="mat-input-0"
+                        id="mat-form-field-label-9"
+                        ng-reflect-disabled="true"
+                        ng-reflect-ng-switch="true"
+                        style=""
+                      >
+                        
+                        
+                        <mat-label
+                          class="ng-star-inserted"
+                        >
+                          Test name
+                        </mat-label>
+                        
+                        
+                      </label>
+                    </span>
+                  </div>
+                  
+                  <div
+                    class="mat-form-field-suffix ng-tns-c2-10 ng-star-inserted"
+                    style=""
+                  >
+                    <mat-icon
+                      aria-hidden="true"
+                      class="mat-icon notranslate material-icons mat-icon-no-color"
+                      matsuffix=""
+                      role="img"
+                    >
+                      search
+                    </mat-icon>
+                  </div>
+                </div>
+                
+                <div
+                  class="mat-form-field-underline ng-tns-c2-10 ng-star-inserted"
+                  style=""
+                >
+                  <span
+                    class="mat-form-field-ripple"
+                  />
+                </div>
+                <div
+                  class="mat-form-field-subscript-wrapper"
+                  ng-reflect-ng-switch="hint"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-hint-wrapper ng-tns-c2-10 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+                    style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+                  >
+                    
+                    <div
+                      class="mat-form-field-hint-spacer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </mat-form-field>
+            <button
+              id="clearFilters"
+              mat-flat-button=""
+            >
+               Clear All 
+            </button>
+          </form>
+          
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</visual-knight-filters>
+`;
+
+exports[`FiltersComponent snapshot filter used 1`] = `
+<visual-knight-filters
+  activeFilterCount$={[Function AnonymousSubject]}
+  browserList$={[Function Array]}
+  deviceList$={[Function Array]}
+  filterForm={[Function FormGroup]}
+  filtersService={[Function FiltersService]}
+  formBuilder={[Function FormBuilder]}
+  panelOpenState="false"
+  projectList$={[Function Observable]}
+  projectService={[Function ProjectService]}
+  testSessionStateList$={[Function Array]}
+>
+  <mat-accordion
+    class="mat-accordion"
+  >
+    <mat-expansion-panel
+      class="mat-expansion-panel ng-tns-c7-0"
+    >
+      <mat-expansion-panel-header
+        aria-controls="cdk-accordion-child-1"
+        aria-disabled="false"
+        aria-expanded="false"
+        class="mat-expansion-panel-header ng-tns-c8-1 ng-trigger ng-trigger-expansionHeight mat-expansion-toggle-indicator-after ng-star-inserted"
+        id="mat-expansion-panel-header-1"
+        role="button"
+        style="height:48px;0:height;"
+        tabindex="0"
+      >
+        <span
+          class="mat-content"
+        >
+          <mat-panel-title
+            class="mat-expansion-panel-header-title"
+          >
+             Filters 
+          </mat-panel-title>
+          <mat-panel-description
+            class="mat-expansion-panel-header-description"
+          >
+             Active Filters: 5 
+          </mat-panel-description>
+        </span>
+        
+        <span
+          class="mat-expansion-indicator ng-tns-c8-1 ng-trigger ng-trigger-indicatorRotate ng-star-inserted"
+          style="transform:rotate(0deg);0:transform;"
+        />
+      </mat-expansion-panel-header>
+      <div
+        aria-labelledby="mat-expansion-panel-header-1"
+        class="mat-expansion-panel-content ng-trigger ng-trigger-bodyExpansion ng-animating"
+        id="cdk-accordion-child-1"
+        role="region"
+        style="animation: 225ms linear 0ms 1 normal forwards gen_css_kf_0; animation-play-state: running;"
+      >
+        <div
+          class="mat-expansion-panel-body"
+        >
+          <form
+            class="ng-untouched ng-pristine ng-valid"
+            fxlayout="column"
+            fxlayout.gt-sm="row wrap"
+            fxlayoutgap="10px"
+            ng-reflect-form="[object Object]"
+            ngxsform="filter"
+            novalidate=""
+          >
+            <mat-form-field
+              class="mat-form-field ng-tns-c9-2 mat-primary mat-form-field-type-mat-select mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid"
+              flex=""
+            >
+              <div
+                class="mat-form-field-wrapper"
+              >
+                <div
+                  class="mat-form-field-flex"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-infix"
+                  >
+                    <mat-select
+                      aria-disabled="false"
+                      aria-invalid="false"
+                      aria-label="Projects"
+                      aria-multiselectable="true"
+                      aria-required="false"
+                      class="mat-select ng-tns-c10-3 ng-untouched ng-pristine ng-valid mat-select-empty ng-star-inserted"
+                      formcontrolname="projectFilter"
+                      id="mat-select-4"
+                      multiple=""
+                      ng-reflect-disable-option-centering="true"
+                      ng-reflect-multiple=""
+                      ng-reflect-name="projectFilter"
+                      ng-reflect-placeholder="Projects"
+                      placeholder="Projects"
+                      role="listbox"
+                      style=""
+                      tabindex="0"
+                    >
+                      <div
+                        aria-hidden="true"
+                        cdk-overlay-origin=""
+                        class="mat-select-trigger"
+                      >
+                        <div
+                          class="mat-select-value"
+                          ng-reflect-ng-switch="true"
+                        >
+                          
+                          <span
+                            class="mat-select-placeholder ng-tns-c10-3 ng-star-inserted"
+                          >
+                            Projects
+                          </span>
+                          
+                        </div>
+                        <div
+                          class="mat-select-arrow-wrapper"
+                        >
+                          <div
+                            class="mat-select-arrow"
+                          />
+                        </div>
+                      </div>
+                      
+                    </mat-select>
+                    <span
+                      class="mat-form-field-label-wrapper"
+                    >
+                      
+                      <label
+                        aria-owns="mat-select-4"
+                        class="mat-form-field-label ng-tns-c9-2 mat-empty mat-form-field-empty ng-star-inserted"
+                        for="mat-select-4"
+                        id="mat-form-field-label-11"
+                        ng-reflect-disabled="true"
+                        ng-reflect-ng-switch="false"
+                        style=""
+                      >
+                        
+                        
+                        <span
+                          class="ng-tns-c9-2 ng-star-inserted"
+                        >
+                          Projects
+                        </span>
+                        
+                        
+                      </label>
+                    </span>
+                  </div>
+                  
+                </div>
+                
+                <div
+                  class="mat-form-field-underline ng-tns-c9-2 ng-star-inserted"
+                  style=""
+                >
+                  <span
+                    class="mat-form-field-ripple"
+                  />
+                </div>
+                <div
+                  class="mat-form-field-subscript-wrapper"
+                  ng-reflect-ng-switch="hint"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-hint-wrapper ng-tns-c9-2 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+                    style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+                  >
+                    
+                    <div
+                      class="mat-form-field-hint-spacer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </mat-form-field>
+            <mat-form-field
+              class="mat-form-field ng-tns-c9-4 mat-primary mat-form-field-type-mat-select mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid mat-form-field-should-float"
+              flex=""
+            >
+              <div
+                class="mat-form-field-wrapper"
+              >
+                <div
+                  class="mat-form-field-flex"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-infix"
+                  >
+                    <mat-select
+                      aria-disabled="false"
+                      aria-invalid="false"
+                      aria-label="Browsers"
+                      aria-multiselectable="true"
+                      aria-required="false"
+                      class="mat-select ng-tns-c10-5 ng-untouched ng-pristine ng-valid ng-star-inserted"
+                      formcontrolname="browserFilter"
+                      id="mat-select-5"
+                      multiple=""
+                      ng-reflect-disable-option-centering="true"
+                      ng-reflect-multiple=""
+                      ng-reflect-name="browserFilter"
+                      ng-reflect-placeholder="Browsers"
+                      placeholder="Browsers"
+                      role="listbox"
+                      style=""
+                      tabindex="0"
+                    >
+                      <div
+                        aria-hidden="true"
+                        cdk-overlay-origin=""
+                        class="mat-select-trigger"
+                      >
+                        <div
+                          class="mat-select-value"
+                          ng-reflect-ng-switch="false"
+                        >
+                          
+                          
+                          <span
+                            class="mat-select-value-text ng-tns-c10-5 ng-star-inserted"
+                            ng-reflect-ng-switch="false"
+                            style=""
+                          >
+                            
+                            <span
+                              class="ng-tns-c10-5 ng-star-inserted"
+                            >
+                              Chrome
+                            </span>
+                            
+                          </span>
+                        </div>
+                        <div
+                          class="mat-select-arrow-wrapper"
+                        >
+                          <div
+                            class="mat-select-arrow"
+                          />
+                        </div>
+                      </div>
+                      
+                    </mat-select>
+                    <span
+                      class="mat-form-field-label-wrapper"
+                    >
+                      
+                      <label
+                        aria-owns="mat-select-5"
+                        class="mat-form-field-label ng-tns-c9-4 ng-star-inserted"
+                        for="mat-select-5"
+                        id="mat-form-field-label-13"
+                        ng-reflect-disabled="true"
+                        ng-reflect-ng-switch="false"
+                        style=""
+                      >
+                        
+                        
+                        <span
+                          class="ng-tns-c9-4 ng-star-inserted"
+                        >
+                          Browsers
+                        </span>
+                        
+                        
+                      </label>
+                    </span>
+                  </div>
+                  
+                </div>
+                
+                <div
+                  class="mat-form-field-underline ng-tns-c9-4 ng-star-inserted"
+                  style=""
+                >
+                  <span
+                    class="mat-form-field-ripple"
+                  />
+                </div>
+                <div
+                  class="mat-form-field-subscript-wrapper"
+                  ng-reflect-ng-switch="hint"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-hint-wrapper ng-tns-c9-4 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+                    style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+                  >
+                    
+                    <div
+                      class="mat-form-field-hint-spacer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </mat-form-field>
+            <mat-form-field
+              class="mat-form-field ng-tns-c9-6 mat-primary mat-form-field-type-mat-select mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid mat-form-field-should-float"
+              flex=""
+            >
+              <div
+                class="mat-form-field-wrapper"
+              >
+                <div
+                  class="mat-form-field-flex"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-infix"
+                  >
+                    <mat-select
+                      aria-disabled="false"
+                      aria-invalid="false"
+                      aria-label="Devices"
+                      aria-multiselectable="true"
+                      aria-required="false"
+                      class="mat-select ng-tns-c10-7 ng-untouched ng-pristine ng-valid ng-star-inserted"
+                      formcontrolname="deviceFilter"
+                      id="mat-select-6"
+                      multiple=""
+                      ng-reflect-disable-option-centering="true"
+                      ng-reflect-multiple=""
+                      ng-reflect-name="deviceFilter"
+                      ng-reflect-placeholder="Devices"
+                      placeholder="Devices"
+                      role="listbox"
+                      style=""
+                      tabindex="0"
+                    >
+                      <div
+                        aria-hidden="true"
+                        cdk-overlay-origin=""
+                        class="mat-select-trigger"
+                      >
+                        <div
+                          class="mat-select-value"
+                          ng-reflect-ng-switch="false"
+                        >
+                          
+                          
+                          <span
+                            class="mat-select-value-text ng-tns-c10-7 ng-star-inserted"
+                            ng-reflect-ng-switch="false"
+                            style=""
+                          >
+                            
+                            <span
+                              class="ng-tns-c10-7 ng-star-inserted"
+                            >
+                              Windows
+                            </span>
+                            
+                          </span>
+                        </div>
+                        <div
+                          class="mat-select-arrow-wrapper"
+                        >
+                          <div
+                            class="mat-select-arrow"
+                          />
+                        </div>
+                      </div>
+                      
+                    </mat-select>
+                    <span
+                      class="mat-form-field-label-wrapper"
+                    >
+                      
+                      <label
+                        aria-owns="mat-select-6"
+                        class="mat-form-field-label ng-tns-c9-6 ng-star-inserted"
+                        for="mat-select-6"
+                        id="mat-form-field-label-15"
+                        ng-reflect-disabled="true"
+                        ng-reflect-ng-switch="false"
+                        style=""
+                      >
+                        
+                        
+                        <span
+                          class="ng-tns-c9-6 ng-star-inserted"
+                        >
+                          Devices
+                        </span>
+                        
+                        
+                      </label>
+                    </span>
+                  </div>
+                  
+                </div>
+                
+                <div
+                  class="mat-form-field-underline ng-tns-c9-6 ng-star-inserted"
+                  style=""
+                >
+                  <span
+                    class="mat-form-field-ripple"
+                  />
+                </div>
+                <div
+                  class="mat-form-field-subscript-wrapper"
+                  ng-reflect-ng-switch="hint"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-hint-wrapper ng-tns-c9-6 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+                    style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+                  >
+                    
+                    <div
+                      class="mat-form-field-hint-spacer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </mat-form-field>
+            <mat-form-field
+              class="mat-form-field ng-tns-c9-8 mat-primary mat-form-field-type-mat-select mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-valid mat-form-field-should-float"
+              flex=""
+            >
+              <div
+                class="mat-form-field-wrapper"
+              >
+                <div
+                  class="mat-form-field-flex"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-infix"
+                  >
+                    <mat-select
+                      aria-disabled="false"
+                      aria-invalid="false"
+                      aria-label="Test Status"
+                      aria-multiselectable="true"
+                      aria-required="false"
+                      class="mat-select ng-tns-c10-9 ng-untouched ng-pristine ng-valid ng-star-inserted"
+                      formcontrolname="testStateFilter"
+                      id="mat-select-7"
+                      multiple=""
+                      ng-reflect-disable-option-centering="true"
+                      ng-reflect-multiple=""
+                      ng-reflect-name="testStateFilter"
+                      ng-reflect-placeholder="Test Status"
+                      placeholder="Test Status"
+                      role="listbox"
+                      style=""
+                      tabindex="0"
+                    >
+                      <div
+                        aria-hidden="true"
+                        cdk-overlay-origin=""
+                        class="mat-select-trigger"
+                      >
+                        <div
+                          class="mat-select-value"
+                          ng-reflect-ng-switch="false"
+                        >
+                          
+                          
+                          <span
+                            class="mat-select-value-text ng-tns-c10-9 ng-star-inserted"
+                            ng-reflect-ng-switch="false"
+                            style=""
+                          >
+                            
+                            <span
+                              class="ng-tns-c10-9 ng-star-inserted"
+                            >
+                              ACCEPTED
+                            </span>
+                            
+                          </span>
+                        </div>
+                        <div
+                          class="mat-select-arrow-wrapper"
+                        >
+                          <div
+                            class="mat-select-arrow"
+                          />
+                        </div>
+                      </div>
+                      
+                    </mat-select>
+                    <span
+                      class="mat-form-field-label-wrapper"
+                    >
+                      
+                      <label
+                        aria-owns="mat-select-7"
+                        class="mat-form-field-label ng-tns-c9-8 ng-star-inserted"
+                        for="mat-select-7"
+                        id="mat-form-field-label-17"
+                        ng-reflect-disabled="true"
+                        ng-reflect-ng-switch="false"
+                        style=""
+                      >
+                        
+                        
+                        <span
+                          class="ng-tns-c9-8 ng-star-inserted"
+                        >
+                          Test Status
+                        </span>
+                        
+                        
+                      </label>
+                    </span>
+                  </div>
+                  
+                </div>
+                
+                <div
+                  class="mat-form-field-underline ng-tns-c9-8 ng-star-inserted"
+                  style=""
+                >
+                  <span
+                    class="mat-form-field-ripple"
+                  />
+                </div>
+                <div
+                  class="mat-form-field-subscript-wrapper"
+                  ng-reflect-ng-switch="hint"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-hint-wrapper ng-tns-c9-8 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+                    style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+                  >
+                    
+                    <div
+                      class="mat-form-field-hint-spacer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </mat-form-field>
+            <mat-form-field
+              class="mat-form-field ng-tns-c9-10 mat-primary mat-form-field-type-mat-input mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label ng-untouched ng-pristine ng-valid mat-form-field-should-float"
+              flex=""
+            >
+              <div
+                class="mat-form-field-wrapper"
+              >
+                <div
+                  class="mat-form-field-flex"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-infix"
+                  >
+                    <input
+                      aria-invalid="false"
+                      aria-required="false"
+                      class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored ng-untouched ng-pristine ng-valid"
+                      formcontrolname="testNameFilter"
+                      id="mat-input-1"
+                      matinput=""
+                      ng-reflect-name="testNameFilter"
+                      ng-reflect-placeholder="Test name"
+                      placeholder="Test name"
+                    />
+                    <span
+                      class="mat-form-field-label-wrapper"
+                    >
+                      
+                      <label
+                        aria-owns="mat-input-1"
+                        class="mat-form-field-label ng-tns-c9-10 ng-star-inserted"
+                        for="mat-input-1"
+                        id="mat-form-field-label-19"
+                        ng-reflect-disabled="true"
+                        ng-reflect-ng-switch="true"
+                        style=""
+                      >
+                        
+                        
+                        <mat-label
+                          class="ng-star-inserted"
+                        >
+                          Test name
+                        </mat-label>
+                        
+                        
+                      </label>
+                    </span>
+                  </div>
+                  
+                  <div
+                    class="mat-form-field-suffix ng-tns-c9-10 ng-star-inserted"
+                    style=""
+                  >
+                    <mat-icon
+                      aria-hidden="true"
+                      class="mat-icon notranslate material-icons mat-icon-no-color"
+                      matsuffix=""
+                      role="img"
+                    >
+                      search
+                    </mat-icon>
+                  </div>
+                </div>
+                
+                <div
+                  class="mat-form-field-underline ng-tns-c9-10 ng-star-inserted"
+                  style=""
+                >
+                  <span
+                    class="mat-form-field-ripple"
+                  />
+                </div>
+                <div
+                  class="mat-form-field-subscript-wrapper"
+                  ng-reflect-ng-switch="hint"
+                >
+                  
+                  
+                  <div
+                    class="mat-form-field-hint-wrapper ng-tns-c9-10 ng-trigger ng-trigger-transitionMessages ng-star-inserted"
+                    style="opacity:1;transform:translateY(0%);0:opacity;1:transform;"
+                  >
+                    
+                    <div
+                      class="mat-form-field-hint-spacer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </mat-form-field>
+            <button
+              id="clearFilters"
+              mat-flat-button=""
+            >
+               Clear All 
+            </button>
+          </form>
+          
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</visual-knight-filters>
+`;
