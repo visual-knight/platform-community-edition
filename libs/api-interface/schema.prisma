@@ -42,7 +42,8 @@ model Test {
   updatedAt DateTime @updatedAt
 
   name       String
-  project    Project
+  project    Project @relation(fields: [projectId], references: [id])
+  projectId  Int 
   variations Variation[]
 }
 
@@ -53,11 +54,13 @@ model Variation {
 
   browserName String
   deviceName  String
-  test        Test
+  test        Test   @relation(fields: [testId], references: [id])
+  testId      Int
 
   testSessions   TestSession[]
   additionalData String?
-  baseline       TestSession?  @relation(name: "VariationBaseline")
+  baseline       TestSession?  @relation(name: "VariationBaseline", fields: [baselineId], references: [id])
+  baselineId     Int?
 }
 
 model TestSession {
@@ -70,14 +73,12 @@ model TestSession {
   misMatchPercentage Float?
   misMatchTolerance  Float
   isSameDimensions   Boolean?
-  variation          Variation
+  variation          Variation        @relation(fields: [variationId], references: [id])
+  variationId        Int
   state              TestSessionState @default(PENDING)
   stateChangedByUser User?
   stateComment       String?
   autoBaseline       Boolean          @default(false)
-
-  // baseline reference
-  baselineRef Variation? @relation(name: "VariationBaseline")
 }
 
 enum Role {

@@ -4,9 +4,8 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
-      POSTGRES_DB: prisma
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - '5432:5432'
     expose:
