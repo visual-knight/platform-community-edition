@@ -489,6 +489,52 @@
       "arity": "Required"
     },
     {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Test",
+          "field": "project"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Test",
+          "field": "project"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[projectId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Test",
+          "field": "project"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Test",
+      "field": "projectId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
       "tag": "CreateField",
       "model": "Test",
       "field": "variations",
@@ -614,6 +660,52 @@
       "arity": "Required"
     },
     {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Variation",
+          "field": "test"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Variation",
+          "field": "test"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[testId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Variation",
+          "field": "test"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Variation",
+      "field": "testId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
       "tag": "CreateField",
       "model": "Variation",
       "field": "testSessions",
@@ -658,6 +750,41 @@
       },
       "argument": "name",
       "value": "\"VariationBaseline\""
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Variation",
+          "field": "baseline"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[baselineId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Variation",
+          "field": "baseline"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Variation",
+      "field": "baselineId",
+      "type": "Int",
+      "arity": "Optional"
     },
     {
       "tag": "CreateModel",
@@ -799,6 +926,52 @@
       "arity": "Required"
     },
     {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "TestSession",
+          "field": "variation"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "TestSession",
+          "field": "variation"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[variationId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "TestSession",
+          "field": "variation"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "TestSession",
+      "field": "variationId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
       "tag": "CreateField",
       "model": "TestSession",
       "field": "state",
@@ -875,38 +1048,6 @@
       },
       "argument": "",
       "value": "false"
-    },
-    {
-      "tag": "CreateField",
-      "model": "TestSession",
-      "field": "baselineRef",
-      "type": "Variation",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "TestSession",
-          "field": "baselineRef"
-        },
-        "directive": "relation"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "TestSession",
-          "field": "baselineRef"
-        },
-        "directive": "relation"
-      },
-      "argument": "name",
-      "value": "\"VariationBaseline\""
     }
   ]
 }
