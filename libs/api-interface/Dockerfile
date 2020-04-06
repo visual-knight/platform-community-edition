@@ -2,7 +2,7 @@ FROM node:latest
 
 RUN npm install -g @prisma/cli
 
-ADD "https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh" /wait-for-it.sh
+ADD wait-for-it.sh /wait-for-it.sh
 RUN chmod +xr /wait-for-it.sh
 
 COPY schema.prisma /schema.prisma

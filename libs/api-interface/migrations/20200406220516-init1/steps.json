@@ -531,7 +531,7 @@
       "tag": "CreateField",
       "model": "Test",
       "field": "projectId",
-      "type": "Int",
+      "type": "String",
       "arity": "Required"
     },
     {
@@ -702,7 +702,7 @@
       "tag": "CreateField",
       "model": "Variation",
       "field": "testId",
-      "type": "Int",
+      "type": "String",
       "arity": "Required"
     },
     {
@@ -783,7 +783,7 @@
       "tag": "CreateField",
       "model": "Variation",
       "field": "baselineId",
-      "type": "Int",
+      "type": "String",
       "arity": "Optional"
     },
     {
@@ -968,7 +968,7 @@
       "tag": "CreateField",
       "model": "TestSession",
       "field": "variationId",
-      "type": "Int",
+      "type": "String",
       "arity": "Required"
     },
     {
