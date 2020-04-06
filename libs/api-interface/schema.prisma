@@ -43,7 +43,7 @@ model Test {
 
   name       String
   project    Project @relation(fields: [projectId], references: [id])
-  projectId  String 
+  projectId  String  @map("project")
   variations Variation[]
 }
 
@@ -55,12 +55,12 @@ model Variation {
   browserName String
   deviceName  String
   test        Test   @relation(fields: [testId], references: [id])
-  testId      String
+  testId      String @map("test")
 
   testSessions   TestSession[]
   additionalData String?
   baseline       TestSession?  @relation(name: "VariationBaseline", fields: [baselineId], references: [id])
-  baselineId     String?
+  baselineId     String?       @map("baseline")
 }
 
 model TestSession {
