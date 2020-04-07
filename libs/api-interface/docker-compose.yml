@@ -17,7 +17,7 @@ services:
     depends_on:
       - postgres
     environment:
-      VK_DATABASE: postgresql://prisma:prisma@postgres:5432/prisma
+      VK_DATABASE: postgresql://postgres:postgres@postgres:5432/prisma
       POSTGRES_SERVER: postgres
       POSTGRES_PORT: 5432
 volumes:
