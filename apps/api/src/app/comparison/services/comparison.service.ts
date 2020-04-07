@@ -32,7 +32,7 @@ export class ComparisonService {
     return defer(() => this.testSession(testSessionId)).pipe(
       map(testSession => {
         if (
-          ((testSession.variation === null && (testSession.variation as any).baseline !== null) ||
+          ((testSession.misMatchPercentage === null && (testSession.variation as any).baseline !== null) ||
             (testSession.misMatchPercentage === null && testSession.autoBaseline === true)) &&
           testSession.isSameDimensions !== false
         ) {
