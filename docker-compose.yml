@@ -1,45 +1,40 @@
 version: '3.7'
 services:
   api:
-    build: 
-      context: .
-      dockerfile: api.Dockerfile
+    image: visualknight/api:0.0.3
     ports: 
-      - '3333:3333'
+      - '${VK_API_PORT}:3333'
     environment: 
       VK_APP_SECRET: SOME_APP_SECRET
-      VK_APP_DOMAIN: http://localhost:4200/
+      VK_APP_DOMAIN: http://${VK_UI_DOMAIN}:${VK_UI_PORT}/
       VK_GRAPHQL_SCHEMA_PATH: apps/api/schema.graphql
-      VK_DATABASE: postgresql://postgres:postgres@postgres:5432/prisma
+      VK_DATABASE: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${VK_DB_NAME}
     depends_on:
       - postgres
   ui:
-    build:
-      context: .
-      dockerfile: ui.Dockerfile
+    image: visualknight/ui:0.0.3
     ports: 
-      - '4200:8080'
+      - '${VK_UI_PORT}:8080'
   postgres:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${VK_DB_NAME}
     ports:
-      - '5432:5432'
+      - '${POSTGRES_PORT}:5432'
     expose:
-      - '5432'
+      - '${POSTGRES_PORT}'
     volumes:
       - postgres:/var/lib/postgresql/data
   migration:
-    build:
-      context: ./libs/api-interface/
-      dockerfile: Dockerfile
+    image: visualknight/migration:0.0.3
     depends_on:
       - postgres
     environment:
-      VK_DATABASE: postgresql://postgres:postgres@postgres:5432/prisma
+      VK_DATABASE: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${VK_DB_NAME}
       POSTGRES_SERVER: postgres
-      POSTGRES_PORT: 5432
+      POSTGRES_PORT: ${POSTGRES_PORT}
 volumes:
   postgres:

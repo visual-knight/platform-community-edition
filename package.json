@@ -35,9 +35,9 @@
     "generate:photon": "cd libs/api-interface && prisma2 generate",
     "generate:vk-types": "graphql-codegen",
     "prismadev": "cd libs/api-interface && prisma2 dev",
-    "upload_docker_image:ui": "docker build -t visualknight/ui:0.0.2 -f ./ui.Dockerfile . && docker push visualknight/ui",
-    "upload_docker_image:api": "docker build -t visualknight/api:0.0.2 -f ./api.Dockerfile . && docker push visualknight/api",
-    "upload_docker_image:migration": "docker build -t visualknight/migration:0.0.2 -f ./libs/api-interface/Dockerfile ./libs/api-interface/ && docker push visualknight/migration"
+    "build_docker_image:ui": "docker build -t visualknight/ui -f ./ui.Dockerfile .",
+    "build_docker_image:api": "docker build -t visualknight/api -f ./api.Dockerfile .",
+    "build_docker_image:migration": "docker build -t visualknight/migration -f ./libs/api-interface/Dockerfile ./libs/api-interface/"
   },
   "private": true,
   "dependencies": {

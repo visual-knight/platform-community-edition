@@ -40,7 +40,7 @@ This API also provides the possibility to create new tests and return there stat
 version: '3.7'
 services:
   api:
-    image: visualknight/api:0.0.2
+    image: visualknight/api:0.0.3
     ports: 
       - '${VK_API_PORT}:3333'
     environment: 
@@ -51,7 +51,7 @@ services:
     depends_on:
       - postgres
   ui:
-    image: visualknight/ui:0.0.2
+    image: visualknight/ui:0.0.3
     ports: 
       - '${VK_UI_PORT}:8080'
   postgres:
@@ -67,7 +67,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
   migration:
-    image: visualknight/migration:0.0.2
+    image: visualknight/migration:0.0.3
     depends_on:
       - postgres
     environment:
@@ -81,11 +81,9 @@ volumes:
 2. create `.env`
 ```
 POSTGRES_PORT=5432
-POSTGRES_USER=prisma
-POSTGRES_PASSWORD=prisma
-
-VK_DB_NAME=prisma_table
-
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+VK_DB_NAME=visual_knight
 VK_UI_DOMAIN=localhost
 VK_UI_PORT=4200
 VK_API_PORT=3333
