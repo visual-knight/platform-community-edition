@@ -8,7 +8,7 @@ datasource db {
 
 generator photon {
   provider     = "prisma-client-js"
-  binaryTarget = ["native", "linux-glibc-libssl1.0.2", "darwin", "windows"]
+  binaryTarget = ["native", "linux-glibc-libssl1.0.2"]
   output       = "../../node_modules/@generated/photonjs"
 }
 
@@ -16,7 +16,6 @@ model User {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   email    String  @unique
   password String
   lastname String?
@@ -30,7 +29,6 @@ model Project {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   name        String
   description String?
   tests       Test[]
@@ -40,10 +38,8 @@ model Test {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   name       String
-  project    Project @relation(fields: [projectId], references: [id])
-  projectId  String  @map("project")
+  project    Project
   variations Variation[]
 }
 
@@ -51,36 +47,30 @@ model Variation {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   browserName String
   deviceName  String
-  test        Test   @relation(fields: [testId], references: [id])
-  testId      String @map("test")
-
+  test        Test
   testSessions   TestSession[]
   additionalData String?
-  baseline       TestSession?  @relation(name: "VariationBaseline", fields: [baselineId], references: [id])
-  baselineId     String?       @map("baseline")
+  baseline       TestSession?  @relation(name: "VariationBaseline")
 }
 
 model TestSession {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   diffImageKey       String?
   imageKey           String?
   misMatchPercentage Float?
   misMatchTolerance  Float
   isSameDimensions   Boolean?
-  variation          Variation        @relation(fields: [variationId], references: [id])
-  variationId        String
+  variation          Variation
   state              TestSessionState @default(PENDING)
   stateChangedByUser User?
   stateComment       String?
   autoBaseline       Boolean          @default(false)
-
-  baselineRef     Variation? @relation(name: "VariationBaseline")
+  // baseline reference
+  baselineRef Variation? @relation(name: "VariationBaseline")
 }
 
 enum Role {
