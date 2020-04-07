@@ -33,7 +33,71 @@ The web app is the graphical user interface in Visual Knight. Here you can manag
 This backend returns all the information for the web app based on [Graphql](https://graphql.org/).
 This API also provides the possibility to create new tests and return there status. It is used for communication with the testing tools like CodeceptJS. The backend framework is written with [NestJS](https://nestjs.com/)
 
-## Setup
+## Set up
+
+1. create `docker-compose.yml`
+```
+version: '3.7'
+services:
+  api:
+    image: visualknight/api:0.0.2
+    ports: 
+      - '${VK_API_PORT}:3333'
+    environment: 
+      VK_APP_SECRET: SOME_APP_SECRET
+      VK_APP_DOMAIN: http://${VK_UI_DOMAIN}:${VK_UI_PORT}/
+      VK_GRAPHQL_SCHEMA_PATH: apps/api/schema.graphql
+      VK_DATABASE: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${VK_DB_NAME}
+    depends_on:
+      - postgres
+  ui:
+    image: visualknight/ui:0.0.2
+    ports: 
+      - '${VK_UI_PORT}:8080'
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - '${POSTGRES_PORT}:5432'
+    expose:
+      - '${POSTGRES_PORT}'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  migration:
+    image: visualknight/migration:0.0.2
+    depends_on:
+      - postgres
+    environment:
+      VK_DATABASE: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${VK_DB_NAME}
+      POSTGRES_SERVER: postgres
+      POSTGRES_PORT: ${POSTGRES_PORT}
+volumes:
+  postgres:
+```
+
+2. create `.env`
+```
+POSTGRES_PORT=5432
+POSTGRES_USER=prisma
+POSTGRES_PASSWORD=prisma
+
+VK_DB_NAME=prisma_table
+
+VK_UI_DOMAIN=localhost
+VK_UI_PORT=4200
+VK_API_PORT=3333
+```
+
+3. run `docker-compose up`
+
+4. open url `VK_UI_DOMAIN:VK_UI_PORT` _localhost:4200_
+
+5. login `visual-knight-community@example.com`/`yourPassw0rd!`
+
+## Setup local env for development
 
 Clone the repository
 
@@ -59,14 +123,14 @@ _NOTE: working database is required for mysql or postgres_
 4. Create initial database migration statements for the application `npx prisma2 migrate save --name "init" --experimental` _NOTE: You have to commit the migration files to be able to update later easy the database changes_
 5. Lift up the database with the structure `npx prisma2 migrate up --experimental`
 6. Generate the photon library `npx prisma2 generate`
-7. Create the first user `node postinstall.js` _NOTE: You'll see credentials and API key in console
+7. Create the first user `node postinstall.js` _NOTE: You'll see credentials and API key in console_
 
 Everything is done and we can start the UI and API Server ;)
 
 ### Start the ui and api server (2 servers in parallel)
 
-- Starting the api server: `npx ng run api:serve` _NOTE: default http://localhost:3333/graphql
-- Starting the ui server: `npx ng run visual-knight:serve` _NOTE: default http://localhost:4200
+- Starting the api server: `npx ng run api:serve` _NOTE: default http://localhost:3333/graphql_
+- Starting the ui server: `npx ng run visual-knight:serve` _NOTE: default http://localhost:4200_
 
 ### Create a build
 
