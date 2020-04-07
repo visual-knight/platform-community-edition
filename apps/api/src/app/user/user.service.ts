@@ -9,7 +9,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { AuthPayload } from '../auth/models/auth-payload';
 import uuidAPIKey from 'uuid-apikey';
 import { PhotonService } from '@visual-knight/api-interface';
-import { User } from '@generated/photonjs';
+import { User, Role } from '@generated/photonjs';
 
 @Injectable()
 export class UserService {
@@ -18,7 +18,29 @@ export class UserService {
     private jwtService: JwtService,
     private authService: AuthService,
     private photonService: PhotonService
-  ) {}
+  ) {
+    //create default user if there are none in DB
+    this.userList().then(userList => {
+      if (userList.length === 0) {
+        const defaultEmail = 'visual-knight-community@example.com';
+        const defaultPassword = 'yourPassw0rd!';
+        const defaultRole = Role.ADMIN;
+
+        this.createUser(defaultEmail, defaultPassword, defaultRole).then(
+          user => {
+            console.log('#########################');
+            console.log('## CREATING ADMIN USER ##');
+            console.log('#########################');
+            console.log('');
+            console.log(
+              `The user with the email "${defaultEmail}" and password "${defaultPassword}" was created`
+            );
+            console.log(`The Api key is: ${user.apiKey}`);
+          }
+        );
+      }
+    });
+  }
 
   async userList() {
     return this.photonService.user.findMany({
@@ -34,7 +56,11 @@ export class UserService {
     });
   }
 
-  async createUser(email: string, password: string): Promise<User> {
+  async createUser(
+    email: string,
+    password: string,
+    role: Role = Role.CUSTOMER
+  ): Promise<User> {
     const salt = genSaltSync(environment.saltRounds);
     const hashedPassword = await hash(password, salt);
     const apiKey = this.generateApiKey();
@@ -43,20 +69,24 @@ export class UserService {
       data: {
         email,
         apiKey: apiKey.apiKey,
-        password: hashedPassword
+        password: hashedPassword,
+        role
       }
     });
   }
 
   async deleteUser(user: User, userIdToDelete: string): Promise<User> {
-    if (user.role !== 'ADMIN') {
+    if (user.role !== Role.ADMIN) {
       throw new Error('You are not allowed to delete a user!');
     }
 
     return this.photonService.user.delete({ where: { id: userIdToDelete } });
   }
 
-  async updateUser(user: User, { email, forename, lastname }: UpdateUserInput): Promise<User> {
+  async updateUser(
+    user: User,
+    { email, forename, lastname }: UpdateUserInput
+  ): Promise<User> {
     return this.photonService.user.update({
       where: { id: user.id },
       data: {
@@ -99,7 +129,9 @@ export class UserService {
       throw new Error('You are not allowed to invite new user!');
     }
 
-    const invitationUser = await this.photonService.user.findOne({ where: { id: invitationUserId } });
+    const invitationUser = await this.photonService.user.findOne({
+      where: { id: invitationUserId }
+    });
 
     this.emailService.sendInvitationMail({
       email: invitationUser.email,
@@ -111,7 +143,10 @@ export class UserService {
     return true;
   }
 
-  async completeInvitation(token: string, password: string): Promise<AuthPayload> {
+  async completeInvitation(
+    token: string,
+    password: string
+  ): Promise<AuthPayload> {
     const { email, exp } = this.jwtService.verify(token);
     const user = await this.photonService.user.findOne({ where: { email } });
     if (user.active) {
