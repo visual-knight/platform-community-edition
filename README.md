@@ -93,7 +93,7 @@ VK_API_PORT=3333
 
 3. run `docker-compose up`
 
-4. open url `VK_UI_DOMAIN:VK_UI_PORT` _localhost:4200_
+4. open url `VK_UI_DOMAIN:VK_UI_PORT` _http://localhost:4200_
 
 5. login `visual-knight-community@example.com`/`yourPassw0rd!`
 
@@ -101,11 +101,7 @@ VK_API_PORT=3333
 
 Clone the repository
 
-`npm install`
-
-You need to decied which platform you want to use. At the moment it is easy. We just support on premise but more and more providers are coming soon. So you need to deploy the api and ui to your system or you can start them with following commands:
-
-### Prepare environments for the server
+### Set up env variables
 
 Create `.env` file based on `.envtemplate` for:
 1. root derictory
@@ -113,24 +109,30 @@ Create `.env` file based on `.envtemplate` for:
 
 Fill your environment with your data!
 
-### We have to prepare the database
+### Install dependencies
+
+`npm install`
+
+### Prepare database
 
 _NOTE: working database is required for mysql or postgres_
 
-1. go into libs/api-interface
+1. go into `libs/api-interface`
 2. you can find a file with the name schema.prisma
 3. Setup your databse (Choose between Postgresql, Mysql and SQLite) _NOTE: environments setup must be done!_
-4. Create initial database migration statements for the application `npx prisma2 migrate save --name "init" --experimental` _NOTE: You have to commit the migration files to be able to update later easy the database changes_
-5. Lift up the database with the structure `npx prisma2 migrate up --experimental`
-6. Generate the photon library `npx prisma2 generate`
-7. Create the first user `node postinstall.js` _NOTE: You'll see credentials and API key in console_
+4. Lift up the database with the structure `npx prisma2 migrate up --experimental`
+5. Create the first user `node postinstall.js` _NOTE: You'll see credentials and API key in console_
 
 Everything is done and we can start the UI and API Server ;)
 
 ### Start the ui and api server (2 servers in parallel)
 
-- Starting the api server: `npx ng run api:serve` _NOTE: default http://localhost:3333/graphql_
-- Starting the ui server: `npx ng run visual-knight:serve` _NOTE: default http://localhost:4200_
+1. Starting the api server: `npx ng run api:serve` _NOTE: default http://localhost:3333/graphql_
+2. Starting the ui server: `npx ng run visual-knight:serve` _NOTE: default http://localhost:4200_
+
+### Build docker images
+
+`docker-compose up --build`
 
 ### Create a build
 
