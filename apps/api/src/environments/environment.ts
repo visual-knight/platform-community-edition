@@ -32,6 +32,7 @@ export const environment = {
   },
 
   appDomain: process.env.VK_APP_DOMAIN,
+  appBodyParserJsonLimit: process.env.VK_BODY_PARSER_JSON_LIMIT,
 
   diffOptions: {
     threshold: 0.01,

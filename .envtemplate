@@ -1,6 +1,7 @@
 VK_APP_SECRET="SOME_APP_SECRET"
 VK_APP_DOMAIN="http://localhost:4200/"
 VK_GRAPHQL_SCHEMA_PATH="apps/api/schema.graphql"
+VK_BODY_PARSER_JSON_LIMIT="1mb"
 
 # EMAIL (only for production)
 VK_EMAIL_USER=""
