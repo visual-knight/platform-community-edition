@@ -28,15 +28,15 @@ export class VariationListComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params: VariationListParameter) => {
+      this.testId = params.testId;
+
       const response$ = this.variationService.variationList(params.testId);
       this.variationList$ = response$.pipe(
-        filter(({ data }) => !!data),
-        map(({ data }) => data.variations)
+        map(({ data }) => data && data.variations)
       );
       this.variationListLoading$ = response$.pipe(
         map(({ loading }) => loading)
       );
-      this.testId = params.testId;
     });
   }
 
@@ -57,7 +57,7 @@ export class VariationListComponent implements OnInit {
       .subscribe((deleteVariation: boolean) => {
         if (deleteVariation) {
           this.variationService
-            .delete(variation.id)
+            .delete(this.testId, variation.id)
             .pipe(first())
             .subscribe();
         }
