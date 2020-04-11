@@ -32,7 +32,7 @@ export class VariationService {
     return this.getVariaitonGQL.watch({ variationId }).valueChanges;
   }
 
-  delete(variationId: string) {
+  delete(testId: string, variationId: string) {
     return this.deleteVariationGQL.mutate(
       { id: variationId },
       {
@@ -45,10 +45,21 @@ export class VariationService {
           }
         ) => {
           const data: AllVariationsQuery = store.readQuery({
-            query: AllVariationsDocument
+            query: AllVariationsDocument,
+            variables: {
+              testId
+            }
           });
-          data.variations = data.variations.filter(variation => variation.id !== id);
-          store.writeQuery({ query: AllVariationsDocument, data });
+          data.variations = data.variations.filter(
+            variation => variation.id !== id
+          );
+          store.writeQuery({
+            query: AllVariationsDocument,
+            variables: {
+              testId
+            },
+            data
+          });
         }
       }
     );
