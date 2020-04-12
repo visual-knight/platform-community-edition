@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
-import { UserType, CurrentUserGQL, SignupGQL, LoginGQL, ForgotPasswordGQL, ResetPasswordGQL } from './types';
+import {
+  UserType,
+  CurrentUserGQL,
+  SignupGQL,
+  LoginGQL,
+  ForgotPasswordGQL,
+  ResetPasswordGQL
+} from './types';
 import { map, tap, filter, catchError, switchMap } from 'rxjs/operators';
 import { GraphQLError } from 'graphql';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import * as jwt_decode from 'jwt-decode';
 
-const AUTH_TOKEN_NAME = 'visual-knight-token';
+export const AUTH_TOKEN_NAME = 'visual-knight-token';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +25,9 @@ export class AuthService {
   public authErrorMessages$: Observable<GraphQLError[]>;
   public isLoading$: Observable<boolean>;
   public user$: Observable<UserType>;
-  public isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject(this.isAuthenticated());
+  public isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject(
+    this.isAuthenticated()
+  );
 
   constructor(
     private router: Router,
@@ -60,6 +69,7 @@ export class AuthService {
       })
     );
   }
+
   public login({ email, password }) {
     return this.loginGQL.mutate({ email, password }).pipe(
       map(result => result.data.login),
@@ -90,20 +100,23 @@ export class AuthService {
 
     if (decoded.exp === undefined) return null;
 
-    const date = new Date(0); 
+    const date = new Date(0);
     date.setUTCSeconds(decoded.exp);
     return date;
   }
 
   isAuthenticated(): boolean {
     const token = localStorage.getItem(AUTH_TOKEN_NAME);
-    if(!token) {
+    if (!token) {
       return false;
-    };
+    }
 
     const date = this.getTokenExpirationDate(token);
-    if(date === undefined) return true;
-    if(date.valueOf() > new Date().valueOf()) {
+    if (!date) {
+      return true;
+    }
+
+    if (date.valueOf() > new Date().valueOf()) {
       return true;
     }
     return false;
