@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { first, tap, map, catchError } from 'rxjs/operators';
 import { VerifyEmailGQL, CompleteInvitationGQL } from '../../core/types';
-import { ACTIVATION_STATE, AuthService } from '../../core/auth-service.service';
+import { ACTIVATION_STATE, AuthService, AUTH_TOKEN_NAME } from '../../core/auth-service.service';
 import { of } from 'rxjs';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class AuthUserService {
     return this.completeInvitationGQL.mutate({ token, password }).pipe(
       first(),
       tap(({ data }) => {
-        localStorage.setItem('visual-knight-token', data.completeInvitation.token.accessToken);
+        localStorage.setItem(AUTH_TOKEN_NAME, data.completeInvitation.token.accessToken);
         this.authService.isAuthenticated$.next(true);
       })
     );
