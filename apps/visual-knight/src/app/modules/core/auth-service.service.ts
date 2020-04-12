@@ -5,6 +5,9 @@ import { map, tap, filter, catchError, switchMap } from 'rxjs/operators';
 import { GraphQLError } from 'graphql';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
+import * as jwt_decode from 'jwt-decode';
+
+const AUTH_TOKEN_NAME = 'visual-knight-token';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +18,7 @@ export class AuthService {
   public authErrorMessages$: Observable<GraphQLError[]>;
   public isLoading$: Observable<boolean>;
   public user$: Observable<UserType>;
-  public isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject(
-    localStorage.getItem('visual-knight-token') !== null
-  );
+  public isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject(this.isAuthenticated());
 
   constructor(
     private router: Router,
@@ -54,7 +55,7 @@ export class AuthService {
     return this.signupGQL.mutate({ email, password }).pipe(
       map(result => result.data.signup),
       tap(signupData => {
-        localStorage.setItem('visual-knight-token', signupData.token.accessToken);
+        localStorage.setItem(AUTH_TOKEN_NAME, signupData.token.accessToken);
         this.isAuthenticated$.next(true);
       })
     );
@@ -63,7 +64,7 @@ export class AuthService {
     return this.loginGQL.mutate({ email, password }).pipe(
       map(result => result.data.login),
       tap(loginData => {
-        localStorage.setItem('visual-knight-token', loginData.token.accessToken);
+        localStorage.setItem(AUTH_TOKEN_NAME, loginData.token.accessToken);
         this.isAuthenticated$.next(true);
       })
     );
@@ -78,10 +79,34 @@ export class AuthService {
   }
 
   public logout() {
-    localStorage.removeItem('visual-knight-token');
+    localStorage.removeItem(AUTH_TOKEN_NAME);
     this.isAuthenticated$.next(false);
     this.apollo.getClient().resetStore();
     this.router.navigateByUrl('/user');
+  }
+
+  getTokenExpirationDate(token: string): Date {
+    const decoded = jwt_decode(token);
+
+    if (decoded.exp === undefined) return null;
+
+    const date = new Date(0); 
+    date.setUTCSeconds(decoded.exp);
+    return date;
+  }
+
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem(AUTH_TOKEN_NAME);
+    if(!token) {
+      return false;
+    };
+
+    const date = this.getTokenExpirationDate(token);
+    if(date === undefined) return true;
+    if(date.valueOf() > new Date().valueOf()) {
+      return true;
+    }
+    return false;
   }
 }
 
