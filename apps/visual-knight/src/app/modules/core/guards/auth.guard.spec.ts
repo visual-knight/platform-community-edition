@@ -40,10 +40,12 @@ describe('AuthGuard', () => {
 
     it('should return false if NOT authenticated', () => {
       authService.isAuthenticated = jest.fn().mockReturnValueOnce(false);
+      router.navigate = jest.fn();
 
       const resut = authGuard.canLoad();
 
       expect(resut).toBeFalsy();
+      expect(router.navigate).toHaveBeenCalledWith(['/user']);
     });
   });
 
