@@ -28,6 +28,11 @@
   >
   </mat-slide-toggle>
   <span>Diff</span> <span fxFlex></span>
+  <div>
+    <button (click)="drawViewToggle()">
+      Draw Ignore Area
+    </button>
+  </div>
   <div fxLayout="column" class="variation-details">
     <div fxFlex="1" fxLayout="row">
       <span class="mr-1">{{ testName }}</span>

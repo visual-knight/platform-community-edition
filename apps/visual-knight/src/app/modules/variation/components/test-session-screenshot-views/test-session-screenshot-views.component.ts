@@ -7,9 +7,10 @@ import {
   SimpleChanges,
   EventEmitter
 } from '@angular/core';
-import { MatSlideToggleChange } from '@angular/material';
+import { MatSlideToggleChange, MatDialog } from '@angular/material';
 import { TestSessionType, TestType, VariationType } from '../../../core/types';
 import { differenceInHours, parseISO, formatDistanceToNow } from 'date-fns';
+import { DrawAreaComponent } from '../modals/draw-area/draw-area.component';
 
 @Component({
   selector: 'visual-knight-test-session-screenshot-views',
@@ -25,7 +26,7 @@ export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
   public isDiffView = false;
   public datetimeString: string;
 
-  constructor() {}
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit() {}
 
@@ -65,5 +66,11 @@ export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
 
   onClickDeclineButton() {
     this.accept.emit(false);
+  }
+
+  drawViewToggle() {
+    this.dialog.open(DrawAreaComponent, {
+      data: { imageUrl: 'http://localhost:3333/screenshots/ck8x13qah00047ps7adwtylw5.screenshot.png' }
+    });
   }
 }
