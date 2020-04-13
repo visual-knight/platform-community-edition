@@ -66,8 +66,8 @@ export class DrawAreaComponent implements OnInit {
         return {
           x: rectangle.x(),
           y: rectangle.y(),
-          height: rectangle.height() * rectangle.scaleX(),
-          width: rectangle.width() * rectangle.scaleY()
+          height: rectangle.height() * rectangle.scaleY(),
+          width: rectangle.width() * rectangle.scaleX()
         };
       }
     );
