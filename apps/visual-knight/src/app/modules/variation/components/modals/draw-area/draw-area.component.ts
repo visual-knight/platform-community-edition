@@ -72,7 +72,7 @@ export class DrawAreaComponent implements OnInit {
       }
     );
     this.variationService.setNewIgnoreAreas(this.variationId, newIgnoreAreas);
-    console.log(newIgnoreAreas);
+    this.dialogRef.close();
   }
 
   addRectangle(ignoreArea: IgnoreAreaType) {
@@ -191,17 +191,3 @@ export class DrawAreaComponent implements OnInit {
   //   });
   // }
 }
-
-// class IgnoreArea {
-//   x: number;
-//   y: number;
-//   width: number;
-//   height: number;
-
-//   constructor(rectangle: Konva.Rect) {
-//     this.x = rectangle.x();
-//     this.y = rectangle.y();
-//     this.height = rectangle.height() * rectangle.scaleX();
-//     this.width = rectangle.width() * rectangle.scaleY();
-//   }
-// }

@@ -8,7 +8,7 @@ import {
   AcceptNewBaselineGQL,
   DeclineTestSessionGQL,
   SetNewIgnoreAreasGQL,
-  IgnoreAreaDataArgs
+  IgnoreAreaType
 } from '../../core/types';
 import { first } from 'rxjs/operators';
 import { Apollo } from 'apollo-angular';
@@ -83,7 +83,7 @@ export class VariationService {
     });
   }
 
-  setNewIgnoreAreas(variationId: string, ignoreAreas: IgnoreAreaDataArgs[]) {
+  setNewIgnoreAreas(variationId: string, ignoreAreas: IgnoreAreaType[]) {
     this.setNewIgnoreAreasGQL
       .mutate({ variationId, ignoreAreas })
       .pipe(first())
