@@ -27,6 +27,13 @@ export type AuthToken = {
   accessToken: Scalars['String'];
 };
 
+export type IgnoreAreaDataArgs = {
+  x: Scalars['Float'];
+  y: Scalars['Float'];
+  width: Scalars['Float'];
+  height: Scalars['Float'];
+};
+
 export type IgnoreAreaType = {
   __typename?: 'IgnoreAreaType';
   x: Scalars['Float'];
@@ -58,6 +65,7 @@ export type Mutation = {
   deleteTest: TestType;
   deleteVariation: VariationType;
   acceptNewBaseline: VariationType;
+  setNewIgnoreAreas: VariationType;
   invokeTestSession: Scalars['String'];
   uploadScreenshot?: Maybe<TestSessionComparison>;
 };
@@ -148,6 +156,11 @@ export type MutationDeleteVariationArgs = {
 export type MutationAcceptNewBaselineArgs = {
   comment?: Maybe<Scalars['String']>;
   testSessionId: Scalars['String'];
+  variationId: Scalars['String'];
+};
+
+export type MutationSetNewIgnoreAreasArgs = {
+  ignoreAreas: Array<IgnoreAreaDataArgs>;
   variationId: Scalars['String'];
 };
 
