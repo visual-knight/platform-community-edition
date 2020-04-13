@@ -3,6 +3,7 @@ import Konva from 'konva';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DeleteVariationModalComponent } from '../delete-variation/delete-variation.component';
 import { IgnoreAreaType } from '../../../../core/types';
+import { VariationService } from '../../../services/variation.service';
 
 @Component({
   selector: 'visual-knight-draw-area',
@@ -10,6 +11,7 @@ import { IgnoreAreaType } from '../../../../core/types';
   styleUrls: ['./draw-area.scss']
 })
 export class DrawAreaComponent implements OnInit {
+  variationId: string;
   imageUrl: string;
   ignoreAreas: IgnoreAreaType[];
   rectangleList: Konva.Rect[] = [];
@@ -17,9 +19,11 @@ export class DrawAreaComponent implements OnInit {
   layer: Konva.Layer;
 
   constructor(
+    private variationService: VariationService,
     public dialogRef: MatDialogRef<DeleteVariationModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    this.variationId = data.variationId;
     this.imageUrl = data.imageUrl;
     this.ignoreAreas = data.ignoreAreas;
   }
@@ -57,14 +61,17 @@ export class DrawAreaComponent implements OnInit {
   }
 
   save() {
-    const newIgnoreAreas: IgnoreAreaType[] = this.rectangleList.map(rectangle => {
-      return {
-        x: rectangle.x(),
-        y: rectangle.y(),
-        height: rectangle.height() * rectangle.scaleX(),
-        width: rectangle.width() * rectangle.scaleY()
-      };
-    });
+    const newIgnoreAreas: IgnoreAreaType[] = this.rectangleList.map(
+      rectangle => {
+        return {
+          x: rectangle.x(),
+          y: rectangle.y(),
+          height: rectangle.height() * rectangle.scaleX(),
+          width: rectangle.width() * rectangle.scaleY()
+        };
+      }
+    );
+    this.variationService.setNewIgnoreAreas(this.variationId, newIgnoreAreas);
     console.log(newIgnoreAreas);
   }
 

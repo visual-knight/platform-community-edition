@@ -153,6 +153,7 @@ export class VariationService {
         }
       },
       include: {
+        ignoreAreas: true,
         baseline: true,
         testSessions: {
           include: {

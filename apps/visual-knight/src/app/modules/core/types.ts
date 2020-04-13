@@ -561,6 +561,15 @@ export type AcceptNewBaselineMutation = { __typename?: 'Mutation' } & {
   acceptNewBaseline: { __typename?: 'VariationType' } & VariationDataFragment;
 };
 
+export type SetNewIgnoreAreasMutationVariables = {
+  variationId: Scalars['String'];
+  ignoreAreas: Array<IgnoreAreaDataArgs>;
+};
+
+export type SetNewIgnoreAreasMutation = { __typename?: 'Mutation' } & {
+  setNewIgnoreAreas: { __typename?: 'VariationType' } & VariationDataFragment;
+};
+
 export type DeclineTestSessionMutationVariables = {
   testSessionId: Scalars['String'];
   comment?: Maybe<Scalars['String']>;
@@ -1159,6 +1168,27 @@ export class AcceptNewBaselineGQL extends Apollo.Mutation<
   AcceptNewBaselineMutationVariables
 > {
   document = AcceptNewBaselineDocument;
+}
+export const SetNewIgnoreAreasDocument = gql`
+  mutation setNewIgnoreAreas(
+    $variationId: String!
+    $ignoreAreas: [IgnoreAreaDataArgs!]!
+  ) {
+    setNewIgnoreAreas(variationId: $variationId, ignoreAreas: $ignoreAreas) {
+      ...VariationData
+    }
+  }
+  ${VariationDataFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetNewIgnoreAreasGQL extends Apollo.Mutation<
+  SetNewIgnoreAreasMutation,
+  SetNewIgnoreAreasMutationVariables
+> {
+  document = SetNewIgnoreAreasDocument;
 }
 export const DeclineTestSessionDocument = gql`
   mutation declineTestSession($testSessionId: String!, $comment: String) {
