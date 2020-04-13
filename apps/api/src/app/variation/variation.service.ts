@@ -70,6 +70,7 @@ export class VariationService {
       where: { id: variationId },
       include: {
         baseline: true,
+        ignoreAreas: true,
         testSessions: {
           orderBy: {
             createdAt: 'desc'

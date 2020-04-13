@@ -55,6 +55,7 @@ model Variation {
   deviceName  String
   test        Test
 
+  ignoreAreas    IgnoreArea[]
   testSessions   TestSession[]
   additionalData String?
   baseline       TestSession?  @relation(name: "VariationBaseline")
@@ -78,6 +79,17 @@ model TestSession {
 
   // baseline reference
   baselineRef Variation? @relation(name: "VariationBaseline")
+}
+
+model IgnoreArea {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  x Float
+  y Float
+  width Float
+  height Float
 }
 
 enum Role {
