@@ -10,10 +10,17 @@ import { DeleteVariationModalComponent } from '../delete-variation/delete-variat
 })
 export class DrawAreaComponent implements OnInit {
   imageUrl: string;
-  ignoreAreas: Konva.Rect[] = [];
+  ignoreAreas: IgnoreArea[] = [
+    {
+      height: 50 * 3.7399999999999993,
+      width: 100 * 2.77296875,
+      x: 268,
+      y: 199
+    }
+  ]; // get request
+  rectangleList: Konva.Rect[] = [];
   stage: Konva.Stage;
   layer: Konva.Layer;
-  transformers: Konva.Transformer[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<DeleteVariationModalComponent>,
@@ -49,14 +56,24 @@ export class DrawAreaComponent implements OnInit {
     this.layer.add(backgroundImage);
 
     this.stage.add(this.layer);
+
+    // draw all ignore areas
+    this.ignoreAreas.forEach(ignoreArea => this.addRectangle(ignoreArea));
   }
 
-  addRectangle() {
+  save() {
+    console.log(this.rectangleList);
+    this.rectangleList.forEach(
+      rect => this.ignoreAreas.push(new IgnoreArea(rect)) //send request
+    );
+  }
+
+  addRectangle(ignoreArea: IgnoreArea) {
     const rectangle = new Konva.Rect({
-      x: 0,
-      y: 0,
-      width: 100,
-      height: 50,
+      x: ignoreArea ? ignoreArea.x : 0,
+      y: ignoreArea ? ignoreArea.y : 0,
+      width: ignoreArea ? ignoreArea.width : 100,
+      height: ignoreArea ? ignoreArea.height : 50,
       fill: 'gray',
       draggable: true,
       opacity: 0.6,
@@ -81,9 +98,8 @@ export class DrawAreaComponent implements OnInit {
     });
     this.layer.add(tr);
 
-    this.ignoreAreas.push(rectangle);
+    this.rectangleList.push(rectangle);
     this.stage.add(this.layer);
-    console.log(this.ignoreAreas);
   }
 
   // clearSelection() {
@@ -167,4 +183,18 @@ export class DrawAreaComponent implements OnInit {
   //     component.layer.batchDraw();
   //   });
   // }
+}
+
+class IgnoreArea {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+
+  constructor(rectangle: Konva.Rect) {
+    this.x = rectangle.x();
+    this.y = rectangle.y();
+    this.height = rectangle.height() * rectangle.scaleX();
+    this.width = rectangle.width() * rectangle.scaleY();
+  }
 }
