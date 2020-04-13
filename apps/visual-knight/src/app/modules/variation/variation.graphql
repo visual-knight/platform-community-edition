@@ -49,6 +49,17 @@ fragment VariationData on VariationType {
   testSessions {
     ...TestSessionData
   }
+  ignoreAreas {
+    ...IgnoreAreaData
+  }
+}
+
+fragment IgnoreAreaData on IgnoreAreaType {
+  id
+  x
+  y
+  height
+  width
 }
 
 fragment TestSessionData on TestSessionType {

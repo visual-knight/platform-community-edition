@@ -27,6 +27,15 @@ export type AuthToken = {
   accessToken: Scalars['String'];
 };
 
+export type IgnoreAreaType = {
+  __typename?: 'IgnoreAreaType';
+  id: Scalars['ID'];
+  x: Scalars['Float'];
+  y: Scalars['Float'];
+  width: Scalars['Float'];
+  height: Scalars['Float'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   login: AuthPayload;
@@ -298,6 +307,7 @@ export type VariationType = {
   additionalData?: Maybe<Scalars['JSON']>;
   baseline?: Maybe<TestSessionType>;
   testSessions: Array<TestSessionType>;
+  ignoreAreas?: Maybe<Array<IgnoreAreaType>>;
   isLastSuccessful: Scalars['Boolean'];
 };
 export type VerifyEmailMutationVariables = {
@@ -563,7 +573,15 @@ export type VariationDataFragment = { __typename?: 'VariationType' } & Pick<
     testSessions: Array<
       { __typename?: 'TestSessionType' } & TestSessionDataFragment
     >;
+    ignoreAreas: Maybe<
+      Array<{ __typename?: 'IgnoreAreaType' } & IgnoreAreaDataFragment>
+    >;
   };
+
+export type IgnoreAreaDataFragment = { __typename?: 'IgnoreAreaType' } & Pick<
+  IgnoreAreaType,
+  'id' | 'x' | 'y' | 'height' | 'width'
+>;
 
 export type TestSessionDataFragment = { __typename?: 'TestSessionType' } & Pick<
   TestSessionType,
@@ -662,6 +680,15 @@ export const TestSessionDataFragmentDoc = gql`
     }
   }
 `;
+export const IgnoreAreaDataFragmentDoc = gql`
+  fragment IgnoreAreaData on IgnoreAreaType {
+    id
+    x
+    y
+    height
+    width
+  }
+`;
 export const VariationDataFragmentDoc = gql`
   fragment VariationData on VariationType {
     id
@@ -676,8 +703,12 @@ export const VariationDataFragmentDoc = gql`
     testSessions {
       ...TestSessionData
     }
+    ignoreAreas {
+      ...IgnoreAreaData
+    }
   }
   ${TestSessionDataFragmentDoc}
+  ${IgnoreAreaDataFragmentDoc}
 `;
 export const VerifyEmailDocument = gql`
   mutation verifyEmail($token: String!) {
@@ -901,7 +932,21 @@ export class DeleteTestGQL extends Apollo.Mutation<
 > {
   document = DeleteTestDocument;
 }
+export const SelectedTestDocument = gql`
+  query selectedTest {
+    selectedTest @client
+  }
+`;
 
+@Injectable({
+  providedIn: 'root'
+})
+export class SelectedTestGQL extends Apollo.Query<
+  SelectedTestQuery,
+  SelectedTestQueryVariables
+> {
+  document = SelectedTestDocument;
+}
 export const UserlistDocument = gql`
   query userlist {
     users {
