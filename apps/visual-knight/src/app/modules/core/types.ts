@@ -29,7 +29,6 @@ export type AuthToken = {
 
 export type IgnoreAreaType = {
   __typename?: 'IgnoreAreaType';
-  id: Scalars['ID'];
   x: Scalars['Float'];
   y: Scalars['Float'];
   width: Scalars['Float'];
@@ -580,7 +579,7 @@ export type VariationDataFragment = { __typename?: 'VariationType' } & Pick<
 
 export type IgnoreAreaDataFragment = { __typename?: 'IgnoreAreaType' } & Pick<
   IgnoreAreaType,
-  'id' | 'x' | 'y' | 'height' | 'width'
+  'x' | 'y' | 'height' | 'width'
 >;
 
 export type TestSessionDataFragment = { __typename?: 'TestSessionType' } & Pick<
@@ -682,7 +681,6 @@ export const TestSessionDataFragmentDoc = gql`
 `;
 export const IgnoreAreaDataFragmentDoc = gql`
   fragment IgnoreAreaData on IgnoreAreaType {
-    id
     x
     y
     height

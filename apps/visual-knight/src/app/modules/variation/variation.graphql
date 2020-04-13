@@ -55,7 +55,6 @@ fragment VariationData on VariationType {
 }
 
 fragment IgnoreAreaData on IgnoreAreaType {
-  id
   x
   y
   height

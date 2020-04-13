@@ -70,7 +70,11 @@ export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
 
   drawViewToggle() {
     this.dialog.open(DrawAreaComponent, {
-      data: { imageUrl: 'http://localhost:3333/screenshots/ck8x13qah00047ps7adwtylw5.screenshot.png' }
+      data: {
+        imageUrl:
+          'http://localhost:3333/screenshots/ck8x13qah00047ps7adwtylw5.screenshot.png',
+        ignoreAreas: this.variation.ignoreAreas
+      }
     });
   }
 }

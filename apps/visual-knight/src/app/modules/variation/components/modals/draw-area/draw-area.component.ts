@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import Konva from 'konva';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DeleteVariationModalComponent } from '../delete-variation/delete-variation.component';
+import { IgnoreAreaType } from '../../../../core/types';
 
 @Component({
   selector: 'visual-knight-draw-area',
@@ -10,14 +11,7 @@ import { DeleteVariationModalComponent } from '../delete-variation/delete-variat
 })
 export class DrawAreaComponent implements OnInit {
   imageUrl: string;
-  ignoreAreas: IgnoreArea[] = [
-    {
-      height: 50 * 3.7399999999999993,
-      width: 100 * 2.77296875,
-      x: 268,
-      y: 199
-    }
-  ]; // get request
+  ignoreAreas: IgnoreAreaType[];
   rectangleList: Konva.Rect[] = [];
   stage: Konva.Stage;
   layer: Konva.Layer;
@@ -27,6 +21,7 @@ export class DrawAreaComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.imageUrl = data.imageUrl;
+    this.ignoreAreas = data.ignoreAreas;
   }
 
   ngOnInit(): void {
@@ -62,13 +57,18 @@ export class DrawAreaComponent implements OnInit {
   }
 
   save() {
-    console.log(this.rectangleList);
-    this.rectangleList.forEach(
-      rect => this.ignoreAreas.push(new IgnoreArea(rect)) //send request
-    );
+    const newIgnoreAreas: IgnoreAreaType[] = this.rectangleList.map(rectangle => {
+      return {
+        x: rectangle.x(),
+        y: rectangle.y(),
+        height: rectangle.height() * rectangle.scaleX(),
+        width: rectangle.width() * rectangle.scaleY()
+      };
+    });
+    console.log(newIgnoreAreas);
   }
 
-  addRectangle(ignoreArea: IgnoreArea) {
+  addRectangle(ignoreArea: IgnoreAreaType) {
     const rectangle = new Konva.Rect({
       x: ignoreArea ? ignoreArea.x : 0,
       y: ignoreArea ? ignoreArea.y : 0,
@@ -185,16 +185,16 @@ export class DrawAreaComponent implements OnInit {
   // }
 }
 
-class IgnoreArea {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+// class IgnoreArea {
+//   x: number;
+//   y: number;
+//   width: number;
+//   height: number;
 
-  constructor(rectangle: Konva.Rect) {
-    this.x = rectangle.x();
-    this.y = rectangle.y();
-    this.height = rectangle.height() * rectangle.scaleX();
-    this.width = rectangle.width() * rectangle.scaleY();
-  }
-}
+//   constructor(rectangle: Konva.Rect) {
+//     this.x = rectangle.x();
+//     this.y = rectangle.y();
+//     this.height = rectangle.height() * rectangle.scaleX();
+//     this.width = rectangle.width() * rectangle.scaleY();
+//   }
+// }

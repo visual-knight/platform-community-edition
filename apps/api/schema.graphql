@@ -17,7 +17,6 @@ type AuthToken {
 scalar DateTime
 
 type IgnoreAreaType {
-  id: ID!
   x: Float!
   y: Float!
   width: Float!
