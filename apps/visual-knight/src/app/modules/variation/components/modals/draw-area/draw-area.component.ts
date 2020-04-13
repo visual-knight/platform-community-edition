@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import Konva from 'konva';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DeleteVariationModalComponent } from '../delete-variation/delete-variation.component';
-import { da } from 'date-fns/locale';
 
 @Component({
   selector: 'visual-knight-draw-area',
@@ -14,12 +13,6 @@ export class DrawAreaComponent implements OnInit {
   ignoreAreas: Konva.Rect[] = [];
   stage: Konva.Stage;
   layer: Konva.Layer;
-  // selectedButton: any = {
-  //   rectangle: false,
-  //   undo: false,
-  //   erase: false
-  // };
-  // erase = false;
   transformers: Konva.Transformer[] = [];
 
   constructor(
@@ -30,61 +23,67 @@ export class DrawAreaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let width = window.innerWidth * 0.9;
-    let height = window.innerHeight;
-
     this.stage = new Konva.Stage({
       container: 'container',
-      width: width,
-      height: height
+      width: window.innerWidth * 0.9,
+      height: window.innerHeight * 0.8
     });
 
-    // add background
+    // add image onload callback
     const imageObj = new Image();
     imageObj.src = this.data.imageUrl;
-    imageObj.onload = () => this.addBackground(imageObj);
+    imageObj.onload = () => this.imageOnload(imageObj);
   }
 
-  addBackground(imageObj) {
+  imageOnload(imageObj) {
+    // create background layer
     this.layer = new Konva.Layer();
 
-    const background = new Konva.Image({
-      image: imageObj,
-      draggable: true
-    });
+    // change stage size according to image
+    this.stage.height(imageObj.height);
+    this.stage.width(imageObj.width);
 
-    // add cursor styling
-    background.on('mouseover', function() {
-      document.body.style.cursor = 'pointer';
+    const backgroundImage = new Konva.Image({
+      image: imageObj
     });
-    background.on('mouseout', function() {
-      document.body.style.cursor = 'default';
-    });
+    this.layer.add(backgroundImage);
 
-    this.layer.add(background);
     this.stage.add(this.layer);
-
-    this.addTransformerListeners();
   }
 
   addRectangle() {
     const rectangle = new Konva.Rect({
-      x: 20,
-      y: 20,
+      x: 0,
+      y: 0,
       width: 100,
       height: 50,
       fill: 'gray',
-      stroke: 'black',
-      strokeWidth: 1,
       draggable: true,
-      opacity: 0.6
-    });
+      opacity: 0.6,
+      dragBoundFunc: function(pos) {
+        const component = this as Konva.Rect;
+        const rectWidth = component.width() * component.scaleX();
+        const rectHeight = component.height() * component.scaleY();
+        const layerSize = component.getLayer().getSize();
 
-    rectangle.transformsEnabled('all')
+        return {
+          x: pos.x > 0 ? Math.min(layerSize.width - rectWidth, pos.x) : 0,
+          y: pos.y > 0 ? Math.min(layerSize.height - rectHeight, pos.y) : 0
+        };
+      }
+    });
+    this.layer.add(rectangle);
+
+    const tr = new Konva.Transformer({
+      node: rectangle,
+      rotateEnabled: false,
+      keepRatio: false
+    });
+    this.layer.add(tr);
 
     this.ignoreAreas.push(rectangle);
-    this.layer.add(rectangle);
     this.stage.add(this.layer);
+    console.log(this.ignoreAreas);
   }
 
   // clearSelection() {
@@ -115,46 +114,45 @@ export class DrawAreaComponent implements OnInit {
   //   this.layer.draw();
   // }
 
-  addTransformerListeners() {
-    const component = this;
-    const tr = new Konva.Transformer({
-      rotateEnabled: false
-    });
-    this.stage.on('click', function(e) {
-      if (!this.clickStartShape) {
-        return;
-      }
-      if (e.target._id === this.clickStartShape._id && this.clickStartShape.className === 'Rect') {
-        component.layer.add(tr);
-        tr.attachTo(e.target);
-        component.transformers.push(tr);
-        component.layer.draw();
-      } else {
-        tr.detach();
-        component.layer.draw();
-      }
-    });
-    // const component = this;
-    // const tr = new Konva.Transformer();
+  // addTransformerListeners() {
+  //   const component = this;
+  //   const tr = new Konva.Transformer({
+  //     rotateEnabled: false,
+  //     keepRatio: false
+  //   });
+  //   this.stage.on('click', function(e) {
+  //     if (!this.clickStartShape) {
+  //       return;
+  //     }
+  //     if (e.target._id === this.clickStartShape._id && this.clickStartShape.className ===  'Rect') {
+  //       component.layer.add(tr);
+  //       tr.attachTo(e.target);
+  //       component.layer.draw();
+  //     } else {
+  //       tr.detach();
+  //       component.layer.draw();
+  //     }
+  //   });
+  // const component = this;
+  // const tr = new Konva.Transformer();
 
-    // this.stage.on('click', function(e) {
-    //   // if click on empty area - remove all transformers
-    //   if (e.target === component.stage) {
-    //     component.stage.find('Transformer').destroy();
-    //     component.layer.draw();
-    //     return;
-    //   }
-    //   // do nothing if clicked NOT on our rectangles
-    //   if (!e.target.hasName('rect')) {
-    //     return;
-    //   }
+  // this.stage.on('click', function(e) {
+  //   // if click on empty area - remove all transformers
+  //   if (e.target === component.stage) {
+  //     component.stage.find('Transformer').destroy();
+  //     component.layer.draw();
+  //     return;
+  //   }
+  //   // do nothing if clicked NOT on our rectangles
+  //   if (!e.target.hasName('rect')) {
+  //     return;
+  //   }
 
-      
-    //   component.layer.add(tr);
-    //   tr.attachTo(e.target);
-    //   component.layer.draw();
-    // });
-  }
+  //   component.layer.add(tr);
+  //   tr.attachTo(e.target);
+  //   component.layer.draw();
+  // });
+  // }
 
   // addDeleteListener(shape) {
   //   const component = this;
