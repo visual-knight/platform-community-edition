@@ -81,10 +81,10 @@ export class DrawAreaComponent implements OnInit {
 
   addRectangle(ignoreArea: IgnoreAreaType) {
     const rectangle = new Konva.Rect({
-      x: ignoreArea ? ignoreArea.x : 0,
-      y: ignoreArea ? ignoreArea.y : 0,
-      width: ignoreArea ? ignoreArea.width : 100,
-      height: ignoreArea ? ignoreArea.height : 50,
+      x: ignoreArea ? ignoreArea.x : this.imageLayer.width() / 4,
+      y: ignoreArea ? ignoreArea.y : this.imageLayer.height() / 4,
+      width: ignoreArea ? ignoreArea.width : this.imageLayer.width() / 2,
+      height: ignoreArea ? ignoreArea.height : this.imageLayer.height() / 2,
       fill: 'gray',
       draggable: true,
       opacity: 0.6,
