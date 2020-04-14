@@ -107,9 +107,21 @@ export class DrawAreaComponent implements OnInit {
       keepRatio: false
     });
 
+    /// prevent negative scaling
+    tr.on('transform', function() {
+      if (rectangle.scaleX() < 0) {
+        tr.stopTransform();
+        rectangle.scaleX(0);
+      }
+      if (rectangle.scaleY() < 0) {
+        tr.stopTransform();
+        rectangle.scaleY(0);
+      }
+    });
+
     this.shapeLayer.add(rectangle);
     this.shapeLayer.add(tr);
-    this.shapeLayer.draw()
+    this.shapeLayer.draw();
   }
 
   clearAll() {
