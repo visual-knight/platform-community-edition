@@ -14,9 +14,9 @@ export class DrawAreaComponent implements OnInit {
   variationId: string;
   imageUrl: string;
   ignoreAreas: IgnoreAreaType[];
-  rectangleList: Konva.Rect[] = [];
   stage: Konva.Stage;
-  layer: Konva.Layer;
+  imageLayer: Konva.Layer;
+  shapeLayer: Konva.Layer;
 
   constructor(
     private variationService: VariationService,
@@ -35,6 +35,16 @@ export class DrawAreaComponent implements OnInit {
       height: window.innerHeight * 0.8
     });
 
+    // create image layer
+    this.imageLayer = new Konva.Layer();
+    this.stage.add(this.imageLayer);
+
+    // add shapes layer
+    this.shapeLayer = new Konva.Layer();
+    this.stage.add(this.shapeLayer);
+    // draw all ignore areas
+    this.ignoreAreas.forEach(ignoreArea => this.addRectangle(ignoreArea));
+
     // add image onload callback
     const imageObj = new Image();
     imageObj.src = this.data.imageUrl;
@@ -42,9 +52,6 @@ export class DrawAreaComponent implements OnInit {
   }
 
   imageOnload(imageObj) {
-    // create background layer
-    this.layer = new Konva.Layer();
-
     // change stage size according to image
     this.stage.height(imageObj.height);
     this.stage.width(imageObj.width);
@@ -52,25 +59,22 @@ export class DrawAreaComponent implements OnInit {
     const backgroundImage = new Konva.Image({
       image: imageObj
     });
-    this.layer.add(backgroundImage);
-
-    this.stage.add(this.layer);
-
-    // draw all ignore areas
-    this.ignoreAreas.forEach(ignoreArea => this.addRectangle(ignoreArea));
+    this.imageLayer.add(backgroundImage);
+    this.stage.draw();
   }
 
   save() {
-    const newIgnoreAreas: IgnoreAreaType[] = this.rectangleList.map(
-      rectangle => {
+    const newIgnoreAreas: IgnoreAreaType[] = this.shapeLayer
+      .getChildren(child => child.getClassName() === 'Rect')
+      .toArray()
+      .map(rectangle => {
         return {
           x: Math.round(rectangle.x()),
           y: Math.round(rectangle.y()),
           height: Math.round(rectangle.height() * rectangle.scaleY()),
           width: Math.round(rectangle.width() * rectangle.scaleX())
         };
-      }
-    );
+      });
     this.variationService.setNewIgnoreAreas(this.variationId, newIgnoreAreas);
     this.dialogRef.close();
   }
@@ -96,98 +100,20 @@ export class DrawAreaComponent implements OnInit {
         };
       }
     });
-    this.layer.add(rectangle);
 
     const tr = new Konva.Transformer({
       node: rectangle,
       rotateEnabled: false,
       keepRatio: false
     });
-    this.layer.add(tr);
 
-    this.rectangleList.push(rectangle);
-    this.stage.add(this.layer);
+    this.shapeLayer.add(rectangle);
+    this.shapeLayer.add(tr);
+    this.shapeLayer.draw()
   }
 
-  // clearSelection() {
-  //   Object.keys(this.selectedButton).forEach(key => {
-  //     this.selectedButton[key] = false;
-  //   });
-  // }
-  // setSelection(type: string) {
-  //   this.selectedButton[type] = true;
-  // }
-
-  // addShape(type: string) {
-  //   this.clearSelection();
-  //   this.setSelection(type);
-  //   if (type === 'rectangle') {
-  //     this.addRectangle();
-  //   }
-  // }
-
-  // undo() {
-  //   const removedShape = this.shapes.pop();
-  //   this.transformers.forEach(t => {
-  //     t.detach();
-  //   });
-  //   if (removedShape) {
-  //     removedShape.remove();
-  //   }
-  //   this.layer.draw();
-  // }
-
-  // addTransformerListeners() {
-  //   const component = this;
-  //   const tr = new Konva.Transformer({
-  //     rotateEnabled: false,
-  //     keepRatio: false
-  //   });
-  //   this.stage.on('click', function(e) {
-  //     if (!this.clickStartShape) {
-  //       return;
-  //     }
-  //     if (e.target._id === this.clickStartShape._id && this.clickStartShape.className ===  'Rect') {
-  //       component.layer.add(tr);
-  //       tr.attachTo(e.target);
-  //       component.layer.draw();
-  //     } else {
-  //       tr.detach();
-  //       component.layer.draw();
-  //     }
-  //   });
-  // const component = this;
-  // const tr = new Konva.Transformer();
-
-  // this.stage.on('click', function(e) {
-  //   // if click on empty area - remove all transformers
-  //   if (e.target === component.stage) {
-  //     component.stage.find('Transformer').destroy();
-  //     component.layer.draw();
-  //     return;
-  //   }
-  //   // do nothing if clicked NOT on our rectangles
-  //   if (!e.target.hasName('rect')) {
-  //     return;
-  //   }
-
-  //   component.layer.add(tr);
-  //   tr.attachTo(e.target);
-  //   component.layer.draw();
-  // });
-  // }
-
-  // addDeleteListener(shape) {
-  //   const component = this;
-  //   window.addEventListener('keydown', function(e) {
-  //     if (e.keyCode === 46) {
-  //       shape.remove();
-  //       component.transformers.forEach(t => {
-  //         t.detach();
-  //       });
-  //       e.preventDefault();
-  //     }
-  //     component.layer.batchDraw();
-  //   });
-  // }
+  clearAll() {
+    this.shapeLayer.destroyChildren();
+    this.shapeLayer.draw();
+  }
 }

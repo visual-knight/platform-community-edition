@@ -1,31 +1,13 @@
 <div class="row">
-  <button
-    mat-raised-button
-    (click)='addRectangle()'
-  >
-    Rectangle
+  <button mat-raised-button (click)="addRectangle()">
+    Add Rectangle
   </button>
-
-  <button
-    mat-raised-button
-    (click)='save()'
-  >
-    Save
+  <button mat-raised-button (click)="clearAll()">
+    Clear all
   </button>
-  <!-- <button
-    mat-raised-button
-    [color]='selectedButton["undo"] ? "primary":""'
-    (click)='clearSelection(); setSelection("undo"); undo()'
-  >
-    Undo
+  <button mat-raised-button (click)="save()">
+    Save and Close
   </button>
-  <button
-    mat-raised-button
-    [color]='selectedButton["erase"] ? "primary":""'
-    (click)='clearSelection(); setSelection("erase"); erase = true'
-  >
-    Erase
-  </button> -->
 </div>
 
 <div id="container"></div>
