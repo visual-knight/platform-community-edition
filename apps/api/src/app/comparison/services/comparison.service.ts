@@ -9,6 +9,7 @@ import { environment } from '../../../environments/environment';
 import { CreateDiffResult } from '../models/diffresult.model';
 import { PNG } from 'pngjs';
 import Pixelmatch from 'pixelmatch';
+import { IgnoreAreaType } from '../../ignorearea/models/ignorearea';
 
 @Injectable()
 export class ComparisonService {
@@ -210,7 +211,8 @@ export class ComparisonService {
   createDiff(
     srcImageFilename: string,
     baselineImageFilename: string,
-    testSessionId: string
+    testSessionId: string,
+    ignoreAreas: IgnoreAreaType[]
   ): Observable<CreateDiffResult> {
     return combineLatest(
       this.cloudProviderService.loadImage(baselineImageFilename),
@@ -232,10 +234,17 @@ export class ComparisonService {
           width: baseline.width,
           height: baseline.height
         });
-        const pixelMisMatchCount = Pixelmatch(baseline.data, test.data, diff.data, baseline.width, baseline.height, {
-          threshold: environment.diffOptions.threshold,
-          includeAA: environment.diffOptions.includeAA
-        });
+        const pixelMisMatchCount = Pixelmatch(
+          this.applyIgnoreAreas(baseline, ignoreAreas),
+          this.applyIgnoreAreas(test, ignoreAreas),
+          diff.data,
+          baseline.width,
+          baseline.height,
+          {
+            threshold: environment.diffOptions.threshold,
+            includeAA: environment.diffOptions.includeAA
+          }
+        );
 
         const subject: Subject<Buffer> = new Subject();
         diff.pack();
@@ -275,10 +284,10 @@ export class ComparisonService {
 
   private processTestSessionImage(testSessionId: string): Observable<TestSession> {
     return this.loadTestSessionData(testSessionId).pipe(
-      switchMap(({ misMatchTolerance, baselineRef, autoBaseline, variationId, testSession }) => {
+      switchMap(({ misMatchTolerance, baselineRef, autoBaseline, variationId, testSession, ignoreAreas }) => {
         if (baselineRef) {
           console.log(`Create diff`);
-          return this.createDiff(testSession.imageKey, baselineRef.imageKey, testSessionId).pipe(
+          return this.createDiff(testSession.imageKey, baselineRef.imageKey, testSessionId, ignoreAreas).pipe(
             switchMap(({ misMatchPercentage, diffImageKey, isSameDimensions }) => {
               console.log('Updated imaged data');
               return this.updateImageData(
@@ -333,7 +342,8 @@ export class ComparisonService {
         include: {
           variation: {
             include: {
-              baseline: true
+              baseline: true,
+              ignoreAreas: true
             }
           }
         }
@@ -344,7 +354,8 @@ export class ComparisonService {
         baselineRef: testSession.variation.baseline,
         misMatchTolerance: testSession.misMatchTolerance,
         autoBaseline: testSession.autoBaseline,
-        variationId: testSession.variation.id
+        variationId: testSession.variation.id,
+        ignoreAreas: testSession.variation.ignoreAreas
       }))
     );
   }
@@ -364,11 +375,26 @@ export class ComparisonService {
         diffImageKey,
         misMatchPercentage,
         isSameDimensions,
-        state,
+        state
       }
     });
 
     console.log('Update image data');
     return from(testSession.then());
+  }
+
+  private applyIgnoreAreas(image: PNG, ignoreAreas: IgnoreAreaType[]): Buffer {
+    ignoreAreas.forEach(area => {
+      for (let y = area.y; y < (area.y + area.height); y++) {
+        for (let x = area.x; x < (area.x + area.width); x++) {
+          const k = 4 * (image.width * y + x);
+          image.data[k + 0] = 0;
+          image.data[k + 1] = 0;
+          image.data[k + 2] = 0;
+          image.data[k + 3] = 0;
+        }
+      }
+    });
+    return image.data;
   }
 }
