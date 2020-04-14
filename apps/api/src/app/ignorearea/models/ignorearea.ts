@@ -1,19 +1,16 @@
-import { Field, ObjectType, ID, Float } from 'type-graphql';
+import { Field, ObjectType, Int } from 'type-graphql';
 
 @ObjectType()
 export class IgnoreAreaType {
-  // @Field(type => ID)
-  // id: string;
-
-  @Field(type => Float)
+  @Field(type => Int)
   x: number;
 
-  @Field(type => Float)
+  @Field(type => Int)
   y: number;
 
-  @Field(type => Float)
+  @Field(type => Int)
   width: number;
 
-  @Field(type => Float)
+  @Field(type => Int)
   height: number;
 }

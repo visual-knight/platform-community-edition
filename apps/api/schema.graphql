@@ -17,17 +17,17 @@ type AuthToken {
 scalar DateTime
 
 input IgnoreAreaDataArgs {
-  x: Float!
-  y: Float!
-  width: Float!
-  height: Float!
+  x: Int!
+  y: Int!
+  width: Int!
+  height: Int!
 }
 
 type IgnoreAreaType {
-  x: Float!
-  y: Float!
-  width: Float!
-  height: Float!
+  x: Int!
+  y: Int!
+  width: Int!
+  height: Int!
 }
 
 """

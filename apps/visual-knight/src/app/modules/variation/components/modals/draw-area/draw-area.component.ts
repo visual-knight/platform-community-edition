@@ -64,10 +64,10 @@ export class DrawAreaComponent implements OnInit {
     const newIgnoreAreas: IgnoreAreaType[] = this.rectangleList.map(
       rectangle => {
         return {
-          x: rectangle.x(),
-          y: rectangle.y(),
-          height: rectangle.height() * rectangle.scaleY(),
-          width: rectangle.width() * rectangle.scaleX()
+          x: Math.round(rectangle.x()),
+          y: Math.round(rectangle.y()),
+          height: Math.round(rectangle.height() * rectangle.scaleY()),
+          width: Math.round(rectangle.width() * rectangle.scaleX())
         };
       }
     );

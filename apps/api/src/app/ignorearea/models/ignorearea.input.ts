@@ -1,16 +1,16 @@
-import { Field, InputType, Float } from 'type-graphql';
+import { Field, InputType, Int } from 'type-graphql';
 
 @InputType()
 export class IgnoreAreaDataArgs {
-  @Field(type => Float)
+  @Field(type => Int)
   x: number;
 
-  @Field(type => Float)
+  @Field(type => Int)
   y: number;
 
-  @Field(type => Float)
+  @Field(type => Int)
   width: number;
 
-  @Field(type => Float)
+  @Field(type => Int)
   height: number;
 }
