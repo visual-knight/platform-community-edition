@@ -3,7 +3,8 @@ import {
   MatIconModule,
   MatSlideToggleModule,
   MatTooltipModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatDialogModule
 } from '@angular/material';
 import { DiffViewComponent } from '../diff-view/diff-view.component';
 import { ScreenshotImagePipe } from '../../../shared/pipes/screenshot-image.pipe';
@@ -16,18 +17,9 @@ describe('TestSessionScreenshotViewsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestSessionScreenshotViewsComponent,
-        DiffViewComponent,
-        ScreenshotImagePipe
-      ],
-      imports: [
-        MatIconModule,
-        MatSlideToggleModule,
-        MatTooltipModule,
-        MatToolbarModule,
-        IconModule
-      ]
+      providers: [ScreenshotImagePipe],
+      declarations: [TestSessionScreenshotViewsComponent, DiffViewComponent, ScreenshotImagePipe],
+      imports: [MatIconModule, MatSlideToggleModule, MatTooltipModule, MatToolbarModule, MatDialogModule, IconModule]
     }).compileComponents();
   }));
 
