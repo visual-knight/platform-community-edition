@@ -355,7 +355,7 @@ export class ComparisonService {
         misMatchTolerance: testSession.misMatchTolerance,
         autoBaseline: testSession.autoBaseline,
         variationId: testSession.variation.id,
-        ignoreAreas: testSession.variation.ignoreAreas
+        ignoreAreas: (testSession.variation as any).ignoreAreas
       }))
     );
   }

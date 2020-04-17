@@ -35,12 +35,12 @@ This API also provides the possibility to create new tests and return there stat
 
 ## Set up
 
-1. create `docker-compose.yml`
+1. create `docker-compose.yml` _NOTE: latest version available on [dockerhub](https://hub.docker.com/u/visualknight)_
 ```
 version: '3.7'
 services:
   api:
-    image: visualknight/api:0.0.3
+    image: visualknight/api:1.0.0
     ports: 
       - '${VK_API_PORT}:3333'
     environment: 
@@ -51,7 +51,7 @@ services:
     depends_on:
       - postgres
   ui:
-    image: visualknight/ui:0.0.3
+    image: visualknight/ui:1.0.0
     ports: 
       - '${VK_UI_PORT}:8080'
   postgres:
@@ -67,7 +67,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
   migration:
-    image: visualknight/migration:0.0.3
+    image: visualknight/migration:1.0.0
     depends_on:
       - postgres
     environment:
