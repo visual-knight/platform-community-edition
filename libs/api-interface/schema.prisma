@@ -50,11 +50,8 @@ model Variation {
   browserName String
   deviceName  String
   test        Test
-<<<<<<< HEAD
 
   ignoreAreas    IgnoreArea[]
-=======
->>>>>>> master
   testSessions   TestSession[]
   additionalData String?
   baseline       TestSession?  @relation(name: "VariationBaseline")

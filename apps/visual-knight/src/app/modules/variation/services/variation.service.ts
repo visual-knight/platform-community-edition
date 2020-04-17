@@ -53,9 +53,7 @@ export class VariationService {
               testId
             }
           });
-          data.variations = data.variations.filter(
-            variation => variation.id !== id
-          );
+          data.variations = data.variations.filter(variation => variation.id !== id);
           store.writeQuery({
             query: AllVariationsDocument,
             variables: {
@@ -63,23 +61,12 @@ export class VariationService {
             },
             data
           });
-<<<<<<< HEAD
-          data.variations = data.variations.filter(
-            variation => variation.id !== id
-          );
-          store.writeQuery({ query: AllVariationsDocument, data });
-=======
->>>>>>> master
         }
       }
     );
   }
 
-  acceptNewBaseline(
-    comment: string,
-    testSessionId: string,
-    variationId: string
-  ) {
+  acceptNewBaseline(comment: string, testSessionId: string, variationId: string) {
     this.acceptNewBaseLineGQL
       .mutate({ comment, testSessionId, variationId })
       .pipe(first())
