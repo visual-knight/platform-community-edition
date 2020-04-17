@@ -45,4 +45,3 @@ screenshotUploads
 
 .env
 .env.*
-libs/api-interface/migrations

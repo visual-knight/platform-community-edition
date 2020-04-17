@@ -1,2 +1,3 @@
 # DATABASE
-VK_DATABASE="file:../../tmp/visual-knight.db"
+# VK_DATABASE="file:../../tmp/visual-knight.db"
+VK_DATABASE="postgresql://postgres:postgres@localhost:5432/prisma"

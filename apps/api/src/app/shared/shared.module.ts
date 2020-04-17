@@ -7,7 +7,12 @@ const services: Provider[] = [
   Logger,
   {
     provide: 'DB_URI',
-    useValue: environment.db
+    useFactory: () => {
+      if(!environment.db){
+        throw new Error("DB connention string is not set in env. Check value of VK_DATABASE")
+      }
+      return environment.db;
+    },
   }
 ];
 

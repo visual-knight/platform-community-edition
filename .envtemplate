@@ -1,6 +1,18 @@
+# Local development
 VK_APP_SECRET="SOME_APP_SECRET"
 VK_APP_DOMAIN="http://localhost:4200/"
 VK_GRAPHQL_SCHEMA_PATH="apps/api/schema.graphql"
+VK_BODY_PARSER_JSON_LIMIT="1mb"
+VK_DATABASE="file:../../tmp/visual-knight.db"
+
+# Docker specific
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+VK_DB_NAME=visual_knight
+VK_UI_DOMAIN=localhost
+VK_UI_PORT=4200
+VK_API_PORT=3333
 
 # EMAIL (only for production)
 VK_EMAIL_USER=""

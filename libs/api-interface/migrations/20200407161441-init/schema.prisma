@@ -3,7 +3,7 @@ datasource db {
   // https://github.com/prisma/prisma2/blob/master/docs/core/connectors
   // mysql | sqlite | postgresql
   provider = "postgresql"
-  url      = env("VK_DATABASE")
+  url = "***"
 }
 
 generator photon {
@@ -50,11 +50,6 @@ model Variation {
   browserName String
   deviceName  String
   test        Test
-<<<<<<< HEAD
-
-  ignoreAreas    IgnoreArea[]
-=======
->>>>>>> master
   testSessions   TestSession[]
   additionalData String?
   baseline       TestSession?  @relation(name: "VariationBaseline")
@@ -76,17 +71,6 @@ model TestSession {
   autoBaseline       Boolean          @default(false)
   // baseline reference
   baselineRef Variation? @relation(name: "VariationBaseline")
-}
-
-model IgnoreArea {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  x Int
-  y Int
-  width Int
-  height Int
 }
 
 enum Role {

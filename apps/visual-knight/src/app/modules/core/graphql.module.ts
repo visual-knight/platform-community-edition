@@ -8,6 +8,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { onError } from 'apollo-link-error';
 import { Router } from '@angular/router';
 import { resolvers, typeDefs } from './schema';
+import { AUTH_TOKEN_NAME } from './auth-service.service';
 
 const uri = environment.apiEndpoint + environment.graphql.uri;
 export function createApollo(httpLink: HttpLink, router: Router) {
@@ -15,7 +16,7 @@ export function createApollo(httpLink: HttpLink, router: Router) {
   const http = httpLink.create({ uri });
 
   const authMiddleware = new ApolloLink((operation, forward) => {
-    const token = localStorage.getItem('visual-knight-token');
+    const token = localStorage.getItem(AUTH_TOKEN_NAME);
     if (!token) return forward(operation);
 
     operation.setContext({
@@ -29,7 +30,7 @@ export function createApollo(httpLink: HttpLink, router: Router) {
     if (graphQLErrors) {
       for (const err of graphQLErrors) {
         if (err.extensions.code === 'INTERNAL_SERVER_ERROR' && err.extensions.exception.status === 401) {
-          localStorage.removeItem('visual-knight-token');
+          localStorage.removeItem(AUTH_TOKEN_NAME);
           // TODO: find better solution
           // router.navigateByUrl('/user');
         }
