@@ -27,6 +27,21 @@ export type AuthToken = {
   accessToken: Scalars['String'];
 };
 
+export type IgnoreAreaDataArgs = {
+  x: Scalars['Int'];
+  y: Scalars['Int'];
+  width: Scalars['Int'];
+  height: Scalars['Int'];
+};
+
+export type IgnoreAreaType = {
+  __typename?: 'IgnoreAreaType';
+  x: Scalars['Int'];
+  y: Scalars['Int'];
+  width: Scalars['Int'];
+  height: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   login: AuthPayload;
@@ -50,6 +65,7 @@ export type Mutation = {
   deleteTest: TestType;
   deleteVariation: VariationType;
   acceptNewBaseline: VariationType;
+  setNewIgnoreAreas: VariationType;
   invokeTestSession: Scalars['String'];
   uploadScreenshot?: Maybe<TestSessionComparison>;
 };
@@ -140,6 +156,11 @@ export type MutationDeleteVariationArgs = {
 export type MutationAcceptNewBaselineArgs = {
   comment?: Maybe<Scalars['String']>;
   testSessionId: Scalars['String'];
+  variationId: Scalars['String'];
+};
+
+export type MutationSetNewIgnoreAreasArgs = {
+  ignoreAreas: Array<IgnoreAreaDataArgs>;
   variationId: Scalars['String'];
 };
 
@@ -298,16 +319,14 @@ export type VariationType = {
   additionalData?: Maybe<Scalars['JSON']>;
   baseline?: Maybe<TestSessionType>;
   testSessions: Array<TestSessionType>;
+  ignoreAreas?: Maybe<Array<IgnoreAreaType>>;
   isLastSuccessful: Scalars['Boolean'];
 };
 export type VerifyEmailMutationVariables = {
   token: Scalars['String'];
 };
 
-export type VerifyEmailMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'verifyEmail'
->;
+export type VerifyEmailMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'verifyEmail'>;
 
 export type CompleteInvitationMutationVariables = {
   password: Scalars['String'];
@@ -323,9 +342,7 @@ export type CompleteInvitationMutation = { __typename?: 'Mutation' } & {
 
 export type CurrentUserQueryVariables = {};
 
-export type CurrentUserQuery = { __typename?: 'Query' } & {
-  me: { __typename?: 'UserType' } & UserDataFragment;
-};
+export type CurrentUserQuery = { __typename?: 'Query' } & { me: { __typename?: 'UserType' } & UserDataFragment };
 
 export type SignupMutationVariables = {
   email: Scalars['String'];
@@ -355,25 +372,16 @@ export type ForgotPasswordMutationVariables = {
   email: Scalars['String'];
 };
 
-export type ForgotPasswordMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'forgotPassword'
->;
+export type ForgotPasswordMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'forgotPassword'>;
 
 export type ResetPasswordMutationVariables = {
   password: Scalars['String'];
   token: Scalars['String'];
 };
 
-export type ResetPasswordMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'resetPassword'
->;
+export type ResetPasswordMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'resetPassword'>;
 
-export type AuthTokenFragment = { __typename?: 'AuthToken' } & Pick<
-  AuthToken,
-  'expiresIn' | 'accessToken'
->;
+export type AuthTokenFragment = { __typename?: 'AuthToken' } & Pick<AuthToken, 'expiresIn' | 'accessToken'>;
 
 export type UserDataFragment = { __typename?: 'UserType' } & Pick<
   UserType,
@@ -403,16 +411,11 @@ export type DeleteProjectMutation = { __typename?: 'Mutation' } & {
   deleteProject: { __typename?: 'ProjectType' } & Pick<ProjectType, 'id'>;
 };
 
-export type ProjectDataFragment = { __typename?: 'ProjectType' } & Pick<
-  ProjectType,
-  'id' | 'name' | 'description'
->;
+export type ProjectDataFragment = { __typename?: 'ProjectType' } & Pick<ProjectType, 'id' | 'name' | 'description'>;
 
 export type AllTestsQueryVariables = {};
 
-export type AllTestsQuery = { __typename?: 'Query' } & {
-  tests: Array<{ __typename?: 'TestType' } & TestDataFragment>;
-};
+export type AllTestsQuery = { __typename?: 'Query' } & { tests: Array<{ __typename?: 'TestType' } & TestDataFragment> };
 
 export type DeleteTestMutationVariables = {
   id: Scalars['String'];
@@ -422,38 +425,22 @@ export type DeleteTestMutation = { __typename?: 'Mutation' } & {
   deleteTest: { __typename?: 'TestType' } & Pick<TestType, 'id'>;
 };
 
-export type TestDataFragment = { __typename?: 'TestType' } & Pick<
-  TestType,
-  'id' | 'name'
-> & {
+export type TestDataFragment = { __typename?: 'TestType' } & Pick<TestType, 'id' | 'name'> & {
     project: Maybe<{ __typename?: 'ProjectType' } & Pick<ProjectType, 'id'>>;
     variations: Array<
-      { __typename?: 'VariationType' } & Pick<
-        VariationType,
-        'id' | 'createdAt' | 'browserName' | 'deviceName'
-      > & {
-          testSessions: Array<
-            { __typename?: 'TestSessionType' } & Pick<
-              TestSessionType,
-              'id' | 'state'
-            >
-          >;
+      { __typename?: 'VariationType' } & Pick<VariationType, 'id' | 'createdAt' | 'browserName' | 'deviceName'> & {
+          testSessions: Array<{ __typename?: 'TestSessionType' } & Pick<TestSessionType, 'id' | 'state'>>;
         }
     >;
   };
 
 export type SelectedTestQueryVariables = {};
 
-export type SelectedTestQuery = { __typename?: 'Query' } & Pick<
-  Query,
-  'selectedTest'
->;
+export type SelectedTestQuery = { __typename?: 'Query' } & Pick<Query, 'selectedTest'>;
 
 export type UserlistQueryVariables = {};
 
-export type UserlistQuery = { __typename?: 'Query' } & {
-  users: Array<{ __typename?: 'UserType' } & UserDataFragment>;
-};
+export type UserlistQuery = { __typename?: 'Query' } & { users: Array<{ __typename?: 'UserType' } & UserDataFragment> };
 
 export type UpdateProfileMutationVariables = {
   email: Scalars['String'];
@@ -469,25 +456,17 @@ export type SetNewPasswordMutationVariables = {
   password: Scalars['String'];
 };
 
-export type SetNewPasswordMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'changePassword'
->;
+export type SetNewPasswordMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'changePassword'>;
 
 export type ResendVerificationEmailMutationVariables = {};
 
-export type ResendVerificationEmailMutation = {
-  __typename?: 'Mutation';
-} & Pick<Mutation, 'resendVerifyEmail'>;
+export type ResendVerificationEmailMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'resendVerifyEmail'>;
 
 export type ResendInvitationMailMutationVariables = {
   userId: Scalars['String'];
 };
 
-export type ResendInvitationMailMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'resendInvitationMail'
->;
+export type ResendInvitationMailMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'resendInvitationMail'>;
 
 export type AddUserMutationVariables = {
   email: Scalars['String'];
@@ -539,31 +518,37 @@ export type AcceptNewBaselineMutation = { __typename?: 'Mutation' } & {
   acceptNewBaseline: { __typename?: 'VariationType' } & VariationDataFragment;
 };
 
+export type SetNewIgnoreAreasMutationVariables = {
+  variationId: Scalars['String'];
+  ignoreAreas: Array<IgnoreAreaDataArgs>;
+};
+
+export type SetNewIgnoreAreasMutation = { __typename?: 'Mutation' } & {
+  setNewIgnoreAreas: { __typename?: 'VariationType' } & VariationDataFragment;
+};
+
 export type DeclineTestSessionMutationVariables = {
   testSessionId: Scalars['String'];
   comment?: Maybe<Scalars['String']>;
 };
 
 export type DeclineTestSessionMutation = { __typename?: 'Mutation' } & {
-  declineTestSession: {
-    __typename?: 'TestSessionType';
-  } & TestSessionDataFragment;
+  declineTestSession: { __typename?: 'TestSessionType' } & TestSessionDataFragment;
 };
 
 export type VariationDataFragment = { __typename?: 'VariationType' } & Pick<
   VariationType,
   'id' | 'deviceName' | 'additionalData' | 'browserName' | 'isLastSuccessful'
 > & {
-    baseline: Maybe<
-      { __typename?: 'TestSessionType' } & Pick<
-        TestSessionType,
-        'imageKey' | 'id'
-      >
-    >;
-    testSessions: Array<
-      { __typename?: 'TestSessionType' } & TestSessionDataFragment
-    >;
+    baseline: Maybe<{ __typename?: 'TestSessionType' } & Pick<TestSessionType, 'imageKey' | 'id'>>;
+    testSessions: Array<{ __typename?: 'TestSessionType' } & TestSessionDataFragment>;
+    ignoreAreas: Maybe<Array<{ __typename?: 'IgnoreAreaType' } & IgnoreAreaDataFragment>>;
   };
+
+export type IgnoreAreaDataFragment = { __typename?: 'IgnoreAreaType' } & Pick<
+  IgnoreAreaType,
+  'x' | 'y' | 'height' | 'width'
+>;
 
 export type TestSessionDataFragment = { __typename?: 'TestSessionType' } & Pick<
   TestSessionType,
@@ -577,21 +562,11 @@ export type TestSessionDataFragment = { __typename?: 'TestSessionType' } & Pick<
   | 'state'
   | 'stateComment'
   | 'autoBaseline'
-> & {
-    stateChangedByUser: Maybe<
-      { __typename?: 'UserType' } & Pick<
-        UserType,
-        'forename' | 'lastname' | 'email'
-      >
-    >;
-  };
+> & { stateChangedByUser: Maybe<{ __typename?: 'UserType' } & Pick<UserType, 'forename' | 'lastname' | 'email'>> };
 
 export type SelectedTestSessionQueryVariables = {};
 
-export type SelectedTestSessionQuery = { __typename?: 'Query' } & Pick<
-  Query,
-  'selectedTestSession'
->;
+export type SelectedTestSessionQuery = { __typename?: 'Query' } & Pick<Query, 'selectedTestSession'>;
 
 export type GetTestNameQueryVariables = {
   testId: Scalars['String'];
@@ -662,6 +637,14 @@ export const TestSessionDataFragmentDoc = gql`
     }
   }
 `;
+export const IgnoreAreaDataFragmentDoc = gql`
+  fragment IgnoreAreaData on IgnoreAreaType {
+    x
+    y
+    height
+    width
+  }
+`;
 export const VariationDataFragmentDoc = gql`
   fragment VariationData on VariationType {
     id
@@ -676,8 +659,12 @@ export const VariationDataFragmentDoc = gql`
     testSessions {
       ...TestSessionData
     }
+    ignoreAreas {
+      ...IgnoreAreaData
+    }
   }
   ${TestSessionDataFragmentDoc}
+  ${IgnoreAreaDataFragmentDoc}
 `;
 export const VerifyEmailDocument = gql`
   mutation verifyEmail($token: String!) {
@@ -688,10 +675,7 @@ export const VerifyEmailDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class VerifyEmailGQL extends Apollo.Mutation<
-  VerifyEmailMutation,
-  VerifyEmailMutationVariables
-> {
+export class VerifyEmailGQL extends Apollo.Mutation<VerifyEmailMutation, VerifyEmailMutationVariables> {
   document = VerifyEmailDocument;
 }
 export const CompleteInvitationDocument = gql`
@@ -729,10 +713,7 @@ export const CurrentUserDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class CurrentUserGQL extends Apollo.Query<
-  CurrentUserQuery,
-  CurrentUserQueryVariables
-> {
+export class CurrentUserGQL extends Apollo.Query<CurrentUserQuery, CurrentUserQueryVariables> {
   document = CurrentUserDocument;
 }
 export const SignupDocument = gql`
@@ -753,10 +734,7 @@ export const SignupDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class SignupGQL extends Apollo.Mutation<
-  SignupMutation,
-  SignupMutationVariables
-> {
+export class SignupGQL extends Apollo.Mutation<SignupMutation, SignupMutationVariables> {
   document = SignupDocument;
 }
 export const LoginDocument = gql`
@@ -777,10 +755,7 @@ export const LoginDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class LoginGQL extends Apollo.Mutation<
-  LoginMutation,
-  LoginMutationVariables
-> {
+export class LoginGQL extends Apollo.Mutation<LoginMutation, LoginMutationVariables> {
   document = LoginDocument;
 }
 export const ForgotPasswordDocument = gql`
@@ -792,10 +767,7 @@ export const ForgotPasswordDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class ForgotPasswordGQL extends Apollo.Mutation<
-  ForgotPasswordMutation,
-  ForgotPasswordMutationVariables
-> {
+export class ForgotPasswordGQL extends Apollo.Mutation<ForgotPasswordMutation, ForgotPasswordMutationVariables> {
   document = ForgotPasswordDocument;
 }
 export const ResetPasswordDocument = gql`
@@ -807,10 +779,7 @@ export const ResetPasswordDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class ResetPasswordGQL extends Apollo.Mutation<
-  ResetPasswordMutation,
-  ResetPasswordMutationVariables
-> {
+export class ResetPasswordGQL extends Apollo.Mutation<ResetPasswordMutation, ResetPasswordMutationVariables> {
   document = ResetPasswordDocument;
 }
 export const AllProjectsDocument = gql`
@@ -825,10 +794,7 @@ export const AllProjectsDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class AllProjectsGQL extends Apollo.Query<
-  AllProjectsQuery,
-  AllProjectsQueryVariables
-> {
+export class AllProjectsGQL extends Apollo.Query<AllProjectsQuery, AllProjectsQueryVariables> {
   document = AllProjectsDocument;
 }
 export const AddProjectDocument = gql`
@@ -843,10 +809,7 @@ export const AddProjectDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class AddProjectGQL extends Apollo.Mutation<
-  AddProjectMutation,
-  AddProjectMutationVariables
-> {
+export class AddProjectGQL extends Apollo.Mutation<AddProjectMutation, AddProjectMutationVariables> {
   document = AddProjectDocument;
 }
 export const DeleteProjectDocument = gql`
@@ -860,10 +823,7 @@ export const DeleteProjectDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class DeleteProjectGQL extends Apollo.Mutation<
-  DeleteProjectMutation,
-  DeleteProjectMutationVariables
-> {
+export class DeleteProjectGQL extends Apollo.Mutation<DeleteProjectMutation, DeleteProjectMutationVariables> {
   document = DeleteProjectDocument;
 }
 export const AllTestsDocument = gql`
@@ -878,10 +838,7 @@ export const AllTestsDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class AllTestsGQL extends Apollo.Query<
-  AllTestsQuery,
-  AllTestsQueryVariables
-> {
+export class AllTestsGQL extends Apollo.Query<AllTestsQuery, AllTestsQueryVariables> {
   document = AllTestsDocument;
 }
 export const DeleteTestDocument = gql`
@@ -895,13 +852,21 @@ export const DeleteTestDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class DeleteTestGQL extends Apollo.Mutation<
-  DeleteTestMutation,
-  DeleteTestMutationVariables
-> {
+export class DeleteTestGQL extends Apollo.Mutation<DeleteTestMutation, DeleteTestMutationVariables> {
   document = DeleteTestDocument;
 }
+export const SelectedTestDocument = gql`
+  query selectedTest {
+    selectedTest @client
+  }
+`;
 
+@Injectable({
+  providedIn: 'root'
+})
+export class SelectedTestGQL extends Apollo.Query<SelectedTestQuery, SelectedTestQueryVariables> {
+  document = SelectedTestDocument;
+}
 export const UserlistDocument = gql`
   query userlist {
     users {
@@ -914,21 +879,12 @@ export const UserlistDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class UserlistGQL extends Apollo.Query<
-  UserlistQuery,
-  UserlistQueryVariables
-> {
+export class UserlistGQL extends Apollo.Query<UserlistQuery, UserlistQueryVariables> {
   document = UserlistDocument;
 }
 export const UpdateProfileDocument = gql`
-  mutation updateProfile(
-    $email: String!
-    $forename: String
-    $lastname: String
-  ) {
-    updateUser(
-      data: { forename: $forename, lastname: $lastname, email: $email }
-    ) {
+  mutation updateProfile($email: String!, $forename: String, $lastname: String) {
+    updateUser(data: { forename: $forename, lastname: $lastname, email: $email }) {
       ...UserData
     }
   }
@@ -938,10 +894,7 @@ export const UpdateProfileDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class UpdateProfileGQL extends Apollo.Mutation<
-  UpdateProfileMutation,
-  UpdateProfileMutationVariables
-> {
+export class UpdateProfileGQL extends Apollo.Mutation<UpdateProfileMutation, UpdateProfileMutationVariables> {
   document = UpdateProfileDocument;
 }
 export const SetNewPasswordDocument = gql`
@@ -953,10 +906,7 @@ export const SetNewPasswordDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class SetNewPasswordGQL extends Apollo.Mutation<
-  SetNewPasswordMutation,
-  SetNewPasswordMutationVariables
-> {
+export class SetNewPasswordGQL extends Apollo.Mutation<SetNewPasswordMutation, SetNewPasswordMutationVariables> {
   document = SetNewPasswordDocument;
 }
 export const ResendVerificationEmailDocument = gql`
@@ -1001,10 +951,7 @@ export const AddUserDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class AddUserGQL extends Apollo.Mutation<
-  AddUserMutation,
-  AddUserMutationVariables
-> {
+export class AddUserGQL extends Apollo.Mutation<AddUserMutation, AddUserMutationVariables> {
   document = AddUserDocument;
 }
 export const DeleteUserDocument = gql`
@@ -1019,10 +966,7 @@ export const DeleteUserDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class DeleteUserGQL extends Apollo.Mutation<
-  DeleteUserMutation,
-  DeleteUserMutationVariables
-> {
+export class DeleteUserGQL extends Apollo.Mutation<DeleteUserMutation, DeleteUserMutationVariables> {
   document = DeleteUserDocument;
 }
 export const GetVariationDocument = gql`
@@ -1037,10 +981,7 @@ export const GetVariationDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class GetVariationGQL extends Apollo.Query<
-  GetVariationQuery,
-  GetVariationQueryVariables
-> {
+export class GetVariationGQL extends Apollo.Query<GetVariationQuery, GetVariationQueryVariables> {
   document = GetVariationDocument;
 }
 export const AllVariationsDocument = gql`
@@ -1055,10 +996,7 @@ export const AllVariationsDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class AllVariationsGQL extends Apollo.Query<
-  AllVariationsQuery,
-  AllVariationsQueryVariables
-> {
+export class AllVariationsGQL extends Apollo.Query<AllVariationsQuery, AllVariationsQueryVariables> {
   document = AllVariationsDocument;
 }
 export const DeleteVariationDocument = gql`
@@ -1072,23 +1010,12 @@ export const DeleteVariationDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class DeleteVariationGQL extends Apollo.Mutation<
-  DeleteVariationMutation,
-  DeleteVariationMutationVariables
-> {
+export class DeleteVariationGQL extends Apollo.Mutation<DeleteVariationMutation, DeleteVariationMutationVariables> {
   document = DeleteVariationDocument;
 }
 export const AcceptNewBaselineDocument = gql`
-  mutation acceptNewBaseline(
-    $testSessionId: String!
-    $variationId: String!
-    $comment: String
-  ) {
-    acceptNewBaseline(
-      variationId: $variationId
-      testSessionId: $testSessionId
-      comment: $comment
-    ) {
+  mutation acceptNewBaseline($testSessionId: String!, $variationId: String!, $comment: String) {
+    acceptNewBaseline(variationId: $variationId, testSessionId: $testSessionId, comment: $comment) {
       ...VariationData
     }
   }
@@ -1103,6 +1030,24 @@ export class AcceptNewBaselineGQL extends Apollo.Mutation<
   AcceptNewBaselineMutationVariables
 > {
   document = AcceptNewBaselineDocument;
+}
+export const SetNewIgnoreAreasDocument = gql`
+  mutation setNewIgnoreAreas($variationId: String!, $ignoreAreas: [IgnoreAreaDataArgs!]!) {
+    setNewIgnoreAreas(variationId: $variationId, ignoreAreas: $ignoreAreas) {
+      ...VariationData
+    }
+  }
+  ${VariationDataFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetNewIgnoreAreasGQL extends Apollo.Mutation<
+  SetNewIgnoreAreasMutation,
+  SetNewIgnoreAreasMutationVariables
+> {
+  document = SetNewIgnoreAreasDocument;
 }
 export const DeclineTestSessionDocument = gql`
   mutation declineTestSession($testSessionId: String!, $comment: String) {
@@ -1131,10 +1076,7 @@ export const SelectedTestSessionDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class SelectedTestSessionGQL extends Apollo.Query<
-  SelectedTestSessionQuery,
-  SelectedTestSessionQueryVariables
-> {
+export class SelectedTestSessionGQL extends Apollo.Query<SelectedTestSessionQuery, SelectedTestSessionQueryVariables> {
   document = SelectedTestSessionDocument;
 }
 export const GetTestNameDocument = gql`
@@ -1148,9 +1090,6 @@ export const GetTestNameDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class GetTestNameGQL extends Apollo.Query<
-  GetTestNameQuery,
-  GetTestNameQueryVariables
-> {
+export class GetTestNameGQL extends Apollo.Query<GetTestNameQuery, GetTestNameQueryVariables> {
   document = GetTestNameDocument;
 }

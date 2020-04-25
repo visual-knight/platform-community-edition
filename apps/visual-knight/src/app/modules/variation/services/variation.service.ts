@@ -6,7 +6,9 @@ import {
   AllVariationsDocument,
   GetVariationGQL,
   AcceptNewBaselineGQL,
-  DeclineTestSessionGQL
+  DeclineTestSessionGQL,
+  SetNewIgnoreAreasGQL,
+  IgnoreAreaType
 } from '../../core/types';
 import { first } from 'rxjs/operators';
 import { Apollo } from 'apollo-angular';
@@ -21,6 +23,7 @@ export class VariationService {
     private getVariaitonGQL: GetVariationGQL,
     private acceptNewBaseLineGQL: AcceptNewBaselineGQL,
     private declineTestSessionGQL: DeclineTestSessionGQL,
+    private setNewIgnoreAreasGQL: SetNewIgnoreAreasGQL,
     private apollo: Apollo
   ) {}
 
@@ -50,9 +53,7 @@ export class VariationService {
               testId
             }
           });
-          data.variations = data.variations.filter(
-            variation => variation.id !== id
-          );
+          data.variations = data.variations.filter(variation => variation.id !== id);
           store.writeQuery({
             query: AllVariationsDocument,
             variables: {
@@ -83,5 +84,12 @@ export class VariationService {
     this.apollo.getClient().writeData({
       data: { selectedTestSession: testSessionId }
     });
+  }
+
+  setNewIgnoreAreas(variationId: string, ignoreAreas: IgnoreAreaType[]) {
+    this.setNewIgnoreAreasGQL
+      .mutate({ variationId, ignoreAreas })
+      .pipe(first())
+      .subscribe();
   }
 }

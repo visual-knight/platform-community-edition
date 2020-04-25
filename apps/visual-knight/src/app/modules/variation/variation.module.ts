@@ -10,6 +10,7 @@ import { TestSessionListComponent } from './components/test-session-list/test-se
 import { TestSessionScreenshotViewsComponent } from './components/test-session-screenshot-views/test-session-screenshot-views.component';
 import { SharedModule } from '../shared/shared.module';
 import { DiffViewComponent } from './components/diff-view/diff-view.component';
+import { DrawAreaComponent } from './components/modals/draw-area/draw-area.component';
 
 const routes: Routes = [
   { path: ':testId', component: VariationListComponent },
@@ -23,10 +24,15 @@ const routes: Routes = [
     TestSessionListComponent,
     TestSessionScreenshotViewsComponent,
     DeleteVariationModalComponent,
+    DrawAreaComponent,
     ScreenshotViewComponent,
     DiffViewComponent
   ],
   imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
-  entryComponents: [DeleteVariationModalComponent, ScreenshotViewComponent]
+  entryComponents: [
+    DeleteVariationModalComponent,
+    ScreenshotViewComponent,
+    DrawAreaComponent
+  ]
 })
 export class VariationModule {}

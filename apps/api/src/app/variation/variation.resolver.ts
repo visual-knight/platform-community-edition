@@ -6,6 +6,7 @@ import { UseGuards } from '@nestjs/common';
 import { Int } from 'type-graphql';
 import { CurrentUser } from '../shared/decorators/current-user.decorator';
 import { User } from '@generated/photonjs';
+import { IgnoreAreaDataArgs } from '../ignorearea/models/ignorearea.input';
 
 @Resolver('Variation')
 export class VariationResolver {
@@ -54,5 +55,15 @@ export class VariationResolver {
       comment,
       user
     );
+  }
+
+  @Mutation(() => VariationType)
+  // @UseGuards(GqlAuthGuard)
+  async setNewIgnoreAreas(
+    @Args('variationId') variationId: string,
+    @Args({ name: 'ignoreAreas', type: () => [IgnoreAreaDataArgs]})
+    ignoreAreas: IgnoreAreaDataArgs[]
+  ): Promise<VariationType> {
+    return this.variationService.setNewIgnoreAreas(variationId, ignoreAreas);
   }
 }

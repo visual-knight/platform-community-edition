@@ -1,15 +1,9 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  EventEmitter
-} from '@angular/core';
-import { MatSlideToggleChange } from '@angular/material';
+import { Component, OnInit, Output, Input, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
+import { MatSlideToggleChange, MatDialog } from '@angular/material';
 import { TestSessionType, TestType, VariationType } from '../../../core/types';
 import { differenceInHours, parseISO, formatDistanceToNow } from 'date-fns';
+import { DrawAreaComponent } from '../modals/draw-area/draw-area.component';
+import { ScreenshotImagePipe } from '../../../shared/pipes/screenshot-image.pipe';
 
 @Component({
   selector: 'visual-knight-test-session-screenshot-views',
@@ -25,7 +19,7 @@ export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
   public isDiffView = false;
   public datetimeString: string;
 
-  constructor() {}
+  constructor(private dialog: MatDialog, private imagePipe: ScreenshotImagePipe) {}
 
   ngOnInit() {}
 
@@ -33,17 +27,11 @@ export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
     if (changes.testSession) {
       const testSession: TestSessionType = changes.testSession.currentValue;
       this.isDiffView =
-        testSession.diffImageKey !== null &&
-        testSession.misMatchPercentage > testSession.misMatchTolerance;
-      if (
-        differenceInHours(parseISO(testSession.createdAt), new Date()) <= 35
-      ) {
-        this.datetimeString = formatDistanceToNow(
-          parseISO(testSession.createdAt),
-          {
-            addSuffix: true
-          }
-        );
+        testSession.diffImageKey !== null && testSession.misMatchPercentage > testSession.misMatchTolerance;
+      if (differenceInHours(parseISO(testSession.createdAt), new Date()) <= 35) {
+        this.datetimeString = formatDistanceToNow(parseISO(testSession.createdAt), {
+          addSuffix: true
+        });
       } else {
         this.datetimeString = null;
       }
@@ -65,5 +53,15 @@ export class TestSessionScreenshotViewsComponent implements OnInit, OnChanges {
 
   onClickDeclineButton() {
     this.accept.emit(false);
+  }
+
+  drawViewToggle() {
+    this.dialog.open(DrawAreaComponent, {
+      data: {
+        variationId: this.variation.id,
+        imageUrl: this.imagePipe.transform(this.testSession.imageKey),
+        ignoreAreas: this.variation.ignoreAreas
+      }
+    });
   }
 }

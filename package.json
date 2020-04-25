@@ -80,6 +80,7 @@
     "graphql-scalars": "^1.0.0",
     "graphql-tag": "^2.10.0",
     "hammerjs": "^2.0.8",
+    "konva": "^4.2.2",
     "lodash": "^4.17.15",
     "md5": "^2.2.1",
     "ng-recaptcha": "^5.0.0",

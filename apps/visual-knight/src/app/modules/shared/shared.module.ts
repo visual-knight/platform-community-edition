@@ -56,6 +56,7 @@ const SHARED_COMPONENTS = [ScreenshotImagePipe];
 @NgModule({
   imports: [...SHARED_MODULES],
   declarations: [...SHARED_COMPONENTS],
+  providers: [ScreenshotImagePipe],
   exports: [...SHARED_MODULES, ...SHARED_COMPONENTS]
 })
 export class SharedModule {}

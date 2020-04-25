@@ -1,10 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { PhotonService, CloudProviderService } from '@visual-knight/api-interface';
+import {
+  PhotonService,
+  CloudProviderService
+} from '@visual-knight/api-interface';
 import { TestSessionState, User } from '@generated/photonjs';
+import { IgnoreAreaDataArgs } from '../ignorearea/models/ignorearea.input';
 
 @Injectable()
 export class VariationService {
-  constructor(private photonService: PhotonService, private cloudService: CloudProviderService) {}
+  constructor(
+    private photonService: PhotonService,
+    private cloudService: CloudProviderService
+  ) {}
 
   async deleteVariation(variationId: string) {
     const testSessionImages = (await this.photonService.testSession.findMany({
@@ -29,10 +36,17 @@ export class VariationService {
     });
 
     try {
-      await Promise.all(testSessionImages.map(image => this.cloudService.deleteScreenshotImage(image)));
+      await Promise.all(
+        testSessionImages.map(image =>
+          this.cloudService.deleteScreenshotImage(image)
+        )
+      );
     } catch (err) {
       console.log(err);
-      console.log('Unable to delete screenshots. Please do it manually! ', testSessionImages);
+      console.log(
+        'Unable to delete screenshots. Please do it manually! ',
+        testSessionImages
+      );
     }
 
     return this.photonService.variation.delete({
@@ -70,6 +84,7 @@ export class VariationService {
       where: { id: variationId },
       include: {
         baseline: true,
+        ignoreAreas: true,
         testSessions: {
           orderBy: {
             createdAt: 'desc'
@@ -82,7 +97,12 @@ export class VariationService {
     });
   }
 
-  async acceptNewBaseline(variationId: string, testSessionId: string, comment: string, user: User) {
+  async acceptNewBaseline(
+    variationId: string,
+    testSessionId: string,
+    comment: string,
+    user: User
+  ) {
     return this.photonService.variation.update({
       where: { id: variationId },
       data: {
@@ -103,6 +123,37 @@ export class VariationService {
         }
       },
       include: {
+        baseline: true,
+        testSessions: {
+          include: {
+            stateChangedByUser: true
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        }
+      }
+    });
+  }
+
+  async setNewIgnoreAreas(variationId: string, ignoreAreas: IgnoreAreaDataArgs[]) {
+    await this.photonService.ignoreArea.deleteMany({
+      where: {
+        variation: {
+          id: variationId
+        }
+      }
+    })
+
+    return this.photonService.variation.update({
+      where: { id: variationId },
+      data: {
+        ignoreAreas: {
+          create: ignoreAreas
+        }
+      },
+      include: {
+        ignoreAreas: true,
         baseline: true,
         testSessions: {
           include: {

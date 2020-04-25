@@ -30,6 +30,18 @@ mutation acceptNewBaseline(
   }
 }
 
+mutation setNewIgnoreAreas(
+  $variationId: String!
+  $ignoreAreas: [IgnoreAreaDataArgs!]!
+) {
+  setNewIgnoreAreas(
+    variationId: $variationId
+    ignoreAreas: $ignoreAreas
+  ) {
+    ...VariationData
+  }
+}
+
 mutation declineTestSession($testSessionId: String!, $comment: String) {
   declineTestSession(testSessionId: $testSessionId, comment: $comment) {
     ...TestSessionData
@@ -49,6 +61,16 @@ fragment VariationData on VariationType {
   testSessions {
     ...TestSessionData
   }
+  ignoreAreas {
+    ...IgnoreAreaData
+  }
+}
+
+fragment IgnoreAreaData on IgnoreAreaType {
+  x
+  y
+  height
+  width
 }
 
 fragment TestSessionData on TestSessionType {

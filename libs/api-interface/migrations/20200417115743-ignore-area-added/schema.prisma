@@ -3,7 +3,7 @@ datasource db {
   // https://github.com/prisma/prisma2/blob/master/docs/core/connectors
   // mysql | sqlite | postgresql
   provider = "postgresql"
-  url      = env("VK_DATABASE")
+  url = "***"
 }
 
 generator photon {
