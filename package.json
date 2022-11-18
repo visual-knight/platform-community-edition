@@ -96,7 +96,7 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.800.1",
+    "@angular-devkit/build-angular": "^15.0.0",
     "@angular/cli": "8.1.1",
     "@angular/compiler-cli": "^8.0.0",
     "@angular/language-service": "^8.0.0",
@@ -107,8 +107,8 @@
     "@nestjs/schematics": "^6.3.0",
     "@nestjs/testing": "^6.2.4",
     "@nrwl/jest": "8.4.12",
-    "@nrwl/nest": "8.4.12",
-    "@nrwl/node": "8.4.12",
+    "@nrwl/nest": "8.12.11",
+    "@nrwl/node": "8.12.11",
     "@nrwl/workspace": "8.4.12",
     "prisma2": "^2.0.0-preview024",
     "@types/bcryptjs": "^2.4.2",
