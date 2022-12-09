@@ -58,7 +58,7 @@
     "@nestjs/graphql": "^6.4.2",
     "@nestjs/jwt": "^6.1.1",
     "@nestjs/passport": "^6.1.0",
-    "@nestjs/platform-express": "^6.5.3",
+    "@nestjs/platform-express": "^9.2.1",
     "@nrwl/angular": "8.4.12",
     "@prisma/client": "^2.0.0-preview024",
     "apollo-angular": "^1.6.0",
