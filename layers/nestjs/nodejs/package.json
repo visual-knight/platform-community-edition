@@ -15,7 +15,7 @@
     "@nestjs/graphql": "^6.4.2",
     "@nestjs/jwt": "^6.1.1",
     "@nestjs/passport": "^6.1.0",
-    "@nestjs/platform-express": "^6.5.3",
+    "@nestjs/platform-express": "^9.2.1",
     "apollo-server-core": "^2.14.2",
     "apollo-server-express": "^2.14.2",
     "aws-serverless-express": "^3.3.6",
