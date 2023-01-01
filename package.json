@@ -59,7 +59,7 @@
     "@nestjs/jwt": "^6.1.1",
     "@nestjs/passport": "^6.1.0",
     "@nestjs/platform-express": "^6.5.3",
-    "@nrwl/angular": "8.4.12",
+    "@nrwl/angular": "15.4.2",
     "@prisma/client": "^2.0.0-preview024",
     "apollo-angular": "^1.6.0",
     "apollo-angular-link-http": "^1.6.0",
@@ -96,7 +96,7 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.800.1",
+    "@angular-devkit/build-angular": "^15.0.4",
     "@angular/cli": "8.1.1",
     "@angular/compiler-cli": "^8.0.0",
     "@angular/language-service": "^8.0.0",
@@ -107,8 +107,8 @@
     "@nestjs/schematics": "^6.3.0",
     "@nestjs/testing": "^6.2.4",
     "@nrwl/jest": "8.4.12",
-    "@nrwl/nest": "8.4.12",
-    "@nrwl/node": "8.4.12",
+    "@nrwl/nest": "15.4.2",
+    "@nrwl/node": "15.4.2",
     "@nrwl/workspace": "8.4.12",
     "prisma2": "^2.0.0-preview024",
     "@types/bcryptjs": "^2.4.2",
